@@ -1,4 +1,5 @@
 import pygame
+from classeBow import Bow
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position):
@@ -37,6 +38,10 @@ class Player(pygame.sprite.Sprite):
         self.jumping_status = False
         self.on_ground_status = True
         self.facing_right_status = True # Utilizado para definir a direção da textura do jogador
+
+        # Arco
+        self.bow = pygame.sprite.GroupSingle()
+        self.bow.add(Bow(self.rect.center))
 
 
     def jump(self):
@@ -120,10 +125,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += dy
 
     def update(self, delta_speed): # Calcula o movimento baseado nos inputs
-        self.move(delta_speed)
+        self.move(delta_speed) # Atualiza a posição do player
 
+        self.bow.update(self.rect.center) # Atualiza o arco
+        
 
-    # Setters
+    # Setters e Getters
     def set_on_ground_status(self, status: bool):
         self.on_ground_status = status
     def set_jumping_status(self, status: bool):

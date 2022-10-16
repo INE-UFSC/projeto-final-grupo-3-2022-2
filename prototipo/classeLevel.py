@@ -84,4 +84,5 @@ class Level:
 
         # Draw
         self.player.draw(self.display_surface)
+        self.player.sprite.bow.draw(self.display_surface)
         self.level_tiles.draw(self.display_surface)
