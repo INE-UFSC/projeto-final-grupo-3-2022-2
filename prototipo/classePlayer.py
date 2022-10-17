@@ -40,8 +40,7 @@ class Player(pygame.sprite.Sprite):
         self.facing_right_status = True # Utilizado para definir a direção da textura do jogador
 
         # Arco
-        self.bow = pygame.sprite.GroupSingle()
-        self.bow.add(Bow(self.rect.center))
+        self.bow = Bow()
 
 
     def jump(self):
@@ -124,10 +123,13 @@ class Player(pygame.sprite.Sprite):
         # Movimento y
         self.rect.y += dy
 
-    def update(self, delta_speed): # Calcula o movimento baseado nos inputs
+    def update(self, delta_speed, display_surface): # Calcula o movimento baseado nos inputs
         self.move(delta_speed) # Atualiza a posição do player
 
-        self.bow.update(self.rect.center) # Atualiza o arco
+        bow_position = self.rect.center
+        display_surface.blit(self.bow.get_rotated_image(bow_position), bow_position)
+
+        
         
 
     # Setters e Getters

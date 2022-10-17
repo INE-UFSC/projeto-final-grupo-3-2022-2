@@ -80,9 +80,8 @@ class Level:
         collided_delta_speed = self.get_collided_position(player, delta_speed, self.level_tiles)
         
         # Aplica o deslocamento final no jogador
-        player.update(collided_delta_speed)
+        player.update(collided_delta_speed, self.display_surface)
 
         # Draw
         self.player.draw(self.display_surface)
-        self.player.sprite.bow.draw(self.display_surface)
         self.level_tiles.draw(self.display_surface)
