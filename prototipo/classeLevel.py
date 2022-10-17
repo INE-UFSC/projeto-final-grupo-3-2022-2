@@ -70,6 +70,16 @@ class Level:
         return (dx, dy) # Retorna as posições colididas com o sprite group passado como argumento
 
 
+    def display_bow(self, player_position):
+        player_x, player_y = player_position
+        bow_x = player_x
+        bow_y = player_y
+        
+        rotated_bow_image = self.player.sprite.bow.get_rotated_image(player_position)
+        rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y))
+
+        self.display_surface.blit(rotated_bow_image, rotated_bow_rect)
+
     def run(self, event_listener):
         player = self.player.sprite
 
@@ -80,8 +90,9 @@ class Level:
         collided_delta_speed = self.get_collided_position(player, delta_speed, self.level_tiles)
         
         # Aplica o deslocamento final no jogador
-        player.update(collided_delta_speed, self.display_surface)
+        player.update(collided_delta_speed)
 
         # Draw
         self.player.draw(self.display_surface)
+        self.display_bow(player.rect.center)
         self.level_tiles.draw(self.display_surface)
