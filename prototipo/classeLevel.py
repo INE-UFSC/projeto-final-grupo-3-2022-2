@@ -22,7 +22,10 @@ class Level:
         self.generate_level(self.level_map_matrix)
 
         # Flechas
-        self.arrows = []
+        self.moving_arrows = []
+        self.stuck_arrows = []
+        self.force = 1 
+        self.switch = False # (MOUSEBUTTONDOWN)
 
     # Gera o mapa baseado no nível (baseado no argumento level_map recebido na construtora)
     def generate_level(self, level_map_matrix):
@@ -77,6 +80,18 @@ class Level:
 
         return (dx, dy) # Retorna as posições colididas com o sprite group passado como argumento
 
+    def check_collision(self, object, collide_with: pygame.sprite.Group) -> bool:
+        if isinstance(object, Player):
+            for tile in collide_with.sprites():
+                if tile.rect.colliderect(object.rect):
+                    return True
+            return False
+        elif isinstance(object, Arrow):
+            for tile in collide_with.sprites():
+                if tile.rect.collidepoint(object.rect.center):
+                    return True
+            return False
+
     def display_bow(self, player_position):
         player_x, player_y = player_position
         bow_x = player_x
@@ -87,7 +102,7 @@ class Level:
 
         self.display_surface.blit(rotated_bow_image, rotated_bow_rect)
 
-    def player_shoot(self, player: Player):
+    def player_shoot(self, player: Player, force):
         try: # Tenta pegar uma flecha do arco (irá suceder se o arco tiver flechas)
             arrow = self.player.sprite.bow.pop_first_arrow()
         
@@ -98,8 +113,8 @@ class Level:
         else: # Caso o try tenha sucedido
             target_position = pygame.mouse.get_pos() # Pega a posição do mouse
 
-            arrow.start_shot(player.rect.center, target_position) # Inicializa os atributos de posição da flecha
-            self.arrows.append(arrow) # Adiciona a flecha na lista de flechas do level
+            arrow.start_shot(player.rect.center, target_position, force) # Inicializa os atributos de posição da flecha
+            self.moving_arrows.append(arrow) # Adiciona a flecha na lista de flechas do level
 
             player.knockback(target_position) # Aplica o knockback no jogador
 
@@ -115,13 +130,34 @@ class Level:
         # Aplica o deslocamento final no jogador
         player.update(collided_delta_speed)
 
-        # Updates das flechas
+        """ UPDATE DAS FLECHAS ------ OTIMIZAR """
+        if self.switch:
+            self.force += 1
+        if self.force >= 60:
+            self.force = 60
+
         for event in event_listener:
+            print(self.force)
+
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Se o botão esquerdo do mouse for pressionado
-                self.player_shoot(player) # Tenta atirar uma flecha
-        for arrow in self.arrows:
-            arrow.update()
+                self.switch = True
+
+            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                self.player_shoot(player, self.force) # Tenta atirar uma flecha
+                self.force = 1
+                self.switch = False
+        
+        for arrow in self.moving_arrows:
+            print(self.check_collision(arrow, self.level_tiles))
+            if self.check_collision(arrow, self.level_tiles):
+                self.stuck_arrows.append(self.moving_arrows.pop(self.moving_arrows.index(arrow)))
+            else:
+                arrow.update()
             self.display_surface.blit(arrow.image, arrow.rect)
+
+        for arrow in self.stuck_arrows:
+            self.display_surface.blit(arrow.image, arrow.rect)
+        """ FIM DO UPDATE DAS FLECHAS """
 
         # Draw
         self.player.draw(self.display_surface)
