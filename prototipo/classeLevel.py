@@ -12,8 +12,7 @@ from classeTimer import Timer
 
 class Level:
     def __init__(self, level_data: dict, surface):
-        self.level_number = level_data['level_number']
-        self.level_name = level_data['level_name']
+        self.level_data = level_data
         self.level_map_matrix = level_data['tile_map']
 
         # Superfície onde o nível será desenhado
@@ -31,7 +30,6 @@ class Level:
         # Porta de saída do nível
         self.level_exit_door = pygame.sprite.GroupSingle()
 
-
         self.generate_level(self.level_map_matrix)
 
         # Flechas
@@ -39,6 +37,12 @@ class Level:
         self.stuck_arrows = []
 
         self.timer = Timer()
+
+        # Status do nível
+        self.win_status = False
+
+    def restart_level(self):
+        self.__init__(self.level_data, self.display_surface)
 
     # Gera o mapa baseado no nível (baseado no argumento level_map recebido na construtora)
     def generate_level(self, level_map_matrix):
@@ -100,8 +104,9 @@ class Level:
         for arrow in self.stuck_arrows:
             # Se o player colidir com alguma flecha remove a flecha das flechas presas e adiciona no player
             if arrow.rect.colliderect(player_position):
+                arrow.stuck = False
                 self.stuck_arrows.remove(arrow)
-                self.player.sprite.bow.add_stuck_arrow(arrow)
+                self.player.sprite.bow.add_arrow(arrow)
 
     def display_arrow_quantity(self, surface, player):
         font = pygame.font.SysFont('arial', 30, True, False)  # Edita a fonte
@@ -120,18 +125,18 @@ class Level:
 
 
     def run(self, event_listener):
+
+        """ DETECÇÃO DE INPUT PARA O NÍVEL (atualizar quando for feito a organização dos inputs) """
+        if pygame.key.get_pressed()[pygame.K_r]:
+            self.restart_level()
+        """ FIM DA DETECÇÃO DE INPUT PARA O NÍVEL """
+
         player = self.player.sprite
 
-        # A variável delta_speed é uma tupla com os valores de deslocamento calculados baseados no player
-        delta_speed = player.calculate_speed()
+        delta_speed = player.calculate_speed() # É uma tupla com os valores de deslocamento calculados baseados no player
+        collided_delta_speed = player.get_collided_position(delta_speed, self.level_tiles) # É uma tupla com os valores de deslocamento transformados a partir das colisões
         
-        # A variável collided_delta_speed é uma tupla com os valores de deslocamento transformados a partir das colisões
-        collided_delta_speed = player.get_collided_position(delta_speed, self.level_tiles)
-        
-        # Aplica o deslocamento final no jogador
-        player.update(collided_delta_speed)
-
-
+        player.update(collided_delta_speed) # Aplica o deslocamento final no jogador
 
 
         """ UPDATE DAS FLECHAS ------ ORGANIZAR DEPOIS """
@@ -150,16 +155,9 @@ class Level:
                 self.player_shoot(player, hold_factor)
 
         for arrow in self.moving_arrows:
-            # A variável delta_speed é uma tupla com os valores do proximo deslocamento
-            delta_speed = arrow.calculate_speed()
+            arrow.update(self.level_tiles) # Aplica o deslocamento na flecha
 
-            # A variável collided_delta_speed é uma tupla com os valores de deslocamento transformados a partir das colisões
-            collided_delta_speed = arrow.get_collided_position(delta_speed, self.level_tiles)
-            
-            # Atualiza a posição do arrow com o novo deslocamento colidido 
-            arrow.update(collided_delta_speed)
-
-            if delta_speed != collided_delta_speed:
+            if arrow.stuck:
                 self.stuck_arrows.append(self.moving_arrows.pop(self.moving_arrows.index(arrow)))
 
             self.display_surface.blit(arrow.image, arrow.rect)
@@ -188,12 +186,14 @@ class Level:
         for spike in self.level_spikes:
             if spike.collided(player):
                 print("MORREU")
+                self.restart_level()
         """ FIM DOS SPIKES """
 
         
         """ PORTA DE SAIDA - ORGANIZAR DEPOIS """
         if self.level_exit_door.sprite.is_unlocked() and self.level_exit_door.sprite.collided(player):
             print("SAIU DO LEVEL")
+            self.win_status = True
         """ FIM DA PORTA DE SAIDA """
         
 

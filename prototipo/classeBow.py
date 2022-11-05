@@ -1,19 +1,22 @@
 import pygame
 from math import pi, atan2
+from os import path
 from abstractArrow import Arrow
-from classeStandartArrow import StandartArrow
+from arrows.classeStandartArrow import StandartArrow
+from arrows.classeBounceArrow import BounceArrow
+from arrows.classeFastArrow import FastArrow
 
 
 class Bow():
     def __init__(self, initial_position):
         # Atributos padrões
-        self.image = pygame.image.load('./gun.png').convert() # Carrega a imagem do arco (que tem fundo preto)
+        self.image = pygame.image.load(path.join('prototipo', 'gun.png')).convert() # Carrega a imagem do arco (que tem fundo preto)
         self.image.set_colorkey((0,0,0)) # Define a cor preta como transparente
         self.image = pygame.transform.scale(self.image, (58, 8)) # Redimensiona a imagem do arco
         self.rect = self.image.get_rect(center=initial_position)
 
         # Flechas
-        self.arrows = [StandartArrow(), StandartArrow(), StandartArrow(), StandartArrow(), StandartArrow(), StandartArrow()]
+        self.arrows = [BounceArrow(), StandartArrow(), FastArrow()]
         
     
     def get_rotated_image(self, player_position):
@@ -30,5 +33,5 @@ class Bow():
     def pop_first_arrow(self) -> Arrow:
         return self.arrows.pop(0) # Retorna a primeira flecha da lista e a remove da lista
 
-    def add_stuck_arrow(self, arrow: Arrow):
+    def add_arrow(self, arrow: Arrow):
         self.arrows.append(arrow)
