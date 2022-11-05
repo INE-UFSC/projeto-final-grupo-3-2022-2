@@ -1,16 +1,21 @@
-import time
-
+from time import time
 
 class Timer:
     def __init__(self):
-        self.start = time.time() # Armazena o tempo de inicio
-        self.finish = 0
+        self.start = time() # Armazena o tempo de inicio (em que ele foi instanciado)
+        self.finish = None # Enquanto não tiver um valor, será None
+        
+        self.stopped_time = None # Enquanto não tiver um valor, será None
 
-    def getTimer(self):
-        return time.time() - self.start # Retorna o tempo atual do level
+    def start(self): # Adiciona a possiblidade de começar o timer em um momento em que ele já foi instanciado
+        self.start = time()
 
-    def setFinish(self):
-        self.finish = time.time() - self.start # Quando o jogador passa de level usará esse metodo para gravar o tempo
+    def stop(self):
+        self.finish = time() # Define um tempo para o fim
+        self.stopped_time = self.finish - self.start # Calcula o tempo decorrido
 
-    def getLevelTime(self):
-        return self.start - self.finish # Retorna o tempo total do level para o uso dos scores
+    def get_stopped_time(self):
+        return self.stopped_time
+
+    def get_time_from_start(self):
+        return time() - self.start # Retorna um float com o tempo decorrido em segundos
