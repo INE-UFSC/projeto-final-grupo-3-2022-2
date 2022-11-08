@@ -10,7 +10,7 @@ from arrows.classeFastArrow import FastArrow
 class Bow():
     def __init__(self, initial_position):
         # Atributos padrões
-        self.__image = pygame.image.load(path.join('gun.png')).convert() # Carrega a imagem do arco (que tem fundo preto)
+        self.__image = pygame.image.load(path.join('prototipo', 'gun.png')).convert() # Carrega a imagem do arco (que tem fundo preto)
         self.__image.set_colorkey((0,0,0)) # Define a cor preta como transparente
         self.__image = pygame.transform.scale(self.__image, (58, 8)) # Redimensiona a imagem do arco
         self.__rect = self.__image.get_rect(center=initial_position)
