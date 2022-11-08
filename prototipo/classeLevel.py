@@ -11,12 +11,14 @@ from classeExitDoor import ExitDoor
 from classeTimer import Timer
 
 class Level:
-    def __init__(self, level_data: dict, surface):
+    def __init__(self, level_data: dict):
         self.__level_data = level_data
         self.__level_map_matrix = level_data['tile_map']
 
         # Superfície onde o nível será desenhado
-        self.__display_surface = surface
+        level_width = len(self.__level_map_matrix[0]) * config.level_tile_size
+        level_height = len(self.__level_map_matrix) * config.level_tile_size
+        self.__display_surface = pygame.surface.Surface((level_width, level_height))
 
         # Jogador
         self.__player = pygame.sprite.GroupSingle()
@@ -42,7 +44,7 @@ class Level:
         self.__win_status = False
 
     def restart_level(self):
-        self.__init__(self.__level_data, self.__display_surface)
+        self.__init__(self.__level_data)
 
     # Gera o mapa baseado no nível (baseado no argumento level_map recebido na construtora)
     def generate_level(self, level_map_matrix):
@@ -207,3 +209,5 @@ class Level:
         self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
         self.display_timer(self.__display_surface) # Mostra o tempo na tela
 
+        # Retorna a superfície onde com os gráficos desenhados
+        return self.__display_surface
