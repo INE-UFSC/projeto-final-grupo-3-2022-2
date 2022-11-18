@@ -1,6 +1,6 @@
 import pygame, sys
 import config
-from classeLevel import Level
+from level.classeLevel import Level
 
 # Setup geral
 pygame.init()
@@ -40,7 +40,6 @@ while True:
                     pygame.display.quit()
                     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
                     pygame.display.init()
-
     pygame.display.flip()
 
     """ Conteúdo do jogo """

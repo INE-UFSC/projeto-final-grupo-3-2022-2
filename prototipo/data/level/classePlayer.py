@@ -1,5 +1,5 @@
 import pygame
-from classeBow import Bow
+from level.classeBow import Bow
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position):
@@ -158,7 +158,7 @@ class Player(pygame.sprite.Sprite):
         self.move(delta_speed) # Atualiza a posição do player
     
 
-    # Setters e Getters
+    # Setters
     def set_on_ground_status(self, status: bool):
         self.__on_ground_status = status
     def set_jumping_status(self, status: bool):
@@ -168,15 +168,12 @@ class Player(pygame.sprite.Sprite):
     @property
     def image(self):
         return self.__image
-
     @property
     def rect(self):
         return self.__rect
-
     @property
     def bow(self):
         return self.__bow
-
     @property
     def thrust(self):
         return self.__thrust
