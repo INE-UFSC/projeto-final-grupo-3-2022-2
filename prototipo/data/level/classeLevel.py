@@ -2,13 +2,16 @@ import pygame
 import config
 from time import time
 
+from Settings import Settings
+from classeTimer import Timer
+from level.classePlayer import Player
+from level.arrows.classePiercingArrow import PiercingArrow
 from level.build_structures.classeTile import Tile
 from level.build_structures.classeTile import Tile
 from level.build_structures.classeSpike import Spike
 from level.build_structures.classeTarget import Target
 from level.build_structures.classeExitDoor import ExitDoor
-from level.classePlayer import Player
-from classeTimer import Timer
+
 
 class Level:
     def __init__(self, level_data: dict):
@@ -81,7 +84,7 @@ class Level:
         bow_x = player_x
         bow_y = player_y
         
-        rotated_bow_image = self.__player.sprite.bow.get_rotated_image(player_position)
+        rotated_bow_image = self.__player.sprite.bow.get_rotated_image(player_position, Settings.mouse_pos())
         rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y))
 
         self.__display_surface.blit(rotated_bow_image, rotated_bow_rect)
@@ -95,7 +98,7 @@ class Level:
             pass
         
         else: # Caso o try tenha sucedido
-            target_position = pygame.mouse.get_pos() # Pega a posição do mouse
+            target_position = Settings.mouse_pos() # Pega a posição do mouse
 
             arrow.start_shot(player.rect.center, target_position, hold_factor) # Inicializa os atributos de posição da flecha
             self.__moving_arrows.append(arrow) # Adiciona a flecha na lista de flechas do level
@@ -168,7 +171,12 @@ class Level:
             for target in self.__level_targets:
                 if arrow.rect.colliderect(target.rect):
                     target.kill()
-                    self.__moving_arrows.remove(arrow)
+                    """ Teleport Arrow """
+                    if isinstance(arrow, PiercingArrow):
+                        pass
+
+                    else:
+                        self.__moving_arrows.remove(arrow)
 
                     if len(self.__level_targets) == 0:
                         self.__level_exit_door.sprite.unlock()
@@ -210,4 +218,13 @@ class Level:
         self.display_timer(self.__display_surface) # Mostra o tempo na tela
 
         # Retorna a superfície onde com os gráficos desenhados
+        return self.__display_surface
+
+    
+    # Getters
+    @property
+    def constants(self):
+        return self.__constants
+    @property
+    def display_surface(self):
         return self.__display_surface
