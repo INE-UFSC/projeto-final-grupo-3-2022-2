@@ -9,8 +9,8 @@ class LevelSelector(State):
         self.__background = None
         self.__buttons = pygame.sprite.Group()
     
-    def update(self):
-        self.game.reset_keys()
+    def update(self, delta_time, actions):
+        pass
 
-    def render(self):
+    def render(self, display_surface):
         pass

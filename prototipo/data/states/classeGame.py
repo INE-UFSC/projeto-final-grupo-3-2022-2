@@ -1,6 +1,8 @@
 import os, time, pygame
 
 from Settings import Settings
+from states.abstractState import State
+from states.stateTitleScreen import TitleScreen
 
 
 class Game():
@@ -25,8 +27,9 @@ class Game():
         self.__dt, self.__prev_time = 0, 0
         self.__state_stack = []
 
-        # Carrega os assets
+        # Carrega o jogo
         self.__load_assets()
+        self.__load_states()
 
     def __load_assets(self):
         pass
@@ -35,6 +38,10 @@ class Game():
         self.sprite_dir = os.path.join(self.assets_dir, "sprites")
         self.font_dir = os.path.join(self.assets_dir, "fonts")
         self.font = pygame.font.Font(os.path.join(self.font_dir, "PressStart2P.ttf"), 28) """
+    
+    def __load_states(self):
+        self.__title_screen = TitleScreen(self)
+        self.__state_stack.append(self.__title_screen)
 
     def run(self):
         while self.__playing:
@@ -65,42 +72,39 @@ class Game():
                         pygame.display.init()
                     self.__screen_resize()
 
-                if event.key == pygame.K_UP:
-                    self.__actions['up'] = True
-                if event.key == pygame.K_DOWN:
-                    self.__actions['down'] = True
-                if event.key == pygame.K_LEFT:
-                    self.__actions['left'] = True
-                if event.key == pygame.K_RIGHT:
-                    self.__actions['right'] = True
-                if event.key == pygame.K_SPACE:
-                    self.__actions['action1'] = True
-                if event.key == pygame.K_RETURN:
-                    self.__actions['action2'] = True
                 if event.key == pygame.K_ESCAPE:
-                    self.__actions['start'] = True
+                    self.__actions['esc'] = True
+                if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
+                    self.__actions['up'] = True
+                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                    self.__actions['down'] = True
+                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                    self.__actions['left'] = True
+                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                    self.__actions['right'] = True
+                if event.key == pygame.K_r:
+                    self.__actions['reset'] = True
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP:
-                    self.__actions['up'] = False
-                if event.key == pygame.K_DOWN:
-                    self.__actions['down'] = False
-                if event.key == pygame.K_LEFT:
-                    self.__actions['left'] = False
-                if event.key == pygame.K_RIGHT:
-                    self.__actions['right'] = False
-                if event.key == pygame.K_SPACE:
-                    self.__actions['action1'] = False
-                if event.key == pygame.K_RETURN:
-                    self.__actions['action2'] = False
                 if event.key == pygame.K_ESCAPE:
-                    self.__actions['start'] = False
+                    self.__actions['esc'] = False
+                if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
+                    self.__actions['up'] = False
+                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
+                    self.__actions['down'] = False
+                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                    self.__actions['left'] = False
+                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                    self.__actions['right'] = False
+                if event.key == pygame.K_r:
+                    self.__actions['reset'] = False
 
     def __update(self):
-        pass
+        self.__state_stack[-1].update(self.__dt, self.__actions)
 
     def __render(self):
-        # self.__screen.blit(pygame.transform.scale(self.__background, (self.screen_width, self.screen_height)), (0,0))
+        self.__state_stack[-1].render(self.__display_surface) # Renderiza a state atual
+        self.__screen.blit(self.__display_surface, Settings.get_surface_offset())
         pygame.display.flip()
 
     def __get_dt(self):
@@ -115,16 +119,18 @@ class Game():
 
 
     def reset_keys(self):
-        for action in self.actions:
-            self.actions[action] = False
+        for action in self.__actions:
+            self.__actions[action] = False
 
 
     # Métodos que alteram a state stack
-    def append_state(self, state):
+    def append_state(self, state: State):
         self.__state_stack.append(state)
+        self.reset_keys()
 
     def pop_state(self):
         self.__state_stack.pop()
+        self.reset_keys()
 
 
     # Getters
@@ -145,9 +151,3 @@ class Game():
     @display_surface.setter
     def display_surface(self, display_surface):
         self.__display_surface = display_surface
-
-    
-""" if __name__ == "__main__":
-    g = Game()
-while g.running:
-    g.run() """
