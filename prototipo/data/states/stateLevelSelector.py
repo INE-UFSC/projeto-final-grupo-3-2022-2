@@ -46,8 +46,9 @@ class LevelSelector(State):
         display_surface.blit(background, (0, 0)) # Mostra o background
 
         center = display_surface.get_rect().center
+        topleft = display_surface.get_rect().topleft
 
-        self.VOLTAR.render(display_surface, (center[0]-600, center[1] - 300))
+        self.VOLTAR.render(display_surface, (topleft[0]+100, topleft[1]+100))
         self.NIVEL.render(display_surface, (center[0]-500, center[1] - 200))
         self.RECORDE.render(display_surface, (center[0]-100, center[1] - 200))
         for i in range(0, len(self.NIVEIS)):
