@@ -30,7 +30,7 @@ class TitleScreen(State):
 
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
-
+        
         background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))
         display_surface.blit(background, (0, 0)) # Mostra o background
 

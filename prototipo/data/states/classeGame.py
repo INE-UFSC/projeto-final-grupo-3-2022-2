@@ -137,6 +137,9 @@ class Game():
 
 
     def __screen_resize(self):
+        # Muda o tamanho da superfície de display
+        self.__display_surface = pygame.Surface((self.__screen.get_width(), self.__screen.get_height()))
+        # Notifica a classe Settings do novo tamanho da tela
         Settings.set_surface_offset(int((self.__screen.get_width() - self.__display_surface.get_width()) / 2),
                                     int((self.__screen.get_height() - self.__display_surface.get_height()) / 2))
 
@@ -162,10 +165,10 @@ class Game():
         return self.__state_stack
     @property
     def screen_width(self):
-        return self.__screen_width
+        return self.__screen.get_width()
     @property
     def screen_height(self):
-        return self.__screen_height
+        return self.__screen.get_height()
     @property
     def display_surface(self):
         return self.__display_surface
