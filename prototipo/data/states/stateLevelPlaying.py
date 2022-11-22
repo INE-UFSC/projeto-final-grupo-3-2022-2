@@ -7,7 +7,7 @@ class LevelPlaying(State):
     def __init__(self, game):
         super().__init__(game)
 
-        self.__background = None
+        self.__background = self._game.images['background']
         self.__buttons = pygame.sprite.Group()
 
     def update(self, delta_time, actions):
@@ -17,4 +17,9 @@ class LevelPlaying(State):
             pause_state.enter_state()
 
     def render(self, display_surface):
-        pass
+        display_surface.fill((0, 0, 0)) # Limpa a tela
+
+        background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))
+        display_surface.blit(background, (0, 0)) # Mostra o background
+
+
