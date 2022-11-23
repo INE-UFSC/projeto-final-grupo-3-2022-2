@@ -1,13 +1,8 @@
-import pickle
+import json
 
-"""
-Pensei que seria melhor o dicionario ter a chave level e uma lista de tuplas (nickname, time) ordenados pelo time,
-assim cada level teria uma lista com oito melhores scores que seriam mostrados durante o pause do level e
-na escolha do level seria mostrado sempre a primeira tupla de cada level, que seria o melhor tempo dos leveis
-"""
 
 class ScoreDAO():
-    def __init__(self, datasource = 'scores.pkl'):
+    def __init__(self, datasource = 'scores.json'):
         self.__datasource = datasource
         self.__objectCache = {}
         try:
@@ -16,35 +11,33 @@ class ScoreDAO():
             self.__dump()
 
     def __dump(self):
-        pickle.dump(self.__objectCache, open(self.__datasource, 'wb'))
+        json.dump(self.__objectCache, open(self.__datasource, 'w'))
 
     def __load(self):
-        self.__objectCache = pickle.load(open(self.__datasource, 'rb'))
+        self.__objectCache = json.load(open(self.__datasource, 'r'))
 
     def add(self, level: int, nickname: str, time: float):
+        level = str(level)
         if level in self.__objectCache: # Verifica se o level ja foi adicionado
-            if len(self.__objectCache[level]) == 8: # Verifica se o tamanho da lista do level é igual a oito (limite de scores por level)
-                self.__remove(level) # Remove o pior score (ultimo da lista ordenada pelo tempo)
-            self.__objectCache[level].append((nickname, time)) # Adiciona os dados na lista
+            if nickname in self.__objectCache[level]: # Verifica se o nickname ja foi adicionado
+                if time < self.__objectCache[level][nickname]: # Se o tempo for menor que o registrado armazena o novo tempo
+                    self.__objectCache[level][nickname] = time
+            else:
+                if len(self.__objectCache[level]) == 50: # Se não tiver o nome e tiver 50 nomes
+                    if time < max(self.__objectCache[level].values()): # Verifica se o tempo é menor do que o maior tempo do level
+                        nickname_toremove = sorted(self.__objectCache[level], key = self.__objectCache[level].get)[-1]
+                        self.__objectCache[level].pop(nickname_toremove) # Remove o nickname com o menor tempo
+                        self.__objectCache[level][nickname] = time
+                else:
+                    self.__objectCache[level][nickname] = time
         else:
-            self.__objectCache[level] = [(nickname, time)] # Se não, adiciona uma lista com a tupla com o dados
+            self.__objectCache[level] = {nickname: time} # Se não, adiciona uma lista com a tupla com o dados
 
-        self.__ordena(level) # Ordena a lista do level pelo tempo
         self.__dump()
-
-    def __remove(self, level: int):
-        self.__objectCache[level].pop(-1)
-
-    def __ordena(self, level: int):
-        for i in range(0, len(self.__objectCache[level])):
-            for j in range(0, len(self.__objectCache[level])):
-                if self.__objectCache[level][i][1] < self.__objectCache[level][j][1]:
-                    temp = self.__objectCache[level][i]
-                    self.__objectCache[level][i] = self.__objectCache[level][j]
-                    self.__objectCache[level][j] = temp
 
 
     def get_level(self, level: int):
+        level = str(level)
         return self.__objectCache[level]
 
     def get_all(self):
