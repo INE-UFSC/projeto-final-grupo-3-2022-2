@@ -28,13 +28,13 @@ class TileMapConverter:
                     "down_right": False,
                 }
                 if st[y][x] == " ":
-                    return_list[y - 1].append("   ")
+                    return_list[y - 1].append(" ")
                 elif st[y][x] == "A":
-                    return_list[y - 1].append(" A ")
+                    return_list[y - 1].append("A")
                 elif st[y][x] == "P":
-                    return_list[y - 1].append(" P ")
+                    return_list[y - 1].append("P")
                 elif st[y][x] == "D":
-                    return_list[y - 1].append(" D ")
+                    return_list[y - 1].append("D")
                 elif st[y][x] == "O":
                     return_list[y - 1].append(" O ")
                 elif st[y][x] == "X":
@@ -66,7 +66,7 @@ class TileMapConverter:
         # falar com andre sobre tiles que deveriam existir
         if c["up"] and c["down"] and c["left"] and c["right"]:
             if c["up_left"] and c["up_right"] and c["down_left"] and c["down_right"]:
-                return "black" # black?
+                return "black"  # black?
             elif (
                 c["up_left"]
                 and c["up_right"]
@@ -123,13 +123,15 @@ class TileMapConverter:
                 and c["down_right"]
             ):
                 return 16
-        elif (
-            not c["up"]
-            and not c["down"]
-            and not c["left"]
-            and not c["right"]
-        ):
-            return 17
+            elif (
+                not c["up_left"]
+                and not c["down_left"]
+                and not c["up_right"]
+                and not c["down_right"]
+            ):
+                return 17
+        elif not c["up"] and not c["down"] and not c["left"] and not c["right"]:
+            return 18
         else:
             if not c["left"] and not c["up"] and c["right"] and c["down"]:
                 return 1
@@ -172,6 +174,23 @@ if __name__ == "__main__":
         "XXXXXXXXXXXXXXXXXXXXXXXXX",
     ]
 
+    convert = TileMapConverter.convert(s)
+    for item in convert:
+        print(item)
+
+    s = [
+        "                         ",
+        "                         ",
+        "                         ",
+        "                         ",
+        "                         ",
+        "     X             X     ",
+        "    X               X    ",
+        "    X      X        X    ",
+        "     X             X     ",
+        " XX         P         XX ",
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+    ]
     convert = TileMapConverter.convert(s)
     for item in convert:
         print(item)
