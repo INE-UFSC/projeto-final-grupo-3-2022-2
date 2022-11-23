@@ -22,6 +22,7 @@ class LevelSelector(State):
         self.VOLTAR = Button(self._game.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
         self.NIVEL = Button(self._game.fonts_path['text'], 50, (222, 69, 69), 'Nível')
         self.RECORDE = Button(self._game.fonts_path['text'], 50, (90, 107, 219), 'Recorde')
+        self.SELETOR = Button(self._game.fonts_path['text'], 45, (222, 69, 69), '>')
         self.NIVEIS = []
         self.RECORDES = []
         scores = self.__scoreController.get_all_scores()
@@ -48,10 +49,12 @@ class LevelSelector(State):
         center = display_surface.get_rect().center
         topleft = display_surface.get_rect().topleft
 
-        self.VOLTAR.render(display_surface, (topleft[0]+100, topleft[1]+100))
+        self.VOLTAR.render(display_surface, (topleft[0]+100, topleft[1]+30))
         self.NIVEL.render(display_surface, (center[0]-500, center[1] - 200))
         self.RECORDE.render(display_surface, (center[0]-100, center[1] - 200))
         for i in range(0, len(self.NIVEIS)):
             self.NIVEIS[i].render(display_surface, (center[0]-500, center[1] - 200 + (i + 1) * 50))
+            if self.NIVEIS[i].check_for_input(self._game.get_mouse_pos()):
+                    self.SELETOR.render(display_surface, (center[0]-530, center[1] - 200 + (i + 1) * 50))
         for i in range(0, len(self.RECORDES)):
             self.RECORDES[i].render(display_surface, (center[0]-100, center[1] - 200 + (i + 1) * 50))
