@@ -6,6 +6,8 @@ import finder
 from states.abstractState import State
 from states.stateTitleScreen import TitleScreen
 
+from singletonAssets import Assets
+
 
 class Game():
     def __init__(self):
@@ -14,14 +16,14 @@ class Game():
         # Configurações da janela
         self.__fullscreen = False
         self.__monitor_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-        self.__screen_width = int(self.__monitor_size[0] * 0.95)
-        self.__screen_height = int(self.__monitor_size[1] * 0.80)
-        self.__screen = pygame.display.set_mode((self.__screen_width, self.__screen_height), pygame.RESIZABLE)
+        self.__initial_screen_width = int(self.__monitor_size[0] * 0.95)
+        self.__initial_screen_height = int(self.__monitor_size[1] * 0.80)
+        self.__screen = pygame.display.set_mode((self.__initial_screen_width, self.__initial_screen_height), pygame.RESIZABLE)
 
         pygame.display.set_caption("Speed Archer")
 
         # Configurações da superfície de display
-        self.__display_surface = pygame.Surface((self.__screen_width, self.__screen_height))
+        self.__display_surface = pygame.Surface((self.__initial_screen_width, self.__initial_screen_height))
 
         # Configurações do jogo
         self.__running, self.__playing = True, True
@@ -36,19 +38,7 @@ class Game():
         self.__load_states()
 
     def __load_assets(self):
-        pass
-
-        self.__fonts_path = {
-            'title': finder.find_file('Fibberish.ttf'),
-            'text': finder.find_file('PixelOperatorHB.ttf')
-        }
-        self.__images = {
-            'background': pygame.image.load(finder.find_file('background.png')).convert_alpha(),
-        }
-        """ self.assets_dir = os.path.join("assets")
-        self.sprite_dir = os.path.join(self.assets_dir, "sprites")
-        self.font_dir = os.path.join(self.assets_dir, "fonts")
-        self.font = pygame.font.Font(os.path.join(self.font_dir, "PressStart2P.ttf"), 28) """
+        Assets().load_assets()
     
     def __load_states(self):
         self.__title_screen = TitleScreen(self)
@@ -79,7 +69,7 @@ class Game():
                         pygame.display.init()
                     else:
                         pygame.display.quit()
-                        self.__screen = pygame.display.set_mode((self.__screen_width, self.__screen_height), pygame.RESIZABLE)
+                        self.__screen = pygame.display.set_mode((self.__initial_screen_width, self.__initial_screen_height), pygame.RESIZABLE)
                         pygame.display.init()
                     self.__screen_resize()
 
@@ -175,9 +165,6 @@ class Game():
     @property
     def actions(self):
         return self.__actions
-
-    def get_mouse_pos(self):
-        return Settings.mouse_pos()
     
     # Assets
     @property
