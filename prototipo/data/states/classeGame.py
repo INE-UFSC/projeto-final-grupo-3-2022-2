@@ -34,11 +34,11 @@ class Game():
         self.__state_stack = []
 
         # Carrega o jogo
-        self.__load_assets()
+        self.__load_assets() # Carrega os assets
         self.__load_states()
 
     def __load_assets(self):
-        Assets().load_assets()
+        Assets().load_assets() # Inicializa o singleton de assets
     
     def __load_states(self):
         self.__title_screen = TitleScreen(self)
@@ -165,14 +165,6 @@ class Game():
     @property
     def actions(self):
         return self.__actions
-    
-    # Assets
-    @property
-    def fonts_path(self):
-        return self.__fonts_path
-    @property
-    def images(self):
-        return self.__images
     
     # Setters
     @display_surface.setter

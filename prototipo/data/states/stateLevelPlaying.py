@@ -1,5 +1,9 @@
 import pygame
 from states.abstractState import State
+from states.classeButton import Button
+from singletonAssets import Assets
+from Settings import Settings
+
 from states.stateLevelPaused import LevelPaused
 
 
@@ -7,7 +11,8 @@ class LevelPlaying(State):
     def __init__(self, game):
         super().__init__(game)
 
-        self.__background = self._game.images['background']
+        self.__assets = Assets()
+        self.__background = self.__assets.images['background']
         self.__buttons = pygame.sprite.Group()
 
     def update(self, delta_time, actions):
@@ -21,5 +26,3 @@ class LevelPlaying(State):
 
         background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))
         display_surface.blit(background, (0, 0)) # Mostra o background
-
-

@@ -51,16 +51,15 @@ class LevelSelector(State):
         display_surface.blit(background, (0, 0)) # Mostra o background
 
         center = display_surface.get_rect().center
-        topleft = display_surface.get_rect().topleft
 
-        self.VOLTAR.render(display_surface, (topleft[0]+100, topleft[1]+30))
-        self.NIVEL.render(display_surface, (center[0]-500, center[1] - 200))
+        self.VOLTAR.render(display_surface, (15, 10), position_origin = 'topleft')
+        self.NIVEL.render(display_surface, (130, center[1] - 200))
         self.RECORDE.render(display_surface, (center[0]-100, center[1] - 200))
         
         for i in range(0, len(self.NIVEIS)):
-            self.NIVEIS[i].render(display_surface, (center[0]-500, center[1] - 200 + (i + 1) * 50))
+            self.NIVEIS[i].render(display_surface, (130, center[1] - 200 + (i + 1) * 50))
             if self.NIVEIS[i].check_for_hover(Settings.mouse_pos()):
-                    self.SELETOR.render(display_surface, (center[0]-530, center[1] - 200 + (i + 1) * 50))
+                    self.SELETOR.render(display_surface, (100, center[1] - 200 + (i + 1) * 50))
         
         for i in range(0, len(self.RECORDES)):
             self.RECORDES[i].render(display_surface, (center[0]-100, center[1] - 200 + (i + 1) * 50))
