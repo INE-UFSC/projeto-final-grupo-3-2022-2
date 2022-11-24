@@ -64,99 +64,62 @@ class TileMapConverter:
     @staticmethod
     def __get_tile(c: dict) -> int:
         # falar com andre sobre tiles que deveriam existir
-        if c["up"] and c["down"] and c["left"] and c["right"]:
-            if c["up_left"] and c["up_right"] and c["down_left"] and c["down_right"]:
-                return "black"  # black?
-            elif (
-                c["up_left"]
-                and c["up_right"]
-                and c["down_left"]
-                and not c["down_right"]
-            ):
-                return 9
-            elif (
-                c["up_left"]
-                and c["up_right"]
-                and not c["down_left"]
-                and c["down_right"]
-            ):
-                return 10
-            elif (
-                c["up_left"]
-                and not c["up_right"]
-                and c["down_left"]
-                and c["down_right"]
-            ):
-                return 11
-            elif (
-                not c["up_left"]
-                and c["up_right"]
-                and c["down_left"]
-                and c["down_right"]
-            ):
-                return 12
-            elif (
-                c["up_left"]
-                and not c["up_right"]
-                and c["down_left"]
-                and not c["down_right"]
-            ):
-                return 13
-            elif (
-                c["up_left"]
-                and c["up_right"]
-                and not c["down_left"]
-                and not c["down_right"]
-            ):
-                return 14
-            elif (
-                not c["up_left"]
-                and c["up_right"]
-                and not c["down_left"]
-                and c["down_right"]
-            ):
-                return 15
-            elif (
-                not c["up_left"]
-                and not c["up_right"]
-                and c["down_left"]
-                and c["down_right"]
-            ):
-                return 16
-            elif (
-                not c["up_left"]
-                and not c["down_left"]
-                and not c["up_right"]
-                and not c["down_right"]
-            ):
-                return 17
-        elif not c["up"] and not c["down"] and not c["left"] and not c["right"]:
+        if (c["up"] and c["right"] and c["left"] and c["down"]
+                and c["up_left"] and c["up_right"] and c["down_left"] and c["down_right"]):
+            return "black"  # black?
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
+            return 17
+        elif (not c["left"] and not c["up"] and c["right"] and c["down"]):
+            return 1
+        elif (c["left"] and not c["up"] and not c["right"] and c["down"]):
+            return 2
+        elif (not c["left"] and c["up"] and c["right"] and not c["down"]):
+            return 3
+        elif (c["left"] and c["up"] and not c["right"] and not c["down"]):
+            return 4
+        elif (not c["left"] and c["up"] and c["right"] and c["down"]):
+            return 5
+        elif (c["left"] and not c["up"] and c["right"] and c["down"]):
+            return 6
+        elif (c["left"] and c["up"] and not c["right"] and c["down"]):
+            return 7
+        elif (c["left"] and c["up"] and c["right"] and not c["down"]):
+            return 8
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_right"] and not c["up_right"]):
+            return 13
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_right"] and not c["down_left"]):
+            return 14
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_left"] and c["up_left"]):
+            return 15
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["up_right"] and not c["up_left"]):
+            return 16
+        elif not c["up"] and not c["down"] and not c["right"] and not c["left"]:
             return 18
-        else:
-            if not c["left"] and not c["up"] and c["right"] and c["down"]:
-                return 1
-            elif c["left"] and not c["up"] and not c["right"] and c["down"]:
-                return 2
-            elif not c["left"] and c["up"] and c["right"] and not c["down"]:
-                return 3
-            elif c["left"] and c["up"] and not c["right"] and not c["down"]:
-                return 4
-            elif c["up"] and c["down"] and not c["left"] and c["right"]:
-                return 5
-            elif c["left"] and c["right"] and not c["up"] and c["down"]:
-                return 6
-            elif c["up"] and c["down"] and c["left"] and not c["right"]:
-                return 7
-            elif c["left"] and c["right"] and c["up"] and not c["down"]:
-                return 8
-            elif not c["up"] and not c["down"] and not c["left"] and not c["right"]:
-                return 18
-            elif not c["up"] and not c["down"] and c["left"] and c["right"]:
-                return 19
-            elif c["up"] and c["down"] and not c["left"] and not c["right"]:
-                return 20
-            else:
-                return "AQUI"
+        elif not c["up"] and not c["down"] and c["right"] and c["left"]:
+            return 19
+        elif (c["left"] and c["down"] and not c["down_right"]):
+            return 9
+        elif (c["left"] and c["down"] and not c["down_left"]):
+            return 10
+        elif (c["up"] and c["right"] and not c["up_right"]):
+            return 11
+        elif (c["left"] and c["up"] and not c["up_left"]):
+            return 12
+        elif c["up"] and c["down"] and not c["right"] and not c["left"]:
+            return 20
+        elif not c["up"] and not c["down"] and not c["right"] and c["left"]:
+            return 21
+        elif not c["up"] and not c["down"] and c["right"] and not c["left"]:
+            return 22
+        elif c["up"] and not c["down"] and not c["right"] and not c["left"]:
+            return 23
+        elif not c["up"] and c["down"] and not c["right"] and not c["left"]:
+            return 24
 
 
 if __name__ == "__main__":
@@ -190,6 +153,34 @@ if __name__ == "__main__":
         "     X             X     ",
         " XX         P         XX ",
         "XXXXXXXXXXXXXXXXXXXXXXXXX",
+    ]
+    convert = TileMapConverter.convert(s)
+    for item in convert:
+        print(item)
+
+    s = [
+        "                         ",
+        "                         ",
+        "                         ",
+        "                         ",
+        "                         ",
+        "     X             X     ",
+        "    X               X    ",
+        "    X      XX       X    ",
+        "     X      XXX    X     ",
+        " XX         P         XX ",
+        "XXXXXXXXXXXXXXXXXXXXXXXXX",
+    ]
+    convert = TileMapConverter.convert(s)
+    for item in convert:
+        print(item)
+
+    s = [
+        "     ",
+        " XXX ",
+        "XXXXX",
+        " XXX ",
+        "     "
     ]
     convert = TileMapConverter.convert(s)
     for item in convert:
