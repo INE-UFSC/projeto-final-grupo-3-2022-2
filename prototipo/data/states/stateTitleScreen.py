@@ -24,11 +24,11 @@ class TitleScreen(State):
     
     def update(self, delta_time, actions):
         if self._game.actions['mouse_left']:
-            if self.SELECT_1.check_for_input(Settings.mouse_pos()):
+            if self.SELECT_1.check_for_hover(Settings.mouse_pos()):
                 self._game.state_stack.append(LevelSelector(self._game))
-            if self.SELECT_2.check_for_input(Settings.mouse_pos()):
+            if self.SELECT_2.check_for_hover(Settings.mouse_pos()):
                 pass
-            if self.SELECT_3.check_for_input(Settings.mouse_pos()):
+            if self.SELECT_3.check_for_hover(Settings.mouse_pos()):
                 pass
 
     def render(self, display_surface):

@@ -15,7 +15,7 @@ class Button():
         self.__rect.center = center_position
         screen.blit(self.__text, self.__rect)
 
-    def check_for_input(self, mouse_position):
+    def check_for_hover(self, mouse_position):
         if self.__rect.collidepoint(mouse_position):
             return True
         return False

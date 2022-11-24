@@ -28,7 +28,8 @@ class LevelSelector(State):
         self.NIVEIS = []
         self.RECORDES = []
         scores = self.__scoreController.get_all_scores()
-        for level in range(1, 9): #Range vai depender da classe que controla os leveis
+        
+        for level in range(1, 9): # Range vai depender da classe que controla os leveis
             self.NIVEIS.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(level)))
             if level in scores:
                 self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][1])))
@@ -37,10 +38,11 @@ class LevelSelector(State):
     
     def update(self, delta_time, actions):
         if self._game.actions['mouse_left']:
-            if self.VOLTAR.check_for_input(Settings.mouse_pos()):
+            if self.VOLTAR.check_for_hover(Settings.mouse_pos()):
                 self.exit_state()
+            
             for i in range(0, len(self.NIVEIS)):
-                if self.NIVEIS[i].check_for_input(Settings.mouse_pos()):
+                if self.NIVEIS[i].check_for_hover(Settings.mouse_pos()):
                     self._game.state_stack.append(LevelPlaying(self._game))
 
 
@@ -54,9 +56,11 @@ class LevelSelector(State):
         self.VOLTAR.render(display_surface, (topleft[0]+100, topleft[1]+30))
         self.NIVEL.render(display_surface, (center[0]-500, center[1] - 200))
         self.RECORDE.render(display_surface, (center[0]-100, center[1] - 200))
+        
         for i in range(0, len(self.NIVEIS)):
             self.NIVEIS[i].render(display_surface, (center[0]-500, center[1] - 200 + (i + 1) * 50))
-            if self.NIVEIS[i].check_for_input(Settings.mouse_pos()):
+            if self.NIVEIS[i].check_for_hover(Settings.mouse_pos()):
                     self.SELETOR.render(display_surface, (center[0]-530, center[1] - 200 + (i + 1) * 50))
+        
         for i in range(0, len(self.RECORDES)):
             self.RECORDES[i].render(display_surface, (center[0]-100, center[1] - 200 + (i + 1) * 50))
