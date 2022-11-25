@@ -23,9 +23,9 @@ class TitleScreen(State):
         self.SELECT_3 = Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
     
     def update(self, delta_time, actions):
-        if self._game.actions['mouse_left']:
+        if actions['mouse_left']:
             if self.SELECT_1.check_for_hover(Settings.mouse_pos()):
-                self._game.state_stack.append(LevelSelector(self._game))
+                LevelSelector(self._game).enter_state()
             if self.SELECT_2.check_for_hover(Settings.mouse_pos()):
                 pass
             if self.SELECT_3.check_for_hover(Settings.mouse_pos()):

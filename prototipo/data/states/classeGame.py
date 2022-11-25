@@ -31,6 +31,7 @@ class Game():
                           'up': False, 'down': False, 'left': False, 'right': False,
                           'mouse_left': False, 'mouse_right': False}
         self.__dt, self.__prev_time = 0, 0
+        self.__clock = pygame.time.Clock()
         self.__state_stack = []
 
         # Carrega o jogo
@@ -50,6 +51,8 @@ class Game():
             self.__update()
             self.__render()
             self.__get_dt()
+            
+            self.__clock.tick(60) # Limita o FPS
 
     def __get_events(self):
         for event in pygame.event.get():
@@ -132,7 +135,6 @@ class Game():
         # Notifica a classe Settings do novo tamanho da tela
         Settings.set_surface_offset(int((self.__screen.get_width() - self.__display_surface.get_width()) / 2),
                                     int((self.__screen.get_height() - self.__display_surface.get_height()) / 2))
-
 
     def reset_keys(self):
         for action in self.__actions:
