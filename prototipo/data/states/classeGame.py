@@ -99,20 +99,12 @@ class Game():
         Settings.set_surface_offset(int((self.__screen.get_width() - self.__display_surface.get_width()) / 2),
                                     int((self.__screen.get_height() - self.__display_surface.get_height()) / 2))
 
-    def reset_keys(self):
-        for action in self.__actions:
-            self.__actions[action] = False
-
-
     # Métodos que alteram a state stack
     def append_state(self, state: State):
         self.__state_stack.append(state)
-        self.reset_keys()
 
     def pop_state(self):
         self.__state_stack.pop()
-        self.reset_keys()
-
 
     # Getters
     @property
