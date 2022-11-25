@@ -13,18 +13,18 @@ class LevelPlaying(State):
     def __init__(self, game):
         super().__init__(game)
 
-        self.__assets = Assets()
-        self.__background = self.__assets.images['background']
-        self.__buttons = pygame.sprite.Group()
-        self.__actions = {'esc': False, 'reset': False,
+        self.__actions = {'esc': False, 'restart': False,
                           'up': False, 'down': False, 'left': False, 'right': False,
                           'mouse_left': False, 'mouse_right': False}
+        
+        self.__assets = Assets()
+        self.__buttons = pygame.sprite.Group()
         
         self.__load_level(0)
         
     def __load_level(self, level_selected):
         current_level = config.levels[level_selected]
-        self.level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
+        self.__level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
         
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN: # Inputs do teclado (soltar tecla)
@@ -39,7 +39,7 @@ class LevelPlaying(State):
             if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                 self.__actions['right'] = True
             if event.key == pygame.K_r:
-                self.__actions['reset'] = True
+                self.__actions['restart'] = True
                 
         if event.type == pygame.KEYUP: # Inputs do teclado (soltar tecla)
             if event.key == pygame.K_ESCAPE:
@@ -53,17 +53,19 @@ class LevelPlaying(State):
             if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                 self.__actions['right'] = False
             if event.key == pygame.K_r:
-                self.__actions['reset'] = False
+                self.__actions['restart'] = False
 
         if event.type == pygame.MOUSEBUTTONDOWN: # Inputs do mouse (pressionar botão)
             if event.button == 1:
                 self.__actions['mouse_left'] = True
+                self.__level.start_hold()
             if event.button == 3:
                 self.__actions['mouse_right'] = True
                     
         if event.type == pygame.MOUSEBUTTONUP: # Inputs do mouse (soltar botão)
             if event.button == 1:
                 self.__actions['mouse_left'] = False
+                self.__level.end_hold()
             if event.button == 3:
                 self.__actions['mouse_right'] = False
 
@@ -72,14 +74,14 @@ class LevelPlaying(State):
         if self.__actions['esc']:
             pause_state = LevelPaused(self._game)
             pause_state.enter_state()
+
+        self.__level.update(self.__actions)
             
             
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
-        background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))
-        display_surface.blit(background, (0, 0)) # Mostra o background
-        
-        temp = self.level.run(pygame.event.get()) # Recebe a display surface do Level
-        display_surface.blit(temp, (0, 0)) # Desenha o Level
-        temp.fill((0, 0, 0)) # Limpa o Level
+
+        level_surface = self.__level.render() # Recebe a display surface do Level
+        display_surface.blit(level_surface, (0, 0)) # Desenha o Level
+        level_surface.fill((0, 0, 0)) # Limpa o Level
 

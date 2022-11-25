@@ -45,6 +45,9 @@ class Level:
 
         # Status do nível
         self.__win_status = False
+        
+        self.__start_hold = None
+        self.__did_shoot = False
 
     def restart_level(self):
         self.__init__(self.__level_data)
@@ -89,22 +92,6 @@ class Level:
 
         self.__display_surface.blit(rotated_bow_image, rotated_bow_rect)
 
-    def player_shoot(self, player: Player, hold_factor: float):
-        try: # Tenta pegar uma flecha do arco (irá suceder se o arco tiver flechas)
-            arrow = self.__player.sprite.bow.pop_first_arrow()
-        
-        except: # Caso o jogador não tenha uma flecha no arco, ele não poderá atirar
-            # Fazer efeito sonoro ou algo do gênero
-            pass
-        
-        else: # Caso o try tenha sucedido
-            target_position = Settings.mouse_pos() # Pega a posição do mouse
-
-            arrow.start_shot(player.rect.center, target_position, hold_factor) # Inicializa os atributos de posição da flecha
-            self.__moving_arrows.append(arrow) # Adiciona a flecha na lista de flechas do level
-
-            player.knockback(target_position) # Aplica o knockback no jogador
-
     def get_arrow_stuck(self, player_position):
         for arrow in self.__stuck_arrows:
             # Se o player colidir com alguma flecha remove a flecha das flechas presas e adiciona no player
@@ -129,83 +116,115 @@ class Level:
         surface.blit(text, (400, 10))  # Mostra na tela
 
 
-    def run(self, event_listener):
-
-        """ DETECÇÃO DE INPUT PARA O NÍVEL (atualizar quando for feito a organização dos inputs) """
-        if pygame.key.get_pressed()[pygame.K_r]:
-            self.restart_level()
-        """ FIM DA DETECÇÃO DE INPUT PARA O NÍVEL """
-
-        player = self.__player.sprite
-
-        delta_speed = player.calculate_speed() # É uma tupla com os valores de deslocamento calculados baseados no player
-        collided_delta_speed = player.get_collided_position(delta_speed, self.__level_tiles) # É uma tupla com os valores de deslocamento transformados a partir das colisões
-        
-        player.update(collided_delta_speed) # Aplica o deslocamento final no jogador
+    def start_hold(self):
+        self.__start_hold = time()
+    
+    def end_hold(self):
+        if self.__start_hold is not None:
+            self.__end_hold = time()
+            self.__did_shoot = True
 
 
-        """ UPDATE DAS FLECHAS ------ ORGANIZAR DEPOIS """
-        for event in event_listener:
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # Se o botão esquerdo do mouse for pressionado
-                self.__start_hold = time()
-            elif event.type == pygame.MOUSEBUTTONUP and event.button == 1: # Quando o botão esquerdo do mouse for soltado
-                end_hold = time()
+    def __update_player(self, player):
+        # Gera uma tupla com os valores de deslocamento calculados baseados no player
+        delta_speed = player.calculate_speed()
+        # A parte da tupla delta_speed, calcula uma nova tupla para os valores de deslocamento transformados a partir das colisões
+        collided_delta_speed = player.get_collided_position(delta_speed, self.__level_tiles) 
+        # Aplica o deslocamento final no jogador
+        player.update(collided_delta_speed)
 
-                self.__hold_time = end_hold - self.__start_hold
-                if self.__hold_time >= 1:
-                    hold_factor = 1
-                else:
-                    hold_factor = self.__hold_time / 1 # Vai ser um float que varia de 0 até 1
-                
-                self.player_shoot(player, hold_factor)
+    def __handle_shoot(self, player):
+        self.__did_shoot = False
 
+        # Calcula o fator de hold
+        mouse_hold_time = self.__end_hold - self.__start_hold # Tempo que o mouse ficou pressionado
+        if mouse_hold_time >= 1:
+            hold_factor = 1
+        else: hold_factor = mouse_hold_time / 1 # Vai ser um float que varia de 0 até 1
+
+        # Tenta atirar
+        try: # Tenta pegar uma flecha do arco (irá suceder se o arco tiver flechas)
+            arrow = player.bow.pop_first_arrow()
+
+        except: # Caso o jogador não tenha uma flecha no arco, ele não poderá atirar
+            # Fazer efeito sonoro ou algo do gênero
+            pass
+            
+        else: # Caso o try tenha sucedido (o jogador tenha atirado)
+            target_position = Settings.mouse_pos() # Pega a posição do mouse
+
+            arrow.start_shot(player.rect.center, target_position, hold_factor) # Inicializa os atributos de posição da flecha
+            self.__moving_arrows.append(arrow) # Adiciona a flecha na lista de flechas do level
+
+            player.knockback(target_position) # Aplica o knockback no jogador
+
+    def __update_arrows(self):
         for arrow in self.__moving_arrows:
-            arrow.update(self.__level_tiles) # Aplica o deslocamento na flecha
+            # Aplica o deslocamento na flecha e trata a colisão da flecha
+            # Possívelmente irá alterar o atributo stuck da flecha
+            arrow.update(self.__level_tiles)
 
-            if arrow.stuck:
+            if arrow.stuck: # Se durante o update a flecha foi definida como stuck = True
                 self.__stuck_arrows.append(self.__moving_arrows.pop(self.__moving_arrows.index(arrow)))
-
-            self.__display_surface.blit(arrow.image, arrow.rect)
-
-            """ TAGET """
+            
+            # Colide a flecha com as targets
             for target in self.__level_targets:
                 if arrow.rect.colliderect(target.rect):
                     target.kill()
-                    """ Teleport Arrow """
                     if isinstance(arrow, PiercingArrow):
                         pass
-
                     else:
                         self.__moving_arrows.remove(arrow)
 
-                    if len(self.__level_targets) == 0:
-                        self.__level_exit_door.sprite.unlock()
-                        print(self.__level_exit_door.sprite.is_unlocked())
-
-                        print("PORTA ABERTA")
-
-        for arrow in self.__stuck_arrows:
-            self.__display_surface.blit(arrow.image, arrow.rect)
-
-        self.get_arrow_stuck(player.rect)
-        """ FIM DO UPDATE DAS FLECHAS """
-
-
-
-        """ SPIKES - ORGANIZAR DEPOIS """
+    def __handle_spike_collisions(self, player):
         for spike in self.__level_spikes:
             if spike.collided(player):
                 print("MORREU")
                 self.restart_level()
-        """ FIM DOS SPIKES """
 
-        
-        """ PORTA DE SAIDA - ORGANIZAR DEPOIS """
-        if self.__level_exit_door.sprite.is_unlocked() and self.__level_exit_door.sprite.collided(player):
-            print("SAIU DO LEVEL")
+    def __check_exit_door(self, player):
+        exit_door = self.__level_exit_door.sprite
+
+        # Confere se a porta está fechada e se não há alvos restantes
+        if not exit_door.is_unlocked() and len(self.__level_targets) == 0:
+            exit_door.unlock()
+
+            print(exit_door.is_unlocked())
+            print("PORTA ABERTA")
+
+        if exit_door.is_unlocked() and exit_door.collided(player):
             self.__win_status = True
-        """ FIM DA PORTA DE SAIDA """
+            self.__timer.stop()
+
+            print("SAIU DO LEVEL")
+    
+    # Retorna uma surperfície com as dimensões do nível que contém o nível renderizado
+    def update(self, actions):
+        # Atualiza o player
+        player = self.__player.sprite
+        self.__update_player(player)
+
+        # Detecta o tiro
+        if self.__did_shoot:
+            print('Tiro detectado')
+            self.__handle_shoot(player)
+
+        # Atualiza as flechas e (possívelmente) as targets
+        self.__update_arrows()
+        self.get_arrow_stuck(player.rect) # MUDAR ##########
+
+        # Trata possíveis colisões do jogador com espinhos
+        self.__handle_spike_collisions(player)
+
+        # Trata ações da porta de saída
+        self.__check_exit_door(player)
         
+        # Confere se o jogador pressionou o botão de reinício
+        if actions['restart']:
+            self.restart_level()
+
+    def render(self) -> pygame.Surface:
+        player = self.__player.sprite
 
         # Draw
         self.__player.draw(self.__display_surface)
@@ -216,15 +235,16 @@ class Level:
         self.__level_exit_door.draw(self.__display_surface)
         self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
         self.display_timer(self.__display_surface) # Mostra o tempo na tela
+        
+        for arrow in self.__stuck_arrows:
+            self.__display_surface.blit(arrow.image, arrow.rect)
 
-        # Retorna a superfície onde com os gráficos desenhados
+        for arrow in self.__moving_arrows:
+            self.__display_surface.blit(arrow.image, arrow.rect)
+            
         return self.__display_surface
-
     
     # Getters
-    @property
-    def constants(self):
-        return self.__constants
     @property
     def display_surface(self):
         return self.__display_surface
