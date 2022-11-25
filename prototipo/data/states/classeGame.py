@@ -27,9 +27,6 @@ class Game():
 
         # Configurações do jogo
         self.__running, self.__playing = True, True
-        self.__actions = {'esc': False, 'reset': False,
-                          'up': False, 'down': False, 'left': False, 'right': False,
-                          'mouse_left': False, 'mouse_right': False}
         self.__dt, self.__prev_time = 0, 0
         self.__clock = pygame.time.Clock()
         self.__state_stack = []
@@ -76,47 +73,13 @@ class Game():
                         pygame.display.init()
                     self.__screen_resize()
 
-                if event.key == pygame.K_ESCAPE:
-                    self.__actions['esc'] = True
-                if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
-                    self.__actions['up'] = True
-                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                    self.__actions['down'] = True
-                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    self.__actions['left'] = True
-                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    self.__actions['right'] = True
-                if event.key == pygame.K_r:
-                    self.__actions['reset'] = True
+            self.__update_state_actions(event)
 
-            if event.type == pygame.KEYUP: # Inputs do teclado (soltar tecla)
-                if event.key == pygame.K_ESCAPE:
-                    self.__actions['esc'] = False
-                if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
-                    self.__actions['up'] = False
-                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                    self.__actions['down'] = False
-                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    self.__actions['left'] = False
-                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    self.__actions['right'] = False
-                if event.key == pygame.K_r:
-                    self.__actions['reset'] = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN: # Inputs do mouse (pressionar botão)
-                if event.button == 1:
-                    self.__actions['mouse_left'] = True
-                if event.button == 3:
-                    self.__actions['mouse_right'] = True
-            
-            if event.type == pygame.MOUSEBUTTONUP: # Inputs do mouse (soltar botão)
-                if event.button == 1:
-                    self.__actions['mouse_left'] = False
-                if event.button == 3:
-                    self.__actions['mouse_right'] = False
+    def __update_state_actions(self, event):
+        self.__state_stack[-1].update_actions(event)
 
     def __update(self):
-        self.__state_stack[-1].update(self.__dt, self.__actions)
+        self.__state_stack[-1].update(self.__dt)
 
     def __render(self):
         self.__state_stack[-1].render(self.__display_surface) # Renderiza a state atual
@@ -136,20 +99,12 @@ class Game():
         Settings.set_surface_offset(int((self.__screen.get_width() - self.__display_surface.get_width()) / 2),
                                     int((self.__screen.get_height() - self.__display_surface.get_height()) / 2))
 
-    def reset_keys(self):
-        for action in self.__actions:
-            self.__actions[action] = False
-
-
     # Métodos que alteram a state stack
     def append_state(self, state: State):
         self.__state_stack.append(state)
-        self.reset_keys()
 
     def pop_state(self):
         self.__state_stack.pop()
-        self.reset_keys()
-
 
     # Getters
     @property
