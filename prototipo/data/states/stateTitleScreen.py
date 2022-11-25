@@ -5,6 +5,7 @@ from singletonAssets import Assets
 from Settings import Settings
 
 from states.stateLevelSelector import LevelSelector
+from states.stateHelpScreen import HelpScreen
 
 
 class TitleScreen(State):
@@ -37,7 +38,7 @@ class TitleScreen(State):
             if self.SELECT_2.check_for_hover(Settings.mouse_pos()):
                 pass
             if self.SELECT_3.check_for_hover(Settings.mouse_pos()):
-                pass
+                HelpScreen(self._game).enter_state()
 
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela

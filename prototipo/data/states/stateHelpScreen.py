@@ -9,6 +9,8 @@ class HelpScreen(State):
     def __init__(self, game):
         super().__init__(game)
 
+        self.__actions = {'mouse_left': False, 'esc': False}
+
         self.__assets = Assets()
         self.__background = self.__assets.images['background']
 
@@ -21,8 +23,22 @@ class HelpScreen(State):
         self.Shoot = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), '(LMB) Shoot')
         self.Slow_Mo = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), '(RMB) Slow-Mo')
         self.Move = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), '(WASD and Keys Arrows) Move')
-    def update(self, delta_time, actions):
-        if actions['mouse_left']:
+
+    def update_actions(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            self.__actions['mouse_left'] = True
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            self.__actions['mouse_left'] = False
+        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.__actions['esc'] = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_ESCAPE:
+                self.__actions['esc'] = False
+
+    def update(self, delta_time):
+        if self.__actions['mouse_left']:
             if self.VOLTAR.check_for_hover(Settings.mouse_pos()):
                 self.exit_state()
 
