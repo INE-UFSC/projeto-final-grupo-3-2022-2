@@ -76,44 +76,10 @@ class Game():
                         pygame.display.init()
                     self.__screen_resize()
 
-                if event.key == pygame.K_ESCAPE:
-                    self.__actions['esc'] = True
-                if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
-                    self.__actions['up'] = True
-                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                    self.__actions['down'] = True
-                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    self.__actions['left'] = True
-                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    self.__actions['right'] = True
-                if event.key == pygame.K_r:
-                    self.__actions['reset'] = True
+            self.__update_state_actions(event)
 
-            if event.type == pygame.KEYUP: # Inputs do teclado (soltar tecla)
-                if event.key == pygame.K_ESCAPE:
-                    self.__actions['esc'] = False
-                if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
-                    self.__actions['up'] = False
-                if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                    self.__actions['down'] = False
-                if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                    self.__actions['left'] = False
-                if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                    self.__actions['right'] = False
-                if event.key == pygame.K_r:
-                    self.__actions['reset'] = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN: # Inputs do mouse (pressionar botão)
-                if event.button == 1:
-                    self.__actions['mouse_left'] = True
-                if event.button == 3:
-                    self.__actions['mouse_right'] = True
-            
-            if event.type == pygame.MOUSEBUTTONUP: # Inputs do mouse (soltar botão)
-                if event.button == 1:
-                    self.__actions['mouse_left'] = False
-                if event.button == 3:
-                    self.__actions['mouse_right'] = False
+    def __update_state_actions(self, event):
+        self.__state_stack[-1].update_actions(event)
 
     def __update(self):
         self.__state_stack[-1].update(self.__dt, self.__actions)

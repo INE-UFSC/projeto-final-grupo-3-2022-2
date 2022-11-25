@@ -7,6 +7,11 @@ class State(ABC):
         self.__prev_state = None
 
     @abstractmethod
+    def update_actions(self, event):
+        # Deve conferir o evento e atualizar um atributo de ações
+        pass
+
+    @abstractmethod
     def update(self, delta_time, actions) -> None:
         # Irá implementar as atualizações dos elementos do estado
         # É possível entrar em outro estado dentro deste método
