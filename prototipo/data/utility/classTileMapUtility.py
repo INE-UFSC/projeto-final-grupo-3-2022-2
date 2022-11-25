@@ -127,3 +127,5 @@ class TileMapConverter:
             return 23
         elif not c["up"] and c["down"] and not c["right"] and not c["left"]:
             return 24
+        else:
+            return " "
