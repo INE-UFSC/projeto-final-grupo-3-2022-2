@@ -1,7 +1,6 @@
-import abstractDAO
+from abstractDAO import AbstractDAO
 
-
-class ScoreDAO(abstractDAO):
+class ScoreDAO(AbstractDAO):
     def __init__(self, datasource='scores.json'):
         super().__init__(datasource=datasource)
 

@@ -7,7 +7,46 @@ from NivelNaoExisteException import NivelNaoExisteException
 class LevelDAO(AbstractDAO):
 
     def __init__(self, datasource='levels.json'):
+        self.DEFAULT_LEVELS = ["Level 1", "Level 2", "Level 3"]
         super().__init__(datasource)
+        try:
+            level_1 = {
+                'level_number': 1,
+                'level_name': 'Level 1',
+                'tile_map': [
+                    'XXXXXXXXXXXXXXXXXXXXXXXXX',
+                    'X                X      X',
+                    'X        O       X      X',
+                    'XXXX             X   O  X',
+                    'X                X      X',
+                    'X        XX      X      X',
+                    'X        X              X',
+                    'X        X              X',
+                    'X        X              X',
+                    'X   P    X      AAA  D  X',
+                    'XXXXXXXXXXXXXXXXXXXXXXXXX']
+            }
+            level_2 = {
+                'level_number': 2,
+                'level_name': 'Level 2',
+                'tile_map': [
+                    '                         ',
+                    '                         ',
+                    '                         ',
+                    '                         ',
+                    '                         ',
+                    '     X             X     ',
+                    '    X               X    ',
+                    '    X      X        X    ',
+                    '     X             X     ',
+                    ' XX         P         XX ',
+                    'XXXXXXXXXXXXXXXXXXXXXXXXX']
+            }
+            self.add_level(level_1)
+            self.add_level(level_2)
+        except NivelJaExisteException:
+            pass
+            # handle other exceptions
 
     def get_levels_names(self):
         return self._objectCache.keys()
@@ -28,31 +67,19 @@ class LevelDAO(AbstractDAO):
         if level_name not in self._objectCache.keys():
             raise NivelNaoExisteException(
                 f"Nível com o nome {level_name} não existe.")
-        del self._objectCache[level_name]
+        if level_name not in self.DEFAULT_LEVELS:
+            del self._objectCache[level_name]
 
 
 if __name__ == '__main__':
     dao = LevelDAO()
 
-    level = {
-        'level_number': 1,
-        'level_name': 'Level 1',
-        'tile_map': [
-            'XXXXXXXXXXXXXXXXXXXXXXXXX',
-            'X                X      X',
-            'X        O       X      X',
-            'XXXX             X   O  X',
-            'X                X      X',
-            'X        XX      X      X',
-            'X        X              X',
-            'X        X              X',
-            'X        X              X',
-            'X   P    X      AAA  D  X',
-            'XXXXXXXXXXXXXXXXXXXXXXXXX']
-    }
-    level_2 = {
+    print(dao.get_levels_names())
+    dao.remove_level("Level 1")
+    print(dao.get_levels_names())
+    level_3 = {
         'level_number': 2,
-        'level_name': 'Level 2',
+        'level_name': 'teste',
         'tile_map': [
             '                         ',
             '                         ',
@@ -66,8 +93,5 @@ if __name__ == '__main__':
             ' XX         P         XX ',
             'XXXXXXXXXXXXXXXXXXXXXXXXX']
     }
-    
-    print(dao.get_levels_names())
-    dao.add_level(level)
-    dao.add_level(level_2)
+    dao.remove_level("teste")
     print(dao.get_levels_names())
