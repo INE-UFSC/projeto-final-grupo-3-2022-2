@@ -63,13 +63,40 @@ class TileMapConverter:
 
     @staticmethod
     def __get_tile(c: dict) -> int:
-        # falar com andre sobre tiles que deveriam existir
         if (c["up"] and c["right"] and c["left"] and c["down"]
                 and c["up_left"] and c["up_right"] and c["down_left"] and c["down_right"]):
             return "black"  # black?
         elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_right"] and not c["up_right"]):
+            return 13
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_right"] and not c["down_left"]):
+            return 14
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_left"] and not c["up_left"]):
+            return 15
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["up_right"] and not c["up_left"]):
+            return 16
+        elif (c["left"] and c["up"] and c["right"] and c["down"]
               and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
             return 17
+        elif c["up"] and c["left"] and not c["right"] and c["down"] and not c["up_left"] and not c["down_left"]:
+            return 25
+        elif c["up"] and c["left"] and c["right"] and not c["down"] and not c["up_left"] and not c["up_right"]:
+            return 26
+        elif c["up"] and not c["left"] and c["right"] and c["down"] and not c["up_right"] and not c["down_right"]:
+            return 27
+        elif not c["up"] and c["left"] and c["right"] and c["down"] and not c["down_left"] and not c["down_right"]:
+            return 28
+        elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["down_right"]):
+            return 9
+        elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["down_left"]):
+            return 10
+        elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["up_right"]):
+            return 11
+        elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["up_left"]):
+            return 12
         elif (not c["left"] and not c["up"] and c["right"] and c["down"]):
             return 1
         elif (c["left"] and not c["up"] and not c["right"] and c["down"]):
@@ -86,30 +113,10 @@ class TileMapConverter:
             return 7
         elif (c["left"] and c["up"] and c["right"] and not c["down"]):
             return 8
-        elif (c["left"] and c["up"] and c["right"] and c["down"]
-              and not c["down_right"] and not c["up_right"]):
-            return 13
-        elif (c["left"] and c["up"] and c["right"] and c["down"]
-              and not c["down_right"] and not c["down_left"]):
-            return 14
-        elif (c["left"] and c["up"] and c["right"] and c["down"]
-              and not c["down_left"] and c["up_left"]):
-            return 15
-        elif (c["left"] and c["up"] and c["right"] and c["down"]
-              and not c["up_right"] and not c["up_left"]):
-            return 16
         elif not c["up"] and not c["down"] and not c["right"] and not c["left"]:
             return 18
         elif not c["up"] and not c["down"] and c["right"] and c["left"]:
             return 19
-        elif (c["left"] and c["down"] and not c["down_right"]):
-            return 9
-        elif (c["left"] and c["down"] and not c["down_left"]):
-            return 10
-        elif (c["up"] and c["right"] and not c["up_right"]):
-            return 11
-        elif (c["left"] and c["up"] and not c["up_left"]):
-            return 12
         elif c["up"] and c["down"] and not c["right"] and not c["left"]:
             return 20
         elif not c["up"] and not c["down"] and not c["right"] and c["left"]:
@@ -120,68 +127,3 @@ class TileMapConverter:
             return 23
         elif not c["up"] and c["down"] and not c["right"] and not c["left"]:
             return 24
-
-
-if __name__ == "__main__":
-    s = [
-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
-        "X                X      X",
-        "X        O       X      X",
-        "XXXX             X   O  X",
-        "X                X      X",
-        "X        XX      X      X",
-        "X        X              X",
-        "X        X              X",
-        "X        X              X",
-        "X   P    X      AAA  D  X",
-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    ]
-
-    convert = TileMapConverter.convert(s)
-    for item in convert:
-        print(item)
-
-    s = [
-        "                         ",
-        "                         ",
-        "                         ",
-        "                         ",
-        "                         ",
-        "     X             X     ",
-        "    X               X    ",
-        "    X      X        X    ",
-        "     X             X     ",
-        " XX         P         XX ",
-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    ]
-    convert = TileMapConverter.convert(s)
-    for item in convert:
-        print(item)
-
-    s = [
-        "                         ",
-        "                         ",
-        "                         ",
-        "                         ",
-        "                         ",
-        "     X             X     ",
-        "    X               X    ",
-        "    X      XX       X    ",
-        "     X      XXX    X     ",
-        " XX         P         XX ",
-        "XXXXXXXXXXXXXXXXXXXXXXXXX",
-    ]
-    convert = TileMapConverter.convert(s)
-    for item in convert:
-        print(item)
-
-    s = [
-        "     ",
-        " XXX ",
-        "XXXXX",
-        " XXX ",
-        "     "
-    ]
-    convert = TileMapConverter.convert(s)
-    for item in convert:
-        print(item)
