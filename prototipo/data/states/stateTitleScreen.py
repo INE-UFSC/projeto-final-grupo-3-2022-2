@@ -2,7 +2,6 @@ import pygame
 from states.abstractState import State
 from states.classeButton import Button
 from singletonAssets import Assets
-from Settings import Settings
 
 from states.stateLevelSelector import LevelSelector
 from states.stateHelpScreen import HelpScreen
@@ -33,11 +32,11 @@ class TitleScreen(State):
 
     def update(self, delta_time):
         if self.__actions['mouse_left']:
-            if self.SELECT_1.check_for_hover(Settings.mouse_pos()):
+            if self.SELECT_1.check_for_hover(pygame.mouse.get_pos()):
                 LevelSelector(self._game).enter_state()
-            if self.SELECT_2.check_for_hover(Settings.mouse_pos()):
+            if self.SELECT_2.check_for_hover(pygame.mouse.get_pos()):
                 pass
-            if self.SELECT_3.check_for_hover(Settings.mouse_pos()):
+            if self.SELECT_3.check_for_hover(pygame.mouse.get_pos()):
                 HelpScreen(self._game).enter_state()
 
     def render(self, display_surface):

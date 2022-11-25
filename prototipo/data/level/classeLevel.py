@@ -2,7 +2,7 @@ import pygame
 import config
 from time import time
 
-from Settings import Settings
+from utility.staticLevelMouse import LevelMouse
 from classeTimer import Timer
 from level.classePlayer import Player
 from level.arrows.classePiercingArrow import PiercingArrow
@@ -87,7 +87,7 @@ class Level:
         bow_x = player_x
         bow_y = player_y
         
-        rotated_bow_image = self.__player.sprite.bow.get_rotated_image(player_position, Settings.mouse_pos())
+        rotated_bow_image = self.__player.sprite.bow.get_rotated_image(player_position, LevelMouse.mouse_pos())
         rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y))
 
         self.__display_surface.blit(rotated_bow_image, rotated_bow_rect)
@@ -141,7 +141,7 @@ class Level:
             pass
             
         else: # Caso o try tenha sucedido (o jogador tenha atirado)
-            target_position = Settings.mouse_pos() # Pega a posição do mouse
+            target_position = LevelMouse.mouse_pos() # Pega a posição do mouse
 
             arrow.start_shot(player.rect.center, target_position, hold_factor) # Inicializa os atributos de posição da flecha
             self.__moving_arrows.append(arrow) # Adiciona a flecha na lista de flechas do level
@@ -238,6 +238,12 @@ class Level:
     @property
     def display_surface(self):
         return self.__display_surface
+    @property
+    def width(self):
+        return self.__display_surface.get_width()
+    @property
+    def height(self):
+        return self.__display_surface.get_height()
 
     # Setters
     def start_hold(self):

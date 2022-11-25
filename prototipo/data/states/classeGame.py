@@ -1,12 +1,10 @@
 import os, time, pygame
 
-from Settings import Settings
 import finder
-
-from states.abstractState import State
-from states.stateTitleScreen import TitleScreen
-
 from singletonAssets import Assets
+from states.abstractState import State
+
+from states.stateTitleScreen import TitleScreen
 
 
 class Game():
@@ -83,7 +81,7 @@ class Game():
 
     def __render(self):
         self.__state_stack[-1].render(self.__display_surface) # Renderiza a state atual
-        self.__screen.blit(self.__display_surface, Settings.get_surface_offset())
+        self.__screen.blit(self.__display_surface, (0, 0))
         pygame.display.flip()
 
     def __get_dt(self):
@@ -91,13 +89,9 @@ class Game():
         self.__dt = now - self.__prev_time
         self.__prev_time = now
 
-
     def __screen_resize(self):
         # Muda o tamanho da superfície de display
         self.__display_surface = pygame.Surface((self.__screen.get_width(), self.__screen.get_height()))
-        # Notifica a classe Settings do novo tamanho da tela
-        Settings.set_surface_offset(int((self.__screen.get_width() - self.__display_surface.get_width()) / 2),
-                                    int((self.__screen.get_height() - self.__display_surface.get_height()) / 2))
 
     # Métodos que alteram a state stack
     def append_state(self, state: State):

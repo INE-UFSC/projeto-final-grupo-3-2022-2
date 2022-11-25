@@ -2,7 +2,6 @@ import pygame
 from states.abstractState import State
 from states.classeButton import Button
 from singletonAssets import Assets
-from Settings import Settings
 
 
 class HelpScreen(State):
@@ -39,7 +38,7 @@ class HelpScreen(State):
 
     def update(self, delta_time):
         if self.__actions['mouse_left']:
-            if self.VOLTAR.check_for_hover(Settings.mouse_pos()):
+            if self.VOLTAR.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
 
     def render(self, display_surface):

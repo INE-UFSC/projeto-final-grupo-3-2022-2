@@ -2,7 +2,6 @@ import pygame
 from states.abstractState import State
 from states.classeButton import Button
 from singletonAssets import Assets
-from Settings import Settings
 
 from states.stateLevelPlaying import LevelPlaying
 from ScoreController import ScoreController
@@ -45,11 +44,11 @@ class LevelSelector(State):
     
     def update(self, delta_time):
         if self.__actions['mouse_left']:
-            if self.VOLTAR.check_for_hover(Settings.mouse_pos()):
+            if self.VOLTAR.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
             
             for i in range(0, len(self.NIVEIS)):
-                if self.NIVEIS[i].check_for_hover(Settings.mouse_pos()):
+                if self.NIVEIS[i].check_for_hover(pygame.mouse.get_pos()):
                     LevelPlaying(self._game).enter_state()
 
 
@@ -65,7 +64,7 @@ class LevelSelector(State):
         
         for i in range(0, len(self.NIVEIS)):
             self.NIVEIS[i].render(display_surface, (130, center[1] - 200 + (i + 1) * 50))
-            if self.NIVEIS[i].check_for_hover(Settings.mouse_pos()):
+            if self.NIVEIS[i].check_for_hover(pygame.mouse.get_pos()):
                     self.SELETOR.render(display_surface, (100, center[1] - 200 + (i + 1) * 50))
         
         for i in range(0, len(self.RECORDES)):

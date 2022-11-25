@@ -1,11 +1,11 @@
 import pygame
+from random import randint # Usando para o screenshake
 from states.abstractState import State
-from states.classeButton import Button
 from singletonAssets import Assets
-from Settings import Settings
-from level.classeLevel import Level
 import config
 
+from utility.staticLevelMouse import LevelMouse
+from level.classeLevel import Level
 from states.stateLevelPaused import LevelPaused
 
 
@@ -19,6 +19,8 @@ class LevelPlaying(State):
         
         self.__assets = Assets()
         self.__buttons = pygame.sprite.Group()
+
+        self.__screen_shake = 0
         
         self.__load_level(0)
         
@@ -75,13 +77,28 @@ class LevelPlaying(State):
             pause_state = LevelPaused(self._game)
             pause_state.enter_state()
 
+        LevelMouse.set_offset(screen_dimensions = (self._game.screen_width, self._game.screen_height),
+                                      level_dimensions = (self.__level.width, self.__level.height))
+
         self.__level.update(self.__actions)
             
             
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
 
-        level_surface = self.__level.render() # Recebe a display surface do Level
-        display_surface.blit(level_surface, (0, 0)) # Desenha o Level
-        level_surface.fill((0, 0, 0)) # Limpa o Level
+        level_surface = self.__level.render() # Recebe a display surface do level
 
+        if self.__screen_shake > 0:
+            display_surface.blit(level_surface, self.__shake(self.__screen_shake))
+            self.__screen_shake -= 1
+        else:
+            display_surface.blit(level_surface, LevelMouse.get_offset()) # Desenha o level
+        
+        level_surface.fill((0, 0, 0)) # Limpa a surface do level
+
+    def start_shake(self, duration = 3):
+        self.__screen_shake = duration # Usando para shake na tela quando o jogador atira        
+
+    def __shake(self, shake_instant):
+        shake_offset = [(randint(0, 16) - 8), (randint(0, 16) - 8)]
+        return shake_offset
