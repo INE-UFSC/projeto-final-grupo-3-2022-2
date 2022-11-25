@@ -1,20 +1,16 @@
 from abc import ABC
-from json import dump, load
-
-class abstractDAO(ABC):
+import json
+class AbstractDAO(ABC):
     def __init__(self, datasource = ''):
-        self.__datasource = datasource
-        self.__objectCache = {}
+        self.datasource = datasource
+        self._objectCache = {}
         try:
-            self.__load()
+            self._load()
         except FileNotFoundError:
-            self.__dump()
+            self._dump()
 
-    def __dump(self):
-        dump(self.__objectCache, open(self.__datasource, 'w'))
+    def _dump(self):
+        json.dump(self._objectCache, open(self.datasource, 'w'))
 
-    def __load(self):
-        self.__objectCache = load(open(self.__datasource, 'r'))
-
-
-    
+    def _load(self):
+        self._objectCache = json.load(open(self.datasource, 'r'))
