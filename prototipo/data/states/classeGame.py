@@ -27,9 +27,6 @@ class Game():
 
         # Configurações do jogo
         self.__running, self.__playing = True, True
-        self.__actions = {'esc': False, 'reset': False,
-                          'up': False, 'down': False, 'left': False, 'right': False,
-                          'mouse_left': False, 'mouse_right': False}
         self.__dt, self.__prev_time = 0, 0
         self.__clock = pygame.time.Clock()
         self.__state_stack = []
@@ -82,7 +79,7 @@ class Game():
         self.__state_stack[-1].update_actions(event)
 
     def __update(self):
-        self.__state_stack[-1].update(self.__dt, self.__actions)
+        self.__state_stack[-1].update(self.__dt)
 
     def __render(self):
         self.__state_stack[-1].render(self.__display_surface) # Renderiza a state atual

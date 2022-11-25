@@ -8,7 +8,7 @@ class State(ABC):
 
     @abstractmethod
     def update_actions(self, event):
-        # Deve conferir o evento e atualizar um atributo de ações
+        # Deve conferir o evento e possivelmente atualizar um atributo de ações
         pass
 
     @abstractmethod
