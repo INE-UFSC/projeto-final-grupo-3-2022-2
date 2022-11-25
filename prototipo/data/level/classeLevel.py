@@ -115,16 +115,6 @@ class Level:
         text = font.render(f'Tempo: {formated_time}', True, (0, 0, 0))  # Edita o texto
         surface.blit(text, (400, 10))  # Mostra na tela
 
-
-    def start_hold(self):
-        self.__start_hold = time()
-    
-    def end_hold(self):
-        if self.__start_hold is not None:
-            self.__end_hold = time()
-            self.__did_shoot = True
-
-
     def __update_player(self, player):
         # Gera uma tupla com os valores de deslocamento calculados baseados no player
         delta_speed = player.calculate_speed()
@@ -206,7 +196,6 @@ class Level:
 
         # Detecta o tiro
         if self.__did_shoot:
-            print('Tiro detectado')
             self.__handle_shoot(player)
 
         # Atualiza as flechas e (possívelmente) as targets
@@ -243,8 +232,17 @@ class Level:
             self.__display_surface.blit(arrow.image, arrow.rect)
             
         return self.__display_surface
-    
+
+
     # Getters
     @property
     def display_surface(self):
         return self.__display_surface
+
+    # Setters
+    def start_hold(self):
+        self.__start_hold = time()
+    def end_hold(self):
+        if self.__start_hold is not None:
+            self.__end_hold = time()
+            self.__did_shoot = True
