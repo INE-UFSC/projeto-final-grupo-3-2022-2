@@ -81,8 +81,7 @@ class LevelPlaying(State):
                                       level_dimensions = (self.__level.width, self.__level.height))
 
         self.__level.update(self.__actions)
-            
-            
+ 
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
 

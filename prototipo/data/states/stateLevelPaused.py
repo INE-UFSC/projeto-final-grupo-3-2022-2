@@ -9,6 +9,9 @@ class LevelPaused(State):
         self.__background = None
         self.__buttons = pygame.sprite.Group()
 
+    def udpate_actions(self, event):
+        ...
+
     def update(self, delta_time, actions):
         # Se o jogador pressionar ESC, sai do estado de pausa
         if actions['esc']:
