@@ -42,11 +42,13 @@ class LevelDAO(AbstractDAO):
                     ' XX         P         XX ',
                     'XXXXXXXXXXXXXXXXXXXXXXXXX']
             }
+            # TODO Atualizar os níveis com as informações atualizadas posteriormente.
             self.add_level(level_1)
             self.add_level(level_2)
         except NivelJaExisteException:
+            print("Erro já existe!")
+        except:
             pass
-            # handle other exceptions
 
     def get_levels_names(self):
         return self._objectCache.keys()
