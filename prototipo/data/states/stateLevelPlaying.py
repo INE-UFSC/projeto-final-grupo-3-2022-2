@@ -92,11 +92,3 @@ class LevelPlaying(State):
             self.__screen_shake -= 1
         else:
             display_surface.blit(level_surface, LevelMouse.get_surface_offset()) # Desenha o level
-
-    def start_shake(self, duration = 3):
-        self.__screen_shake = duration # Usando para shake na tela quando o jogador atira        
-
-    def __shake(self, shake_instant):
-        surface_offset = LevelMouse.get_surface_offset()
-        shake_offset = [surface_offset[0] + (randint(0, 16) - 8), surface_offset[1] + (randint(0, 16) - 8)]
-        return shake_offset
