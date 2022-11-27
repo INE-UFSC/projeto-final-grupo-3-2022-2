@@ -12,11 +12,11 @@ class LevelMouse:
                 pygame.mouse.get_pos()[1] - LevelMouse.__display_surface_offset[1])
 
     @staticmethod
-    def get_offset():
+    def get_surface_offset():
         return LevelMouse.__display_surface_offset
 
     @staticmethod
-    def set_offset(screen_dimensions: tuple, level_dimensions: tuple):
+    def set_surface_offset(screen_dimensions: tuple, level_dimensions: tuple):
         if screen_dimensions != LevelMouse.__screen_dimensions or level_dimensions != LevelMouse.__level_dimensions:
             LevelMouse.__screen_dimensions = screen_dimensions
             LevelMouse.__level_dimensions = level_dimensions
