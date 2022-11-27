@@ -32,6 +32,7 @@ class Level:
         self.__level_spikes = pygame.sprite.Group()
         # Agrupa os alvos
         self.__level_targets = pygame.sprite.Group()
+        self.__level_hit_targets = pygame.sprite.Group() # Alvos que foram acertados e estão na animação antes de serem eliminados
         # Porta de saída do nível
         self.__level_exit_door = pygame.sprite.GroupSingle()
 
@@ -91,14 +92,6 @@ class Level:
         rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y))
 
         self.__display_surface.blit(rotated_bow_image, rotated_bow_rect)
-
-    def get_arrow_stuck(self, player_position):
-        for arrow in self.__stuck_arrows:
-            # Se o player colidir com alguma flecha remove a flecha das flechas presas e adiciona no player
-            if arrow.rect.colliderect(player_position):
-                arrow.stuck = False
-                self.__stuck_arrows.remove(arrow)
-                self.__player.sprite.bow.add_stuck_arrow(arrow)
 
     def display_arrow_quantity(self, surface, player):
         font = pygame.font.SysFont('arial', 30, True, False)  # Edita a fonte
@@ -160,11 +153,20 @@ class Level:
             # Colide a flecha com as targets
             for target in self.__level_targets:
                 if arrow.rect.colliderect(target.rect):
-                    target.kill()
+                    self.__level_targets.remove(target)
+                    self.__level_hit_targets.add(target)
                     if isinstance(arrow, PiercingArrow):
                         pass
                     else:
                         self.__moving_arrows.remove(arrow)
+
+    def __handle_stuck_arrows(self, player: pygame.sprite, stuck_arrows: list):
+        for arrow in stuck_arrows:
+            # Se o player colidir com alguma flecha remove a flecha das flechas presas e adiciona no player
+            if arrow.rect.colliderect(player.rect):
+                arrow.stuck = False
+                stuck_arrows.remove(arrow)
+                player.bow.add_stuck_arrow(arrow)
 
     def __handle_spike_collisions(self, player):
         for spike in self.__level_spikes:
@@ -194,7 +196,8 @@ class Level:
 
         # Atualiza as flechas e (possívelmente) as targets
         self.__update_arrows()
-        self.get_arrow_stuck(player.rect) # MUDAR ##########
+        self.__handle_stuck_arrows(player, self.__stuck_arrows) # MUDAR ##########
+        self.__level_hit_targets.update() # Chama a animação para os alvos atingidos
 
         # Trata possíveis colisões do jogador com espinhos
         self.__handle_spike_collisions(player)
@@ -207,13 +210,17 @@ class Level:
             self.restart_level()
 
     def render(self) -> pygame.Surface:
+        self.__display_surface.fill((15, 15, 15)) # Limpa a surface do nível
+
         player = self.__player.sprite
 
         # Estruturas do nível
         self.__level_tiles.draw(self.__display_surface)
         self.__level_spikes.draw(self.__display_surface)
-        self.__level_targets.draw(self.__display_surface)
         self.__level_exit_door.draw(self.__display_surface)
+        # Alvos
+        self.__level_targets.draw(self.__display_surface)
+        self.__level_hit_targets.draw(self.__display_surface)
         # Jogador e flecha
         self.__player.draw(self.__display_surface)
         self.display_bow(player.rect.center)
