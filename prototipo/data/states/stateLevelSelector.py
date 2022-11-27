@@ -1,10 +1,10 @@
 import pygame
 from states.abstractState import State
 from states.classeButton import Button
-from singletonAssets import Assets
+from singletons.singletonAssets import Assets
 
 from states.stateLevelPlaying import LevelPlaying
-from ScoreController import ScoreController
+from utility.classeScoreController import ScoreController
 
 
 class LevelSelector(State):

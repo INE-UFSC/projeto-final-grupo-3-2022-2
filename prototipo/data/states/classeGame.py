@@ -1,6 +1,5 @@
 import os, time, pygame
 
-import finder
 from singletonAssets import Assets
 from states.abstractState import State
 

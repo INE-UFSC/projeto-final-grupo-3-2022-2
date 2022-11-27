@@ -3,7 +3,7 @@ import config
 from time import time
 
 from utility.staticLevelMouse import LevelMouse
-from classeTimer import Timer
+from utility.classeTimer import Timer
 from level.classePlayer import Player
 from level.arrows.classePiercingArrow import PiercingArrow
 from level.build_structures.classeTile import Tile

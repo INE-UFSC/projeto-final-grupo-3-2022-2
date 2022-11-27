@@ -1,7 +1,7 @@
 from abstractDAO import AbstractDAO
 from utility.classTileMapUtility import TileMapConverter
-from NivelJaExisteException import NivelJaExisteException
-from NivelNaoExisteException import NivelNaoExisteException
+from daos.exceptions.NivelJaExisteException import NivelJaExisteException
+from daos.exceptions.NivelNaoExisteException import NivelNaoExisteException
 
 
 class LevelDAO(AbstractDAO):

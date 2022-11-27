@@ -1,4 +1,4 @@
-from ScoreDAO import ScoreDAO
+from daos.ScoreDAO import ScoreDAO
 
 class ScoreController():
     def __init__(self):

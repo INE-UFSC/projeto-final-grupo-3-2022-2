@@ -1,6 +1,6 @@
 import pygame
 
-import finder
+import utility.finder as finder
 from abstractSingleton import Singleton
 
 
