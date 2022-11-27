@@ -71,7 +71,7 @@ class Level:
                     self.__level_targets.add(Target((x, y))) # Adiciona o alvo criado no atributo que agrupa os alvos
 
                 if tile == 'D':
-                    self.__level_exit_door.add(ExitDoor((x, y), 48, 48)) # Cria a porta de saída
+                    self.__level_exit_door.add(ExitDoor((x, y), 48)) # Cria a porta de saída
 
                 if tile == 'P':
                     # Os valores de posição são ajustados pois o player é gerado com base nas coordenadas em seu midbottom
@@ -169,7 +169,6 @@ class Level:
     def __handle_spike_collisions(self, player):
         for spike in self.__level_spikes:
             if spike.collided(player):
-                print("MORREU")
                 self.restart_level()
 
     def __check_exit_door(self, player):
@@ -179,14 +178,9 @@ class Level:
         if not exit_door.is_unlocked() and len(self.__level_targets) == 0:
             exit_door.unlock()
 
-            print(exit_door.is_unlocked())
-            print("PORTA ABERTA")
-
         if exit_door.is_unlocked() and exit_door.collided(player):
             self.__win_status = True
             self.__timer.stop()
-
-            print("SAIU DO LEVEL")
     
     # Retorna uma surperfície com as dimensões do nível que contém o nível renderizado
     def update(self, actions):
@@ -215,21 +209,22 @@ class Level:
     def render(self) -> pygame.Surface:
         player = self.__player.sprite
 
-        # Draw
-        self.__player.draw(self.__display_surface)
-        self.display_bow(player.rect.center)
+        # Estruturas do nível
         self.__level_tiles.draw(self.__display_surface)
         self.__level_spikes.draw(self.__display_surface)
         self.__level_targets.draw(self.__display_surface)
         self.__level_exit_door.draw(self.__display_surface)
-        self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
-        self.display_timer(self.__display_surface) # Mostra o tempo na tela
-        
+        # Jogador e flecha
+        self.__player.draw(self.__display_surface)
+        self.display_bow(player.rect.center)
+        # Arrows
         for arrow in self.__stuck_arrows:
             self.__display_surface.blit(arrow.image, arrow.rect)
-
         for arrow in self.__moving_arrows:
             self.__display_surface.blit(arrow.image, arrow.rect)
+        # Interface
+        self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
+        self.display_timer(self.__display_surface) # Mostra o tempo na tela
             
         return self.__display_surface
 

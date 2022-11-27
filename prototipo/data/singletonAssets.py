@@ -21,6 +21,12 @@ class Assets(Singleton):
         self.__level_images = {
             'spike': pygame.image.load(finder.find_file('spike.png')).convert_alpha(),
             'target': pygame.image.load(finder.find_file('target.png')).convert_alpha(),
+            'door': [
+                pygame.image.load(finder.find_file('door_001.png')),
+                pygame.image.load(finder.find_file('door_002.png')),
+                pygame.image.load(finder.find_file('door_003.png')),
+                pygame.image.load(finder.find_file('door_004.png'))
+            ]
         }
 
     # Getters
