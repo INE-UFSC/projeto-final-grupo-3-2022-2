@@ -1,7 +1,7 @@
 import pygame
 
 import utility.finder as finder
-from abstractSingleton import Singleton
+from singletons.abstractSingleton import Singleton
 
 
 class Assets(Singleton):

@@ -1,6 +1,6 @@
 import pygame
 from level.build_structures.abstractBuildStructure import BuildStructure
-from singletonAssets import Assets
+from singletons.singletonAssets import Assets
 
 
 class Spike(BuildStructure):

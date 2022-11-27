@@ -1,7 +1,7 @@
 import pygame
 from states.abstractState import State
 from states.classeButton import Button
-from singletonAssets import Assets
+from singletons.singletonAssets import Assets
 
 
 class HelpScreen(State):

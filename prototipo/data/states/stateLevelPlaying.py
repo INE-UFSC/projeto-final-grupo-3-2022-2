@@ -1,7 +1,7 @@
 import pygame
 from random import randint # Usando para o screenshake
 from states.abstractState import State
-from singletonAssets import Assets
+from singletons.singletonAssets import Assets
 import config
 
 from utility.staticLevelMouse import LevelMouse

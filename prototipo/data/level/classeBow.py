@@ -1,5 +1,5 @@
 import pygame
-from finder import find_file
+from utility.finder import find_file
 from math import pi, atan2
 
 from level.arrows.abstractArrow import Arrow
