@@ -65,10 +65,10 @@ class Level:
                     self.__level_tiles.add(Tile((x, y), tile_size)) # Adiciona o tile criado no atributo que agrupa os tiles
                 
                 if tile == 'A':
-                    self.__level_spikes.add(Spike((x, y), 48, 48)) # Adiciona o spike criado no atributo que agrupa os spikes
+                    self.__level_spikes.add(Spike((x, y), 48)) # Adiciona o spike criado no atributo que agrupa os spikes
                 
                 if tile == 'O':
-                    self.__level_targets.add(Target((x + (48-30)/2, y + (48-30)/2), 30, 30)) # Adiciona o alvo criado no atributo que agrupa os alvos
+                    self.__level_targets.add(Target((x, y))) # Adiciona o alvo criado no atributo que agrupa os alvos
 
                 if tile == 'D':
                     self.__level_exit_door.add(ExitDoor((x, y), 48, 48)) # Cria a porta de saída

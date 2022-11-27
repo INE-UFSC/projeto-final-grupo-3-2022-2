@@ -3,7 +3,7 @@ from level.build_structures.abstractBuildStructure import BuildStructure
 
 class ExitDoor(BuildStructure):
     def __init__(self, position, width, height):
-        super().__init__(position, width, height, 'blue')
+        super().__init__(position, width, height, None, 'blue')
         self.__unlocked = False
 
     def is_unlocked(self) -> bool:

@@ -18,11 +18,18 @@ class Assets(Singleton):
         self.__images = {
             'background': pygame.image.load(finder.find_file('background.png')).convert_alpha(),
         }
+        self.__level_images = {
+            'spike': pygame.image.load(finder.find_file('spike.png')).convert_alpha(),
+            'target': pygame.image.load(finder.find_file('target.png')).convert_alpha(),
+        }
 
     # Getters
+    @property
+    def fonts_path(self):
+        return self.__fonts_path
     @property
     def images(self):
         return self.__images
     @property
-    def fonts_path(self):
-        return self.__fonts_path
+    def level_images(self):
+        return self.__level_images
