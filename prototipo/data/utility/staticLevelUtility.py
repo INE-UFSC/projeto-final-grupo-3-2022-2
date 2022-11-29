@@ -1,10 +1,13 @@
 from typing import List
-import os
-#https://pypi.org/project/pylocalc/
+import pylocalc as pl
+from string import ascii_uppercase
+# https://pypi.org/project/pylocalc/
+
 
 class LevelUtility:
     @staticmethod
     def convert(tile_map: List[str]) -> List[str]:
+        """Convert a list of tiles into a list of textures."""
         st = tile_map.copy()
         st.insert(0, ["X" for _ in range((len(st[0])))])
         st.append(["X" for _ in range((len(st[0])))])
@@ -133,5 +136,47 @@ class LevelUtility:
             return " "
 
     @staticmethod
-    def import_map(path):
-        pass
+    def import_map(path) -> None:
+        """Import a .ods map file into a in game environment."""
+        map_file = pl.Document(path)
+        map_file.connect()
+        sheet = map_file[0]
+
+        tile_map = []
+        for y in range(2, 13):
+            st = ""
+            for x in ascii_uppercase[1:24]:
+                cell = sheet[x + str(y)]
+                if cell.value == "":
+                    st += " "
+                else:
+                    st += cell.value.upper()
+            tile_map.append(st)
+
+        level_name = sheet['AD2'].value
+        lifes = sheet['AA1'].value
+        standart_arrows = sheet['AA2'].value
+        fast_arrows = sheet['AA3'].value
+        piercing_arrows = sheet['AA4'].value
+        bounce_arrows = sheet['AA5'].value
+        level = {
+            'level_name': level_name,
+            'lifes': int(lifes),
+            'arrows': {
+                'standart_arrows': int(standart_arrows),
+                'fast_arrows': int(fast_arrows),
+                'piercing_arrows': int(piercing_arrows),
+                'bounce_arrows': int(bounce_arrows)
+            },
+            'tile_map': tile_map,
+            'textures': LevelUtility.convert(tile_map)
+        }
+        # insert try
+        return level
+
+
+if __name__ == '__main__':
+
+    import_map = LevelUtility.import_map('tile_map.ods')
+    for line in import_map['textures']:
+        print(line)
