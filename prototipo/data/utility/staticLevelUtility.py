@@ -1,7 +1,8 @@
+import sys
+sys.path.append("..")
 from typing import List
 from pyexcel_ods import get_data
-# from prototipo.data.utility.exceptions.TileMapErrorException import TileMapErrorException
-from exceptions.TileMapErrorException import TileMapErrorException
+from utility.exceptions.TileMapErrorException import TileMapErrorException
 # https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
 
 
@@ -194,8 +195,3 @@ class LevelUtility:
             print(e)
         except Exception as e:
             print(e)
-
-if __name__ == '__main__':
-
-    import_map = LevelUtility.import_map('tile_map.ods')
-    print(import_map)
