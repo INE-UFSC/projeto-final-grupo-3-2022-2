@@ -1,7 +1,7 @@
 from typing import List
-import pylocalc as pl
+import pylocalc as pl  # https://pypi.org/project/pylocalc/
 from string import ascii_uppercase
-# https://pypi.org/project/pylocalc/
+from TileMapErrorException import TileMapErrorException
 
 
 class LevelUtility:
@@ -136,47 +136,74 @@ class LevelUtility:
             return " "
 
     @staticmethod
+    def __verify_map(map):
+        if map['lifes'] <= 0:
+            raise TileMapErrorException(
+                "Lifes must be integer and higher than zero.")
+        total_arrows = 0
+        for value in map['arrows'].values():
+            total_arrows += value
+        if total_arrows == 0:
+            raise TileMapErrorException("Must have at least one arrow.")
+        if map['level_name'] == '':
+            raise TileMapErrorException("Level name can't be empty")
+
+    @staticmethod
     def import_map(path) -> None:
         """Import a .ods map file into a in game environment."""
-        map_file = pl.Document(path)
-        map_file.connect()
-        sheet = map_file[0]
+        try:
 
-        tile_map = []
-        for y in range(2, 13):
-            st = ""
-            for x in ascii_uppercase[1:24]:
-                cell = sheet[x + str(y)]
-                if cell.value == "":
-                    st += " "
-                else:
-                    st += cell.value.upper()
-            tile_map.append(st)
+            map_file = pl.Document(path)
+            map_file.connect()
+            sheet = map_file[0]
 
-        level_name = sheet['AD2'].value
-        lifes = sheet['AA1'].value
-        standart_arrows = sheet['AA2'].value
-        fast_arrows = sheet['AA3'].value
-        piercing_arrows = sheet['AA4'].value
-        bounce_arrows = sheet['AA5'].value
-        level = {
-            'level_name': level_name,
-            'lifes': int(lifes),
-            'arrows': {
-                'standart_arrows': int(standart_arrows),
-                'fast_arrows': int(fast_arrows),
-                'piercing_arrows': int(piercing_arrows),
-                'bounce_arrows': int(bounce_arrows)
-            },
-            'tile_map': tile_map,
-            'textures': LevelUtility.convert(tile_map)
-        }
-        # insert try
-        return level
+            tile_map = []
+            for y in range(2, 13):
+                st = ""
+                for x in ascii_uppercase[1:24]:
+                    cell = sheet[x + str(y)]
+                    if cell.value == "":
+                        st += " "
+                    else:
+                        st += cell.value.upper()
+                tile_map.append(st)
+
+            level_name = sheet['AD2'].value
+            lifes = sheet['AA1'].value
+            standart_arrows = sheet['AA2'].value
+            fast_arrows = sheet['AA3'].value
+            piercing_arrows = sheet['AA4'].value
+            bounce_arrows = sheet['AA5'].value
+
+            map_file.save()
+            map_file.close()
+
+            level = {
+                'level_name': level_name,
+                'lifes': int(lifes),
+                'arrows': {
+                    'standart_arrows': int(standart_arrows),
+                    'fast_arrows': int(fast_arrows),
+                    'piercing_arrows': int(piercing_arrows),
+                    'bounce_arrows': int(bounce_arrows)
+                },
+                'tile_map': tile_map,
+                'textures': LevelUtility.convert(tile_map)
+            }
+
+            # LevelUtility.__verify_map(level)
+            return level
+        except ValueError as e:
+            print(e)
+        except TileMapErrorException as e:
+            print(e)
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':
 
     import_map = LevelUtility.import_map('tile_map.ods')
+    print(import_map)
     for line in import_map['textures']:
         print(line)
