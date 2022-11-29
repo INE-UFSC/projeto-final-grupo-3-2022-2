@@ -27,7 +27,12 @@ class LevelPlaying(State):
     def __load_level(self, level_atual):
         current_level = config.levels[level_atual]
         self.__level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
-        
+    
+    def restart_actions(self):
+        self.__actions = {'esc': False, 'restart': False,
+                          'up': False, 'down': False, 'left': False, 'right': False,
+                          'mouse_left': False, 'mouse_right': False}
+
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN: # Inputs do teclado (soltar tecla)
             if event.key == pygame.K_ESCAPE:
@@ -82,16 +87,16 @@ class LevelPlaying(State):
 
         self.__level.update(self.__actions)
 
+        # Confere os status do nível
         if self.__level.win_status:
             self.__next_level()
-        
         if self.__level.restart_status:
             self.__level.restart_level()
 
     def __next_level(self):
         if self.__level_atual == len(config.levels):
             pass
-            # Implementar End Game
+            # Implementar fim de jogo (quando acabam os níveis)
         else:
             self.__level_atual += 1
             self.__load_level(self.__level_atual)

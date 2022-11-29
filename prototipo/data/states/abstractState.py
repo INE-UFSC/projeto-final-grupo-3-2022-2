@@ -7,6 +7,14 @@ class State(ABC):
         self.__prev_state = None
 
     @abstractmethod
+    def restart_actions(self, action_dict):
+        # Essa função é chamada quando há uma troca estados (para não gerar conflitos) de inputs antigos
+        # Deve reiniciar o dicionário salvo em actions para False em todos seus valores
+        for key in action_dict:
+            action_dict[key] = False
+        return action_dict
+
+    @abstractmethod
     def update_actions(self, event):
         # Deve conferir o evento e possivelmente atualizar um atributo de ações
         pass

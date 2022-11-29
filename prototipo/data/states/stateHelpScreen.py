@@ -23,6 +23,9 @@ class HelpScreen(State):
         self.Slow_Mo = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), '(RMB) Slow-Mo')
         self.Move = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), '(WASD and Keys Arrows) Move')
 
+    def restart_actions(self):
+        self.__actions = super().restart_actions(self.__actions)
+
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.__actions['mouse_left'] = True
