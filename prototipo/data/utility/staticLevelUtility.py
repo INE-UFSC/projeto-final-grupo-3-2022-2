@@ -1,7 +1,8 @@
 from typing import List
-import pylocalc as pl  # https://pypi.org/project/pylocalc/
-from string import ascii_uppercase
+from pyexcel_ods import get_data
 from TileMapErrorException import TileMapErrorException
+#https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
+
 
 
 class LevelUtility:
@@ -68,7 +69,10 @@ class LevelUtility:
 
     @staticmethod
     def __get_tile(c: dict) -> int:
-        if (c["up"] and c["right"] and c["left"] and c["down"]
+        if (c["left"] and c["up"] and c["right"] and c["down"]
+              and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
+            return 17
+        elif (c["up"] and c["right"] and c["left"] and c["down"]
                 and c["up_left"] and c["up_right"] and c["down_left"] and c["down_right"]):
             return "black"  # black?
         elif (c["left"] and c["up"] and c["right"] and c["down"]
@@ -83,9 +87,6 @@ class LevelUtility:
         elif (c["left"] and c["up"] and c["right"] and c["down"]
               and not c["up_right"] and not c["up_left"]):
             return 16
-        elif (c["left"] and c["up"] and c["right"] and c["down"]
-              and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
-            return 17
         elif c["up"] and c["left"] and not c["right"] and c["down"] and not c["up_left"] and not c["down_left"]:
             return 25
         elif c["up"] and c["left"] and c["right"] and not c["down"] and not c["up_left"] and not c["up_right"]:
@@ -153,30 +154,24 @@ class LevelUtility:
         """Import a .ods map file into a in game environment."""
         try:
 
-            map_file = pl.Document(path)
-            map_file.connect()
-            sheet = map_file[0]
-
+            map_file = get_data(path)['Sheet1']
             tile_map = []
-            for y in range(2, 13):
+            for y in range(1, 12):
                 st = ""
-                for x in ascii_uppercase[1:24]:
-                    cell = sheet[x + str(y)]
-                    if cell.value == "":
+                for x in range(1,24):
+                    cell = map_file[y][x]
+                    if cell == "":
                         st += " "
                     else:
-                        st += cell.value.upper()
+                        st += cell.upper()
                 tile_map.append(st)
 
-            level_name = sheet['AD2'].value
-            lifes = sheet['AA1'].value
-            standart_arrows = sheet['AA2'].value
-            fast_arrows = sheet['AA3'].value
-            piercing_arrows = sheet['AA4'].value
-            bounce_arrows = sheet['AA5'].value
-
-            map_file.save()
-            map_file.close()
+            level_name = map_file[0][29]
+            lifes = map_file[0][26]
+            standart_arrows = map_file[1][-1]
+            fast_arrows = map_file[2][-1]
+            piercing_arrows = map_file[3][-1]
+            bounce_arrows = map_file[4][-1]
 
             level = {
                 'level_name': level_name,
@@ -191,7 +186,7 @@ class LevelUtility:
                 'textures': LevelUtility.convert(tile_map)
             }
 
-            # LevelUtility.__verify_map(level)
+            LevelUtility.__verify_map(level)
             return level
         except ValueError as e:
             print(e)
@@ -204,6 +199,5 @@ class LevelUtility:
 if __name__ == '__main__':
 
     import_map = LevelUtility.import_map('tile_map.ods')
-    print(import_map)
     for line in import_map['textures']:
         print(line)
