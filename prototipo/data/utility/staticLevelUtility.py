@@ -96,6 +96,14 @@ class LevelUtility:
             return 27
         elif not c["up"] and c["left"] and c["right"] and c["down"] and not c["down_left"] and not c["down_right"]:
             return 28
+        elif not c["up"] and not c["left"] and c["right"] and c["down"] and not c["down_right"]:
+            return 29
+        elif not c["up"] and c["left"] and not c["right"] and c["down"] and not c["down_left"]:
+            return 30
+        elif c["up"] and not c["left"] and c["right"] and not c["down"] and not c["up_right"]:
+            return 31
+        elif c["up"] and c["left"] and not c["right"] and not c["down"] and not c["up_left"]:
+            return 32
         elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["down_right"]):
             return 9
         elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["down_left"]):
@@ -152,7 +160,7 @@ class LevelUtility:
 
     @staticmethod
     def import_map(path) -> None:
-        """Import a .ods map file into a in game environment."""
+        """Recebe um path absoluto de um .ods relativo a um mapa, e retorna um dict formatado para inserir no LevelDAO"""
         try:
 
             map_file = get_data(path)['Sheet1']
