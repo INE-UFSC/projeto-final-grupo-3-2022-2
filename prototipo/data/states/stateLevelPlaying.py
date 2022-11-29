@@ -5,8 +5,8 @@ from singletons.singletonAssets import Assets
 import config
 
 from utility.staticLevelMouse import LevelMouse
-from level.classeLevel import Level
 from states.stateLevelPaused import LevelPaused
+from level.classeLevel import Level
 
 
 class LevelPlaying(State):
@@ -85,7 +85,7 @@ class LevelPlaying(State):
         if self.__level.win_status:
             self.__next_level()
         
-        if self.__actions['restart']:
+        if self.__level.restart_status:
             self.__restart_level()
             
 
@@ -96,7 +96,6 @@ class LevelPlaying(State):
         else:
             self.__level_atual += 1
             self.__load_level(self.__level_atual)
-
     
     def __restart_level(self):
         self.__load_level(self.__level_atual)

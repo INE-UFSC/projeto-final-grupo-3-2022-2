@@ -12,7 +12,7 @@ class State(ABC):
         pass
 
     @abstractmethod
-    def update(self, delta_time, actions) -> None:
+    def update(self, delta_time) -> None:
         # Irá implementar as atualizações dos elementos do estado
         # É possível entrar em outro estado dentro deste método
         # Deve-se importart o estado desejado, instanciar e chamar o método enter_state()
