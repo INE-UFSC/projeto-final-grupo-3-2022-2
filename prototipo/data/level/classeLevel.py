@@ -205,10 +205,6 @@ class Level:
         # Trata ações da porta de saída
         self.__check_exit_door(player)
         
-        # Confere se o jogador pressionou o botão de reinício
-        if actions['restart']:
-            self.restart_level()
-
     def render(self) -> pygame.Surface:
         self.__display_surface.fill((15, 15, 15)) # Limpa a surface do nível
 

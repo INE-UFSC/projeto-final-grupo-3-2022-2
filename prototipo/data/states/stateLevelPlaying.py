@@ -84,6 +84,9 @@ class LevelPlaying(State):
 
         if self.__level.win_status:
             self.__next_level()
+        
+        if self.__actions['restart']:
+            self.__restart_level()
             
 
     def __next_level(self):
@@ -93,10 +96,11 @@ class LevelPlaying(State):
         else:
             self.__level_atual += 1
             self.__load_level(self.__level_atual)
-        
 
+    
+    def __restart_level(self):
+        self.__load_level(self.__level_atual)
 
- 
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
 
