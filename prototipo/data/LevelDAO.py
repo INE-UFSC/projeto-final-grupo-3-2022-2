@@ -71,15 +71,3 @@ class LevelDAO(AbstractDAO):
                 f"Nível com o nome {level_name} não existe.")
         if level_name not in self.DEFAULT_LEVELS:
             del self._objectCache[level_name]
-
-
-if __name__ == '__main__':
-    dao = LevelDAO()
-
-    print(dao.get_levels_names())
-    level_1 = dao.get_level("Level 1")
-    print(level_1)
-    print(len(level_1['textures']))
-    print(len(level_1['textures'][0]))
-    print(len(level_1['tile_map']))
-    print(len(level_1['tile_map'][0]))
