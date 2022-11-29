@@ -1,8 +1,8 @@
 from typing import List
 from pyexcel_ods import get_data
-from TileMapErrorException import TileMapErrorException
-#https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
-
+# from prototipo.data.utility.exceptions.TileMapErrorException import TileMapErrorException
+from exceptions.TileMapErrorException import TileMapErrorException
+# https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
 
 
 class LevelUtility:
@@ -70,7 +70,7 @@ class LevelUtility:
     @staticmethod
     def __get_tile(c: dict) -> int:
         if (c["left"] and c["up"] and c["right"] and c["down"]
-              and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
+                and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
             return 17
         elif (c["up"] and c["right"] and c["left"] and c["down"]
                 and c["up_left"] and c["up_right"] and c["down_left"] and c["down_right"]):
@@ -158,7 +158,7 @@ class LevelUtility:
             tile_map = []
             for y in range(1, 12):
                 st = ""
-                for x in range(1,24):
+                for x in range(1, 24):
                     cell = map_file[y][x]
                     if cell == "":
                         st += " "
@@ -195,9 +195,7 @@ class LevelUtility:
         except Exception as e:
             print(e)
 
-
 if __name__ == '__main__':
 
     import_map = LevelUtility.import_map('tile_map.ods')
-    for line in import_map['textures']:
-        print(line)
+    print(import_map)
