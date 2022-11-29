@@ -1,9 +1,11 @@
 from typing import List
+import os
+#https://pypi.org/project/pylocalc/
 
-
-class TileMapConverter:
+class LevelUtility:
     @staticmethod
-    def convert(st: List[str]) -> List[str]:
+    def convert(tile_map: List[str]) -> List[str]:
+        st = tile_map.copy()
         st.insert(0, ["X" for _ in range((len(st[0])))])
         st.append(["X" for _ in range((len(st[0])))])
 
@@ -55,7 +57,7 @@ class TileMapConverter:
                     if st[y + 1][x + 1] == "X":
                         context["down_right"] = True
                     return_list[y - 1].append(
-                        "B_" + str(TileMapConverter.__get_tile(context))
+                        "B_" + str(LevelUtility.__get_tile(context))
                     )
                 else:
                     return_list[y - 1].append("FAILED")
@@ -129,3 +131,7 @@ class TileMapConverter:
             return 24
         else:
             return " "
+
+    @staticmethod
+    def import_map(path):
+        pass
