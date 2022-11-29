@@ -89,7 +89,7 @@ class Level:
         bow_y = player_y
         
         rotated_bow_image = self.__player.sprite.bow.get_rotated_image(player_position, LevelMouse.mouse_pos())
-        rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y))
+        rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y - 3))
 
         self.__display_surface.blit(rotated_bow_image, rotated_bow_rect)
 
