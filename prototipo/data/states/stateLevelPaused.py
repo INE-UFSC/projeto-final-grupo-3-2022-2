@@ -6,16 +6,19 @@ class LevelPaused(State):
     def __init__(self, game):
         super().__init__(game)
 
-        self.__background = None
-        self.__buttons = pygame.sprite.Group()
+        self.__actions = {'esc': False}
 
-    def udpate_actions(self, event):
-        ...
+    def update_actions(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.__actions['esc'] = True
 
-    def update(self, delta_time, actions):
-        # Se o jogador pressionar ESC, sai do estado de pausa
-        if actions['esc']:
+    def update(self, delta_time):
+        if self.__actions['esc']:
+            self.__actions['esc'] = False
             self.exit_state()
 
     def render(self, display_surface):
-        display_surface.fill('black') # Limpa a tela
+        display_surface.set_alpha(128)
+        display_surface.fill((0, 0, 0)) # Limpa a tela
+        return display_surface

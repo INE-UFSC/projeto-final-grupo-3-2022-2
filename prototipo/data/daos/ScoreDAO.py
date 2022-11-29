@@ -1,4 +1,4 @@
-from abstractDAO import AbstractDAO
+from daos.abstractDAO import AbstractDAO
 
 class ScoreDAO(AbstractDAO):
     def __init__(self, datasource='scores.json'):

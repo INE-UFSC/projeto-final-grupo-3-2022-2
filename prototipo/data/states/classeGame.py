@@ -1,7 +1,6 @@
 import os, time, pygame
 
-import finder
-from singletonAssets import Assets
+from singletons.singletonAssets import Assets
 from states.abstractState import State
 
 from states.stateTitleScreen import TitleScreen

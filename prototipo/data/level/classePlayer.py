@@ -1,13 +1,15 @@
 import pygame
+from singletons.singletonAssets import Assets
 from level.classeBow import Bow
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__()
 
         # Atributos padrões
-        self.__image = pygame.Surface((27,54))
-        self.__image.fill('red')
+        self.__image = Assets().level_images["player"]
+        self.__image = pygame.transform.scale(self.__image, (self.__image.get_width() * 3, self.__image.get_height() * 3)) # Redimensiona a imagem do arco
         self.__rect = self.__image.get_rect(midbottom=position)
 
         # Mudanças de posição

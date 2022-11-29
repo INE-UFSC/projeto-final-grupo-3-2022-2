@@ -1,9 +1,9 @@
+import sys
+sys.path.append("..")
 from abstractDAO import AbstractDAO
+from daos.exceptions.NivelJaExisteException import NivelJaExisteException
+from daos.exceptions.NivelNaoExisteException import NivelNaoExisteException
 from utility.staticLevelUtility import LevelUtility
-from NivelJaExisteException import NivelJaExisteException
-from NivelNaoExisteException import NivelNaoExisteException
-
-
 class LevelDAO(AbstractDAO):
 
     def __init__(self, datasource='levels.json'):

@@ -3,7 +3,7 @@ import config
 from time import time
 
 from utility.staticLevelMouse import LevelMouse
-from classeTimer import Timer
+from utility.classeTimer import Timer
 from level.classePlayer import Player
 from level.arrows.classePiercingArrow import PiercingArrow
 from level.build_structures.classeTile import Tile
@@ -32,6 +32,7 @@ class Level:
         self.__level_spikes = pygame.sprite.Group()
         # Agrupa os alvos
         self.__level_targets = pygame.sprite.Group()
+        self.__level_hit_targets = pygame.sprite.Group() # Alvos que foram acertados e estão na animação antes de serem eliminados
         # Porta de saída do nível
         self.__level_exit_door = pygame.sprite.GroupSingle()
 
@@ -45,6 +46,7 @@ class Level:
 
         # Status do nível
         self.__win_status = False
+        self.__restart_status = False
         
         self.__start_hold = None
         self.__did_shoot = False
@@ -65,13 +67,13 @@ class Level:
                     self.__level_tiles.add(Tile((x, y), tile_size)) # Adiciona o tile criado no atributo que agrupa os tiles
                 
                 if tile == 'A':
-                    self.__level_spikes.add(Spike((x, y), 48, 48)) # Adiciona o spike criado no atributo que agrupa os spikes
+                    self.__level_spikes.add(Spike((x, y), 48)) # Adiciona o spike criado no atributo que agrupa os spikes
                 
                 if tile == 'O':
-                    self.__level_targets.add(Target((x + (48-30)/2, y + (48-30)/2), 30, 30)) # Adiciona o alvo criado no atributo que agrupa os alvos
+                    self.__level_targets.add(Target((x, y))) # Adiciona o alvo criado no atributo que agrupa os alvos
 
                 if tile == 'D':
-                    self.__level_exit_door.add(ExitDoor((x, y), 48, 48)) # Cria a porta de saída
+                    self.__level_exit_door.add(ExitDoor((x, y), 48)) # Cria a porta de saída
 
                 if tile == 'P':
                     # Os valores de posição são ajustados pois o player é gerado com base nas coordenadas em seu midbottom
@@ -88,17 +90,9 @@ class Level:
         bow_y = player_y
         
         rotated_bow_image = self.__player.sprite.bow.get_rotated_image(player_position, LevelMouse.mouse_pos())
-        rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y))
+        rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y - 3))
 
         self.__display_surface.blit(rotated_bow_image, rotated_bow_rect)
-
-    def get_arrow_stuck(self, player_position):
-        for arrow in self.__stuck_arrows:
-            # Se o player colidir com alguma flecha remove a flecha das flechas presas e adiciona no player
-            if arrow.rect.colliderect(player_position):
-                arrow.stuck = False
-                self.__stuck_arrows.remove(arrow)
-                self.__player.sprite.bow.add_stuck_arrow(arrow)
 
     def display_arrow_quantity(self, surface, player):
         font = pygame.font.SysFont('arial', 30, True, False)  # Edita a fonte
@@ -160,17 +154,25 @@ class Level:
             # Colide a flecha com as targets
             for target in self.__level_targets:
                 if arrow.rect.colliderect(target.rect):
-                    target.kill()
+                    self.__level_targets.remove(target)
+                    self.__level_hit_targets.add(target)
                     if isinstance(arrow, PiercingArrow):
                         pass
                     else:
                         self.__moving_arrows.remove(arrow)
 
+    def __handle_stuck_arrows(self, player: pygame.sprite, stuck_arrows: list):
+        for arrow in stuck_arrows:
+            # Se o player colidir com alguma flecha remove a flecha das flechas presas e adiciona no player
+            if arrow.rect.colliderect(player.rect):
+                arrow.stuck = False
+                stuck_arrows.remove(arrow)
+                player.bow.add_stuck_arrow(arrow)
+
     def __handle_spike_collisions(self, player):
         for spike in self.__level_spikes:
             if spike.collided(player):
-                print("MORREU")
-                self.restart_level()
+                self.__restart_status = True
 
     def __check_exit_door(self, player):
         exit_door = self.__level_exit_door.sprite
@@ -179,14 +181,9 @@ class Level:
         if not exit_door.is_unlocked() and len(self.__level_targets) == 0:
             exit_door.unlock()
 
-            print(exit_door.is_unlocked())
-            print("PORTA ABERTA")
-
         if exit_door.is_unlocked() and exit_door.collided(player):
             self.__win_status = True
             self.__timer.stop()
-
-            print("SAIU DO LEVEL")
     
     # Retorna uma surperfície com as dimensões do nível que contém o nível renderizado
     def update(self, actions):
@@ -200,36 +197,41 @@ class Level:
 
         # Atualiza as flechas e (possívelmente) as targets
         self.__update_arrows()
-        self.get_arrow_stuck(player.rect) # MUDAR ##########
+        self.__handle_stuck_arrows(player, self.__stuck_arrows) # MUDAR ##########
+        self.__level_hit_targets.update() # Chama a animação para os alvos atingidos
 
         # Trata possíveis colisões do jogador com espinhos
         self.__handle_spike_collisions(player)
 
         # Trata ações da porta de saída
         self.__check_exit_door(player)
-        
-        # Confere se o jogador pressionou o botão de reinício
-        if actions['restart']:
-            self.restart_level()
 
+        if actions['restart']:
+            self.__restart_status = True
+        
     def render(self) -> pygame.Surface:
+        self.__display_surface.fill((15, 15, 15)) # Limpa a surface do nível
+
         player = self.__player.sprite
 
-        # Draw
-        self.__player.draw(self.__display_surface)
-        self.display_bow(player.rect.center)
+        # Estruturas do nível
         self.__level_tiles.draw(self.__display_surface)
         self.__level_spikes.draw(self.__display_surface)
-        self.__level_targets.draw(self.__display_surface)
         self.__level_exit_door.draw(self.__display_surface)
-        self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
-        self.display_timer(self.__display_surface) # Mostra o tempo na tela
-        
+        # Alvos
+        self.__level_targets.draw(self.__display_surface)
+        self.__level_hit_targets.draw(self.__display_surface)
+        # Jogador e flecha
+        self.__player.draw(self.__display_surface)
+        self.display_bow(player.rect.center)
+        # Arrows
         for arrow in self.__stuck_arrows:
             self.__display_surface.blit(arrow.image, arrow.rect)
-
         for arrow in self.__moving_arrows:
             self.__display_surface.blit(arrow.image, arrow.rect)
+        # Interface
+        self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
+        self.display_timer(self.__display_surface) # Mostra o tempo na tela
             
         return self.__display_surface
 
@@ -244,6 +246,12 @@ class Level:
     @property
     def height(self):
         return self.__display_surface.get_height()
+    @property
+    def win_status(self):
+        return self.__win_status
+    @property
+    def restart_status(self):
+        return self.__restart_status
 
     # Setters
     def start_hold(self):

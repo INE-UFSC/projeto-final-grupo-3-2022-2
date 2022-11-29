@@ -1,6 +1,8 @@
 import pygame
-from finder import find_file
+from utility.finder import find_file
 from math import pi, atan2
+
+from singletons.singletonAssets import Assets
 
 from level.arrows.abstractArrow import Arrow
 from level.arrows.classeStandartArrow import StandartArrow
@@ -12,9 +14,8 @@ from level.arrows.classePiercingArrow import PiercingArrow
 class Bow():
     def __init__(self, initial_position):
         # Atributos padrões
-        self.__image = pygame.image.load(find_file('gun.png')).convert() # Carrega a imagem do arco (que tem fundo preto)
-        self.__image.set_colorkey((0,0,0)) # Define a cor preta como transparente
-        self.__image = pygame.transform.scale(self.__image, (58, 8)) # Redimensiona a imagem do arco
+        self.__image = Assets().level_images['gun'] # Carrega a imagem do arco (que tem fundo preto)
+        self.__image = pygame.transform.scale(self.__image, (self.__image.get_width() * 3, self.__image.get_height() * 3)) # Redimensiona a imagem do arco
         self.__rect = self.__image.get_rect(center=initial_position)
 
         # Flechas
