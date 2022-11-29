@@ -10,7 +10,7 @@ from states.stateLevelPaused import LevelPaused
 
 
 class LevelPlaying(State):
-    def __init__(self, game):
+    def __init__(self, game, level_atual = 0):
         super().__init__(game)
 
         self.__actions = {'esc': False, 'restart': False,
@@ -19,13 +19,13 @@ class LevelPlaying(State):
         
         self.__assets = Assets()
         self.__buttons = pygame.sprite.Group()
+        self.__level_atual = level_atual
 
-        self.__screen_shake = 0
         
-        self.__load_level(0)
+        self.__load_level(level_atual)
         
-    def __load_level(self, level_selected):
-        current_level = config.levels[level_selected]
+    def __load_level(self, level_atual):
+        current_level = config.levels[level_atual]
         self.__level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
         
     def update_actions(self, event):
@@ -81,14 +81,25 @@ class LevelPlaying(State):
                                       level_dimensions = (self.__level.width, self.__level.height))
 
         self.__level.update(self.__actions)
+
+        if self.__level.win_status:
+            self.__next_level()
+            
+
+    def __next_level(self):
+        if self.__level_atual == len(config.levels):
+            pass
+            # Implementar End Game
+        else:
+            self.__level_atual += 1
+            self.__load_level(self.__level_atual)
+        
+
+
  
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
 
         level_surface = self.__level.render() # Recebe a display surface do level
 
-        if self.__screen_shake > 0:
-            display_surface.blit(level_surface, self.__shake(self.__screen_shake))
-            self.__screen_shake -= 1
-        else:
-            display_surface.blit(level_surface, LevelMouse.get_surface_offset()) # Desenha o level
+        display_surface.blit(level_surface, LevelMouse.get_surface_offset()) # Desenha o level

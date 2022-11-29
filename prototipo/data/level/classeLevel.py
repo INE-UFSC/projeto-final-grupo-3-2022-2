@@ -246,6 +246,9 @@ class Level:
     @property
     def height(self):
         return self.__display_surface.get_height()
+    @property
+    def win_status(self):
+        return self.__win_status
 
     # Setters
     def start_hold(self):
