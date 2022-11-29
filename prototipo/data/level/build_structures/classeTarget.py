@@ -8,7 +8,7 @@ class Target(BuildStructure):
         self.__frames = Assets().level_images['target']
         self.__frame_quantity = len(self.__frames)
 
-        TARGET_IMAGE = self.__frames[0]
+        TARGET_IMAGE = pygame.transform.scale(self.__frames[0], (self.__frames[0].get_width() * 3, self.__frames[0].get_height() * 3))
         WIDTH = TARGET_IMAGE.get_width()
         HEIGHT = TARGET_IMAGE.get_height()
 
@@ -23,4 +23,5 @@ class Target(BuildStructure):
             self.kill()
         else:
             self.__frame_counter += self.__animation_speed
-            self.image = self.__frames[1] # Como animation_speed é um float, arredonda o valor de frame_counter para inteiro
+            self.image = pygame.transform.scale(self.__frames[1], (self.__frames[1].get_width() * 3, self.__frames[1].get_height() * 3))
+            # Como animation_speed é um float, arredonda o valor de frame_counter para inteiro
