@@ -73,10 +73,12 @@ class Player(pygame.sprite.Sprite):
 
     def __movement_input(self, actions):
         # Movimento horizontal
-        if actions['right']:
+        if (actions["right"] and actions["left"]) or (not actions["right"] and not actions["left"]):
+            self.__thrust = 0
+        elif actions['right']:
             self.__thrust = 1
             self.__input_right_status = True
-        if actions['left']:
+        elif actions['left']:
             self.__thrust = -1
             self.__input_right_status = False
         
@@ -150,10 +152,10 @@ class Player(pygame.sprite.Sprite):
         for tile in collide_with.sprites():
             # Colisão horizontal
             if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.rect.width, self.rect.height): # Testa a colisão do deslocamento horizontal
-                if self.__delta_position.x < 0: # Caso o jogador colida com um superfície pela esquerda
-                    dx = tile.rect.right - self.rect.left
-                elif self.__delta_position.x > 0: # Caso o jogador colida com um superfície pela direita
+                if self.__delta_position.x > 0: # Caso o jogador colida com um superfície pela direita
                     dx = tile.rect.left - self.rect.right
+                elif self.__delta_position.x < 0: # Caso o jogador colida com um superfície pela esquerda
+                    dx = tile.rect.right - self.rect.left
                 else:
                     dx = 0
 
@@ -184,8 +186,6 @@ class Player(pygame.sprite.Sprite):
         self.__on_ground_status = status
     def set_jumping_status(self, status: bool):
         self.__jumping_status = status
-    def input_right_status(self, status: bool):
-        self.__input_right_status = status
 
     # Getters
     @property
