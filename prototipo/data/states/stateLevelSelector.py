@@ -9,16 +9,16 @@ from utility.classeScoreController import ScoreController
 
 class LevelSelector(State):
     def __init__(self, game):
-        super().__init__(game)
+        ACTIONS = {'mouse_left': False}
+
+        super().__init__(game, ACTIONS)
 
         self.__scoreController = ScoreController()
 
-        self.__actions = {'mouse_left': False}
         self.__assets = Assets()
         self.__background = self.__assets.images['background']
 
         self.__load_buttons()
-
 
     def __load_buttons(self):
         self.VOLTAR = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
@@ -40,17 +40,14 @@ class LevelSelector(State):
                 self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
                 self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
 
-    def restart_actions(self):
-        self.__actions = super().restart_actions(self.__actions)
-
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            self.__actions['mouse_left'] = True
+            self._actions['mouse_left'] = True
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            self.__actions['mouse_left'] = False
+            self._actions['mouse_left'] = False
     
     def update(self, delta_time):
-        if self.__actions['mouse_left']:
+        if self._actions['mouse_left']:
             if self.VOLTAR.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
             

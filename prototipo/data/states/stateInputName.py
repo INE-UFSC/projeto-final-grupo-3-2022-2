@@ -9,9 +9,9 @@ from states.stateTitleScreen import TitleScreen
 
 class InputName(State):
     def __init__(self, game):
-        super().__init__(game)
+        ACTIONS = {'enter': False}
 
-        self.__actions = {'enter': False}
+        super().__init__(game, ACTIONS)
 
         self.__assets = Assets()
         self.__background = self.__assets.images['background']
@@ -25,9 +25,6 @@ class InputName(State):
         self.INPUT_BOX = InputBox(self.__assets.fonts_path['text'], 50, (255,255,255), 300)
         self.TEXTO_ERRO = Button(self.__assets.fonts_path['text'], 30, (140,140,140), '')
 
-    def restart_actions(self):
-        self.__actions = super().restart_actions(self.__actions)
-
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
@@ -39,12 +36,12 @@ class InputName(State):
                     self.TEXTO_ERRO = Button(self.__assets.fonts_path['text'], 30, (140,140,140), 'Seu nome pode ter no máximo 8 letras')
                 else:
                     self.__verificador = True 
-                    self.__actions['enter'] = True
+                    self._actions['enter'] = True
         
         self.INPUT_BOX.update_actions(event)
 
     def update(self, delta_time):
-        if self.__actions['enter'] and self.__verificador:
+        if self._actions['enter'] and self.__verificador:
             self.__assets.user_name = str(self.INPUT_BOX.text).upper() # Salva o nome do usuário (em all caps)
             TitleScreen(self._game).enter_state()
 

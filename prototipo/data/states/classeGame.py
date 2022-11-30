@@ -95,18 +95,14 @@ class Game():
 
     # Métodos que alteram a state stack
     def append_state(self, state: State):
+        self.__reset_state_actions()
         self.__state_stack.append(state)
 
     def pop_state(self):
         self.__state_stack.pop()
-        self.__reset_state_actions()
-    
-    def __reset_state_actions(self):
-        try:
-            self.__state_stack[-1].restart_actions()
-        except:
-            pass
 
+    def __reset_state_actions(self):
+        self.__state_stack[-1].restart_actions()
 
     # Getters
     @property

@@ -12,17 +12,16 @@ from utility.classeScoreController import ScoreController
 
 class LevelPlaying(State):
     def __init__(self, game, level_atual = 0):
-        super().__init__(game)
+        ACTIONS = {'esc': False, 'restart': False,
+                   'up': False, 'down': False, 'left': False, 'right': False,
+                   'mouse_left': False, 'mouse_right': False}
 
-        self.__actions = {'esc': False, 'restart': False,
-                          'up': False, 'down': False, 'left': False, 'right': False,
-                          'mouse_left': False, 'mouse_right': False}
-        
+        super().__init__(game, ACTIONS)
+
         self.__assets = Assets()
         self.__scoreController = ScoreController()
         self.__buttons = pygame.sprite.Group()
         self.__level_atual = level_atual
-
         
         self.__load_level(level_atual)
         
@@ -31,63 +30,63 @@ class LevelPlaying(State):
         self.__level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
     
     def restart_actions(self):
-        self.__actions = {'esc': False, 'restart': False,
+        self._actions = {'esc': False, 'restart': False,
                           'up': False, 'down': False, 'left': False, 'right': False,
                           'mouse_left': False, 'mouse_right': False}
 
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN: # Inputs do teclado (soltar tecla)
             if event.key == pygame.K_ESCAPE:
-                self.__actions['esc'] = True
+                self._actions['esc'] = True
             if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
-                self.__actions['up'] = True
+                self._actions['up'] = True
             if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                self.__actions['down'] = True
+                self._actions['down'] = True
             if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                self.__actions['left'] = True
+                self._actions['left'] = True
             if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                self.__actions['right'] = True
+                self._actions['right'] = True
             if event.key == pygame.K_r:
-                self.__actions['restart'] = True
+                self._actions['restart'] = True
                 
         if event.type == pygame.KEYUP: # Inputs do teclado (soltar tecla)
             if event.key == pygame.K_ESCAPE:
-                self.__actions['esc'] = False
+                self._actions['esc'] = False
             if event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_SPACE:
-                self.__actions['up'] = False
+                self._actions['up'] = False
             if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                self.__actions['down'] = False
+                self._actions['down'] = False
             if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                self.__actions['left'] = False
+                self._actions['left'] = False
             if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                self.__actions['right'] = False
+                self._actions['right'] = False
             if event.key == pygame.K_r:
-                self.__actions['restart'] = False
+                self._actions['restart'] = False
 
         if event.type == pygame.MOUSEBUTTONDOWN: # Inputs do mouse (pressionar botão)
             if event.button == 1:
-                self.__actions['mouse_left'] = True
+                self._actions['mouse_left'] = True
                 self.__level.start_hold()
             if event.button == 3:
-                self.__actions['mouse_right'] = True
+                self._actions['mouse_right'] = True
                     
         if event.type == pygame.MOUSEBUTTONUP: # Inputs do mouse (soltar botão)
             if event.button == 1:
-                self.__actions['mouse_left'] = False
+                self._actions['mouse_left'] = False
                 self.__level.end_hold()
             if event.button == 3:
-                self.__actions['mouse_right'] = False
+                self._actions['mouse_right'] = False
 
     def update(self, delta_time):
         # Se o jogador pressionar ESC, entra no estado de pausa
-        if self.__actions['esc']:
+        if self._actions['esc']:
             pause_state = LevelPaused(self._game)
             pause_state.enter_state()
 
         LevelMouse.set_surface_offset(screen_dimensions = (self._game.screen_width, self._game.screen_height),
                                       level_dimensions = (self.__level.width, self.__level.height))
 
-        self.__level.update(self.__actions)
+        self.__level.update(self._actions)
 
         # Confere os status do nível
         if self.__level.win_status:

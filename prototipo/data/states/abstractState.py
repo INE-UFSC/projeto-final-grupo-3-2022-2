@@ -2,17 +2,11 @@ from abc import ABC, abstractmethod
 
 
 class State(ABC):
-    def __init__(self, game):
+    def __init__(self, game, actions_dict: dict):
         self._game = game
         self.__prev_state = None
 
-    @abstractmethod
-    def restart_actions(self, action_dict):
-        # Essa função é chamada quando há uma troca estados (para não gerar conflitos) de inputs antigos
-        # Deve reiniciar o dicionário salvo em actions para False em todos seus valores
-        for key in action_dict:
-            action_dict[key] = False
-        return action_dict
+        self._actions = actions_dict
 
     @abstractmethod
     def update_actions(self, event):
@@ -31,6 +25,12 @@ class State(ABC):
         # Irá renderizar na tela os elementos atualizados em update()
         # Na maioria dos casos, deve-se limpar no início do método usando display_surface.fill((0, 0, 0)) 
         pass
+
+    def restart_actions(self):
+        # Essa função é chamada quando há uma troca estados (para não gerar conflitos) de inputs antigos
+        # Reinicia o dicionário salvo em actions para False em todos seus valores
+        for key in self._actions:
+            self._actions[key] = False
 
     def enter_state(self):
         if len(self._game.state_stack) > 1:

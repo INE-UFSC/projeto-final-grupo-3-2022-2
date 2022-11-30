@@ -6,9 +6,9 @@ from singletons.singletonAssets import Assets
 
 class LevelPaused(State):
     def __init__(self, game):
-        super().__init__(game)
+        ACTIONS = {'esc': False, 'mouse_left': False}
 
-        self.__actions = {'esc': False, 'mouse_left': False}
+        super().__init__(game, ACTIONS)
 
         self.__assets = Assets()
 
@@ -20,25 +20,25 @@ class LevelPaused(State):
         self.EXIT_LEVEL = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), 'Voltar para o menu')
 
     def restart_actions(self):
-        self.__actions = {'esc': False, 'mouse_left': False}
+        self._actions = {'esc': False, 'mouse_left': False}
 
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                self.__actions['esc'] = True
+                self._actions['esc'] = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
-                self.__actions['esc'] = False
+                self._actions['esc'] = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                self.__actions['mouse_left'] = True
+                self._actions['mouse_left'] = True
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
-                self.__actions['mouse_left'] = False        
+                self._actions['mouse_left'] = False        
 
     def update(self, delta_time):
         """ PROBLEMA -> O botão deve ser identificado quando o mouse sobe, não quando ele está pressionado """
-        if self.__actions['mouse_left']:
+        if self._actions['mouse_left']:
             if self.CONTINUE.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
             if self.LEVEL_RECORDS.check_for_hover(pygame.mouse.get_pos()):
