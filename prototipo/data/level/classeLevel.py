@@ -99,9 +99,11 @@ class Level:
         text = font.render(f'Tempo: {formated_time}', True, (0, 0, 0))  # Edita o texto
         surface.blit(text, (400, 10))  # Mostra na tela
 
-    def __update_player(self, player):
+    def __update_player(self, player, actions):
+        #if self.__actions['']
+
         # Gera uma tupla com os valores de deslocamento calculados baseados no player
-        delta_speed = player.calculate_speed()
+        delta_speed = player.calculate_speed(actions)
         # A parte da tupla delta_speed, calcula uma nova tupla para os valores de deslocamento transformados a partir das colisões
         collided_delta_speed = player.get_collided_position(delta_speed, self.__level_tiles) 
         # Aplica o deslocamento final no jogador
@@ -189,7 +191,7 @@ class Level:
     def update(self, actions):
         # Atualiza o player
         player = self.__player.sprite
-        self.__update_player(player)
+        self.__update_player(player, actions)
 
         # Detecta o tiro
         if self.__did_shoot:

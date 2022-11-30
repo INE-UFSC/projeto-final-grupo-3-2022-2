@@ -44,35 +44,33 @@ class Player(pygame.sprite.Sprite):
         # Arco
         self.__gun = Crossbow(self.__rect.center)
 
-    """ MOVIMENTAÇÃO """
 
-    def jump(self):
+    """ MÉTODOS INTERNOS """
+    def __jump(self):
         self.__delta_position.y = -self.__jump_strength
         self.__jumping_status = True
         self.__on_ground_status = False
 
-    def movement_input(self):
-        keys = pygame.key.get_pressed()
-
+    def __movement_input(self, actions):
         # Movimento horizontal
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        if actions['right']:
             self.__thrust = 1
             self.__facing_right_status = True
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        if actions['left']:
             self.__thrust = -1
             self.__facing_right_status = False
         
         # Se o jogador não estiver pressionando esquerda ou direita
-        if not (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and not (keys[pygame.K_LEFT] or keys[pygame.K_a]):
+        if not actions['right'] and not actions['left']:
             self.__thrust = 0
 
         self.__acceleration.x = (self.__input_strength * self.__thrust)
 
         # Movimento vertical
-        if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.__jumping_status is False:
-            self.jump()
+        if actions['up'] and self.__jumping_status is False:
+            self.__jump()
 
-    def apply_accceleration(self):
+    def __apply_accceleration(self):
         temp_speed_result = self.__delta_position.x + self.__acceleration.x
 
         # Se a velocidade for maior que a máxima de caminhada e o jogador estiver pressionando a tecla de movimento na mesma direção, não entra na condição
@@ -82,7 +80,7 @@ class Player(pygame.sprite.Sprite):
         # Aplica a aceleração da gravidade
         self.__delta_position.y += self.__acceleration.y
 
-    def apply_friction(self):
+    def __apply_friction(self):
         if self.__on_ground_status and self.__thrust == 0:
             self.__delta_position.x = int(self.__delta_position.x * self.__ground_friction * 1000)/1000 # Arredonda para 4 pontos de precisão
         elif self.__on_ground_status and abs(self.__delta_position.x) > self.__max_walking_speed:
@@ -91,6 +89,28 @@ class Player(pygame.sprite.Sprite):
         if not self.__on_ground_status:
             self.__delta_position.x = int(self.__delta_position.x * self.__air_friction * 1000)/1000 # Arredonda para 4 pontos de precisão
 
+    def __move_player(self, delta_speed):
+        dx, dy = delta_speed
+
+        # Movimento x
+        self.__precise_rect_position_x += dx # A posição precisa será float
+        self.__rect.x = int(self.__precise_rect_position_x) # A posição recebida pelo retângulo precisa ser inteira para posicionar o pixel
+
+        # Movimento y
+        self.__rect.y += dy
+
+
+    """ MÉTODOS DE INTERFACE """
+    def calculate_speed(self, actions):
+        # Aplica a aceleração do input
+        self.__movement_input(actions) # Muda os valores de aceleração
+        self.__apply_accceleration() # Aplica a aceleração ao vetor de velocidade
+
+        # Aplica a fricção na aceleração horizontal
+        self.__apply_friction()
+
+        return self.__delta_position
+    
     def knockback(self, target_position, hold_factor: float = 1):
         self.__on_ground_status = False
 
@@ -102,29 +122,9 @@ class Player(pygame.sprite.Sprite):
         knockback_factor = self.__knockback_strength * hold_factor
         self.__delta_position = -(direction * knockback_factor)
 
-    def calculate_speed(self):
-        # Aplica a aceleração do input
-        self.movement_input() # Muda os valores de aceleração
-        self.apply_accceleration() # Aplica a aceleração ao vetor de velocidade
-
-        # Aplica a fricção na aceleração horizontal
-        self.apply_friction()
-
-        return self.__delta_position
-
-    def move(self, delta_speed):
-        dx, dy = delta_speed
-
-        # Movimento x
-        self.__precise_rect_position_x += dx # A posição precisa será float
-        self.__rect.x = int(self.__precise_rect_position_x) # A posição recebida pelo retângulo precisa ser inteira para posicionar o pixel
-
-        # Movimento y
-        self.__rect.y += dy
-
-    """ COLISÃO """
-    # Colide a próxima posição do objeto e retorna a nova posição colidida em uma tupla (collided_dx, collided_dy)
     def get_collided_position(self, next_position: tuple, collide_with: pygame.sprite.Group) -> tuple:
+        # Colide a próxima posição do objeto e retorna a nova posição colidida em uma tupla (collided_dx, collided_dy)
+
         dx, dy = next_position
 
         for tile in collide_with.sprites():
@@ -154,10 +154,8 @@ class Player(pygame.sprite.Sprite):
 
         return (dx, dy) # Retorna as posições colididas com o sprite group passado como argumento
 
-    """ ATUALIZAÇÃO """
-
     def update(self, delta_speed): # Calcula o movimento baseado nos inputs
-        self.move(delta_speed) # Atualiza a posição do player
+        self.__move_player(delta_speed) # Atualiza a posição do player
     
 
     # Setters
