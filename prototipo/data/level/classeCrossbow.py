@@ -21,13 +21,18 @@ class Crossbow():
         # Flechas
         self.__arrows = [BounceArrow(), StandartArrow(), FastArrow(), PiercingArrow()]
 
-
     def get_rotated_image(self, player_position, cursor_position):
         # Calcula o ângulo entre o centro do jogador (ponto pivô de rotação da arma) e o cursor
         relative_position = pygame.Vector2(cursor_position) - pygame.Vector2(player_position)
         angle_degrees = (180 / pi) * (-atan2(relative_position[1], relative_position[0]))
 
-        rotated_image = pygame.transform.rotate(self.__image, angle_degrees) # Faz uma cópia da imagem rotacionada
+        if angle_degrees <= 90 and angle_degrees >= -90: # Quadrantes da direita
+            image = self.__image
+        else: # Quadrantes da esquerda
+            image = pygame.transform.flip(self.__image, False, True) # Faz uma cópia da imagem espelhada verticalmente
+            
+        rotated_image = pygame.transform.rotate(image, angle_degrees) # Faz uma cópia da imagem rotacionada
+            
 
         return rotated_image
     

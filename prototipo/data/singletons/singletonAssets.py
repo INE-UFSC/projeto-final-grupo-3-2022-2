@@ -7,10 +7,10 @@ from singletons.abstractSingleton import Singleton
 class Assets(Singleton):
     def __init__(self):
         super().__init__() # Inicia o Singleton
-       
+        self.__user_name = '-'       
+
         self.load_assets()
 
-    
     def load_assets(self):
         self.__fonts_path = {
             'title': finder.find_file('Fibberish.ttf'),
@@ -31,8 +31,13 @@ class Assets(Singleton):
                 pygame.image.load(finder.find_file('door_003.png')),
                 pygame.image.load(finder.find_file('door_004.png'))
             ],
-            'gun': pygame.image.load(finder.find_file('gun.png')).convert_alpha(),
-            'player': pygame.image.load(finder.find_file('idle.png')).convert_alpha(),
+            'gun': pygame.image.load(finder.find_file('gun.png')).convert_alpha()
+        }
+        self.__player = {
+            'idle': [pygame.image.load(finder.find_file('idle.png')).convert_alpha()],
+            'run': [],
+            'fall': [],
+            # 'jump': pygame.image.load(finder.find_file('jump.png')).convert_alpha(),
         }
 
     # Getters
@@ -45,12 +50,14 @@ class Assets(Singleton):
     @property
     def level_images(self):
         return self.__level_images
-
+    @property
+    def player(self):
+        return self.__player
     @property
     def user_name(self):
         return self.__user_name
 
     #Setters
     @user_name.setter
-    def user_name(self, user_name):
+    def user_name(self, user_name: str):
         self.__user_name = user_name

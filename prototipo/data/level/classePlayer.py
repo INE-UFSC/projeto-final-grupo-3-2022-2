@@ -1,14 +1,17 @@
 import pygame
 from singletons.singletonAssets import Assets
-from level.classeBow import Crossbow
+from level.classeCrossbow import Crossbow
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__()
 
+        # Carrega as imagens do jogador
+        self.__images = Assets().player
+
         # Atributos padrões
-        self.__image = Assets().level_images["player"]
+        self.__image = self.__images["idle"][0]
         self.__image = pygame.transform.scale(self.__image, (self.__image.get_width() * 3, self.__image.get_height() * 3)) # Redimensiona a imagem do arco
         self.__rect = self.__image.get_rect(midbottom=position)
 
@@ -45,7 +48,25 @@ class Player(pygame.sprite.Sprite):
         self.__gun = Crossbow(self.__rect.center)
 
 
-    """ MÉTODOS INTERNOS """
+        # Animação
+        self.__animation_status = "idle"
+        self.__animation_speed = 0.1
+        self.__frame_index = 0
+
+    def __update_animation(self):
+        frames = self.__images[self.__animation_status]
+
+        #self.__frame_index += self.__animation_speed # Fazer a conversão para inteiro nesse ponto ???????????
+        #if self.__frame_index >= len(animation):
+        #    self.__frame_index = 0
+        
+        image = pygame.transform.scale(frames[0], (frames[0].get_width() * 3, frames[0].get_height() * 3))
+        if self.__facing_right_status == True:
+            self.__image = image
+        else:
+            self.__image = pygame.transform.flip(image, True, False) # Flipa a imagem no eixo x
+
+    """ MÉTODOS INTERNOS DE MOVIMENTAÇÃO """
     def __jump(self):
         self.__delta_position.y = -self.__jump_strength
         self.__jumping_status = True
@@ -155,6 +176,7 @@ class Player(pygame.sprite.Sprite):
         return (dx, dy) # Retorna as posições colididas com o sprite group passado como argumento
 
     def update(self, delta_speed): # Calcula o movimento baseado nos inputs
+        self.__update_animation()
         self.__move_player(delta_speed) # Atualiza a posição do player
     
 
@@ -163,6 +185,8 @@ class Player(pygame.sprite.Sprite):
         self.__on_ground_status = status
     def set_jumping_status(self, status: bool):
         self.__jumping_status = status
+    def facing_right_status(self, status: bool):
+        self.__facing_right_status = status
 
     # Getters
     @property
