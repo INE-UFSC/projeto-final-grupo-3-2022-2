@@ -40,6 +40,9 @@ class LevelSelector(State):
                 self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
                 self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
 
+    def restart_actions(self):
+        self.__actions = super().restart_actions(self.__actions)
+
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.__actions['mouse_left'] = True
@@ -53,23 +56,24 @@ class LevelSelector(State):
             
             for i in range(0, len(self.NIVEIS)):
                 if self.NIVEIS[i].check_for_hover(pygame.mouse.get_pos()):
-                    LevelPlaying(self._game).enter_state()
+                    LevelPlaying(self._game, i).enter_state()
 
     def render(self, display_surface):
         background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))
         display_surface.blit(background, (0, 0)) # Mostra o background
 
         center = display_surface.get_rect().center
+        right = display_surface.get_rect().topright
 
         self.VOLTAR.render(display_surface, (15, 10), position_origin = 'topleft')
         self.NIVEL.render(display_surface, (130, center[1] - 200))
-        self.RECORDE.render(display_surface, (center[0]-100, center[1] - 200))
-        self.AUTOR.render(display_surface, (center[0]-350, center[1] - 200))
+        self.RECORDE.render(display_surface, (center[0]+50, center[1] - 200))
+        self.AUTOR.render(display_surface, (right[0]-200, center[1] - 200))
         
         for i in range(0, len(self.NIVEIS)):
             self.NIVEIS[i].render(display_surface, (130, center[1] - 200 + (i + 1) * 55))
-            self.RECORDES[i].render(display_surface, (center[0]-100, center[1] - 200 + (i + 1) * 55))
-            self.AUTORES[i].render(display_surface, (center[0]-350, center[1] - 200 + (i + 1) * 55))
+            self.RECORDES[i].render(display_surface, (center[0]+50, center[1] - 200 + (i + 1) * 55))
+            self.AUTORES[i].render(display_surface, (right[0]-200, center[1] - 200 + (i + 1) * 55))
             if self.NIVEIS[i].check_for_hover(pygame.mouse.get_pos()):
                     self.SELETOR.render(display_surface, (100, center[1] - 200 + (i + 1) * 55))
 

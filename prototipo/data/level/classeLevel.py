@@ -46,6 +46,7 @@ class Level:
 
         # Status do nível
         self.__win_status = False
+        self.__restart_status = False
         
         self.__start_hold = None
         self.__did_shoot = False
@@ -171,7 +172,7 @@ class Level:
     def __handle_spike_collisions(self, player):
         for spike in self.__level_spikes:
             if spike.collided(player):
-                self.restart_level()
+                self.__restart_status = True
 
     def __check_exit_door(self, player):
         exit_door = self.__level_exit_door.sprite
@@ -204,11 +205,10 @@ class Level:
 
         # Trata ações da porta de saída
         self.__check_exit_door(player)
-        
-        # Confere se o jogador pressionou o botão de reinício
-        if actions['restart']:
-            self.restart_level()
 
+        if actions['restart']:
+            self.__restart_status = True
+        
     def render(self) -> pygame.Surface:
         self.__display_surface.fill((15, 15, 15)) # Limpa a surface do nível
 
@@ -246,6 +246,12 @@ class Level:
     @property
     def height(self):
         return self.__display_surface.get_height()
+    @property
+    def win_status(self):
+        return self.__win_status
+    @property
+    def restart_status(self):
+        return self.__restart_status
 
     # Setters
     def start_hold(self):

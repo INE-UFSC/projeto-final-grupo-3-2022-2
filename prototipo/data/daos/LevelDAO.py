@@ -1,9 +1,9 @@
+import sys
+sys.path.append("..")
 from abstractDAO import AbstractDAO
-from utility.classTileMapUtility import TileMapConverter
 from daos.exceptions.NivelJaExisteException import NivelJaExisteException
 from daos.exceptions.NivelNaoExisteException import NivelNaoExisteException
-
-
+from utility.staticLevelUtility import LevelUtility
 class LevelDAO(AbstractDAO):
 
     def __init__(self, datasource='levels.json'):
@@ -61,7 +61,7 @@ class LevelDAO(AbstractDAO):
             raise NivelJaExisteException(
                 f"Nível com o nome {level['level_name']} já existe.")
         self._objectCache[level['level_name']] = level
-        self._objectCache[level['level_name']]['textures'] = TileMapConverter.convert(
+        self._objectCache[level['level_name']]['textures'] = LevelUtility.convert(
             level['tile_map'])
         self._dump()
 
@@ -71,29 +71,3 @@ class LevelDAO(AbstractDAO):
                 f"Nível com o nome {level_name} não existe.")
         if level_name not in self.DEFAULT_LEVELS:
             del self._objectCache[level_name]
-
-
-if __name__ == '__main__':
-    dao = LevelDAO()
-
-    print(dao.get_levels_names())
-    dao.remove_level("Level 1")
-    print(dao.get_levels_names())
-    level_3 = {
-        'level_number': 2,
-        'level_name': 'teste',
-        'tile_map': [
-            '                         ',
-            '                         ',
-            '                         ',
-            '                         ',
-            '                         ',
-            '     X             X     ',
-            '    X               X    ',
-            '    X      X        X    ',
-            '     X             X     ',
-            ' XX         P         XX ',
-            'XXXXXXXXXXXXXXXXXXXXXXXXX']
-    }
-    dao.remove_level("teste")
-    print(dao.get_levels_names())

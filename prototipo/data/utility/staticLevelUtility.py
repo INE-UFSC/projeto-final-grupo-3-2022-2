@@ -1,9 +1,16 @@
+import sys
+sys.path.append("..")
 from typing import List
+from pyexcel_ods import get_data
+from utility.exceptions.TileMapErrorException import TileMapErrorException
+# https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
 
 
-class TileMapConverter:
+class LevelUtility:
     @staticmethod
-    def convert(st: List[str]) -> List[str]:
+    def convert(tile_map: List[str]) -> List[str]:
+        """Convert a list of tiles into a list of textures."""
+        st = tile_map.copy()
         st.insert(0, ["X" for _ in range((len(st[0])))])
         st.append(["X" for _ in range((len(st[0])))])
 
@@ -55,7 +62,7 @@ class TileMapConverter:
                     if st[y + 1][x + 1] == "X":
                         context["down_right"] = True
                     return_list[y - 1].append(
-                        "B_" + str(TileMapConverter.__get_tile(context))
+                        "B_" + str(LevelUtility.__get_tile(context))
                     )
                 else:
                     return_list[y - 1].append("FAILED")
@@ -63,7 +70,10 @@ class TileMapConverter:
 
     @staticmethod
     def __get_tile(c: dict) -> int:
-        if (c["up"] and c["right"] and c["left"] and c["down"]
+        if (c["left"] and c["up"] and c["right"] and c["down"]
+                and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
+            return 17
+        elif (c["up"] and c["right"] and c["left"] and c["down"]
                 and c["up_left"] and c["up_right"] and c["down_left"] and c["down_right"]):
             return "black"  # black?
         elif (c["left"] and c["up"] and c["right"] and c["down"]
@@ -78,9 +88,6 @@ class TileMapConverter:
         elif (c["left"] and c["up"] and c["right"] and c["down"]
               and not c["up_right"] and not c["up_left"]):
             return 16
-        elif (c["left"] and c["up"] and c["right"] and c["down"]
-              and not c["down_left"] and not c["down_right"] and not c["up_left"] and not c["up_right"]):
-            return 17
         elif c["up"] and c["left"] and not c["right"] and c["down"] and not c["up_left"] and not c["down_left"]:
             return 25
         elif c["up"] and c["left"] and c["right"] and not c["down"] and not c["up_left"] and not c["up_right"]:
@@ -89,6 +96,14 @@ class TileMapConverter:
             return 27
         elif not c["up"] and c["left"] and c["right"] and c["down"] and not c["down_left"] and not c["down_right"]:
             return 28
+        elif not c["up"] and not c["left"] and c["right"] and c["down"] and not c["down_right"]:
+            return 29
+        elif not c["up"] and c["left"] and not c["right"] and c["down"] and not c["down_left"]:
+            return 30
+        elif c["up"] and not c["left"] and c["right"] and not c["down"] and not c["up_right"]:
+            return 31
+        elif c["up"] and c["left"] and not c["right"] and not c["down"] and not c["up_left"]:
+            return 32
         elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["down_right"]):
             return 9
         elif (c["left"] and c["down"] and c["up"] and c["right"] and not c["down_left"]):
@@ -129,3 +144,62 @@ class TileMapConverter:
             return 24
         else:
             return " "
+
+    @staticmethod
+    def __verify_map(map):
+        if map['lifes'] <= 0:
+            raise TileMapErrorException(
+                "Lifes must be integer and higher than zero.")
+        total_arrows = 0
+        for value in map['arrows'].values():
+            total_arrows += value
+        if total_arrows == 0:
+            raise TileMapErrorException("Must have at least one arrow.")
+        if map['level_name'] == '':
+            raise TileMapErrorException("Level name can't be empty")
+
+    @staticmethod
+    def import_map(path) -> None:
+        """Recebe um path absoluto de um .ods relativo a um mapa, e retorna um dict formatado para inserir no LevelDAO"""
+        try:
+
+            map_file = get_data(path)['Sheet1']
+            tile_map = []
+            for y in range(1, 12):
+                st = ""
+                for x in range(1, 24):
+                    cell = map_file[y][x]
+                    if cell == "":
+                        st += " "
+                    else:
+                        st += cell.upper()
+                tile_map.append(st)
+
+            level_name = map_file[0][29]
+            lifes = map_file[0][26]
+            standart_arrows = map_file[1][-1]
+            fast_arrows = map_file[2][-1]
+            piercing_arrows = map_file[3][-1]
+            bounce_arrows = map_file[4][-1]
+
+            level = {
+                'level_name': level_name,
+                'lifes': int(lifes),
+                'arrows': {
+                    'standart_arrows': int(standart_arrows),
+                    'fast_arrows': int(fast_arrows),
+                    'piercing_arrows': int(piercing_arrows),
+                    'bounce_arrows': int(bounce_arrows)
+                },
+                'tile_map': tile_map,
+                'textures': LevelUtility.convert(tile_map)
+            }
+
+            LevelUtility.__verify_map(level)
+            return level
+        except ValueError as e:
+            print(e)
+        except TileMapErrorException as e:
+            print(e)
+        except Exception as e:
+            print(e)
