@@ -8,8 +8,10 @@ class LevelMouse:
 
     @staticmethod
     def mouse_pos():
-        return (pygame.mouse.get_pos()[0] - LevelMouse.__display_surface_offset[0],
-                pygame.mouse.get_pos()[1] - LevelMouse.__display_surface_offset[1])
+        #return (pygame.mouse.get_pos()[0] - LevelMouse.__display_surface_offset[0],
+        #        pygame.mouse.get_pos()[1] - LevelMouse.__display_surface_offset[1])
+        return (pygame.mouse.get_pos()[0] // 3,
+                pygame.mouse.get_pos()[1] // 3)
 
     @staticmethod
     def get_surface_offset():

@@ -31,7 +31,7 @@ levels = [{
 'XXXXXXXXXXXXXXXXXXXXXXXXX']
 }]
 
-level_tile_size = 48 # Definir tamanho de cada bloco em pixels
+level_tile_size = 16 # Definir tamanho de cada bloco em pixels
 
 screen_width = 1200
 screen_height = 600

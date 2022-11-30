@@ -108,5 +108,5 @@ class LevelPlaying(State):
         display_surface.fill((0, 0, 0)) # Limpa a tela
 
         level_surface = self.__level.render() # Recebe a display surface do level
-
-        display_surface.blit(level_surface, LevelMouse.get_surface_offset()) # Desenha o level
+        level_surface = pygame.transform.scale(level_surface, (level_surface.get_width()*3, level_surface.get_height()*3))
+        display_surface.blit(level_surface, (0,0)) # Desenha o level

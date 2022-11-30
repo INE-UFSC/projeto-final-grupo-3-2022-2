@@ -67,13 +67,13 @@ class Level:
                     self.__level_tiles.add(Tile((x, y), tile_size)) # Adiciona o tile criado no atributo que agrupa os tiles
                 
                 if tile == 'A':
-                    self.__level_spikes.add(Spike((x, y), 48)) # Adiciona o spike criado no atributo que agrupa os spikes
+                    self.__level_spikes.add(Spike((x, y), tile_size)) # Adiciona o spike criado no atributo que agrupa os spikes
                 
                 if tile == 'O':
                     self.__level_targets.add(Target((x, y))) # Adiciona o alvo criado no atributo que agrupa os alvos
 
                 if tile == 'D':
-                    self.__level_exit_door.add(ExitDoor((x, y), 48)) # Cria a porta de saída
+                    self.__level_exit_door.add(ExitDoor((x, y), tile_size)) # Cria a porta de saída
 
                 if tile == 'P':
                     # Os valores de posição são ajustados pois o player é gerado com base nas coordenadas em seu midbottom
@@ -84,7 +84,7 @@ class Level:
                     player_sprite = Player((player_origin_x, player_origin_y)) 
                     self.__player.add(player_sprite)
 
-    def display_arrow_quantity(self, surface, player):
+    """ def display_arrow_quantity(self, surface, player):
         font = pygame.font.SysFont('arial', 30, True, False)  # Edita a fonte
         text = font.render(f'Quantidade de flechas: {len(player.gun.arrows)}', True, (0, 0, 0))  # Edita o texto
         surface.blit(text, (10, 10))  # Mostra na tela
@@ -97,7 +97,7 @@ class Level:
         formated_time = "{:0>2}:{:05.2f}".format(int(minutes),seconds)
 
         text = font.render(f'Tempo: {formated_time}', True, (0, 0, 0))  # Edita o texto
-        surface.blit(text, (400, 10))  # Mostra na tela
+        surface.blit(text, (400, 10))  # Mostra na tela """
 
     def __update_player(self, player, actions):
         if actions['right'] and actions['left']:
@@ -237,8 +237,8 @@ class Level:
         for arrow in self.__moving_arrows:
             self.__display_surface.blit(arrow.image, arrow.rect)
         # Interface
-        self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
-        self.display_timer(self.__display_surface) # Mostra o tempo na tela
+        """ self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
+        self.display_timer(self.__display_surface) # Mostra o tempo na tela """
             
         return self.__display_surface
 

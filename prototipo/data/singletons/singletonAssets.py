@@ -15,22 +15,22 @@ class Assets(metaclass = Singleton):
             'background': pygame.image.load(finder.find_file('background.png')).convert_alpha(),
         }
         self.__level_images = {
-            'spike': self.__get_image('spike.png', 3),
+            'spike': self.__get_image('spike.png', 1),
             'target': [
-                self.__get_image('target_001.png', 3),
-                self.__get_image('target_002.png', 3),
+                self.__get_image('target_001.png', 1),
+                self.__get_image('target_002.png', 1),
             ],
             'door': [
-                self.__get_image('door_001.png', scale=3),
-                self.__get_image('door_002.png', scale=3),
-                self.__get_image('door_003.png', scale=3),
-                self.__get_image('door_004.png', scale=3),
+                self.__get_image('door_001.png', scale=1),
+                self.__get_image('door_002.png', scale=1),
+                self.__get_image('door_003.png', scale=1),
+                self.__get_image('door_004.png', scale=1),
             ],
-            'gun': self.__get_image('gun.png', scale=3),
-            'arrow': self.__get_image('arrow.png', scale=3)
+            'gun': self.__get_image('gun.png', scale=1),
+            'arrow': self.__get_image('arrow.png', scale=1)
         }
         self.__player = {
-            'idle': [self.__get_image('idle.png', scale=3)],
+            'idle': [self.__get_image('idle.png', scale=1)],
             'run': [],
             'fall': []
         }
