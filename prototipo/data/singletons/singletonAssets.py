@@ -4,13 +4,7 @@ import utility.finder as finder
 from singletons.abstractSingleton import Singleton
 
 
-class Assets(Singleton):
-    def __init__(self):
-        super().__init__() # Inicia o Singleton
-        self.__user_name = '-'       
-
-        self.load_assets()
-
+class Assets(metaclass = Singleton):
     def load_assets(self):
         self.__fonts_path = {
             'title': finder.find_file('Fibberish.ttf'),
