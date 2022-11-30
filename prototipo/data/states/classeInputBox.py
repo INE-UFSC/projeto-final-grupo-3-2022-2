@@ -10,6 +10,7 @@ class InputBox(Button):
         self.__text_string = text
         self.__text_surface = self._text
 
+        self.__initial_box_width = initial_width
         self._rect = pygame.Rect(0, 0, initial_width, font_size + 20)
         
     def update_actions(self, event):
@@ -26,7 +27,7 @@ class InputBox(Button):
 
     def update(self):
         # Resize the box if the text is too long.
-        width = max(200, self.__text_surface.get_width()+10)
+        width = max(self.__initial_box_width, self.__text_surface.get_width()+10)
         self._rect.w = width
     
     def render(self, screen: pygame.display, position: tuple, position_origin: str = 'center'):
