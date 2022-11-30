@@ -33,7 +33,7 @@ class Player(pygame.sprite.Sprite):
         # Forças
         self.__input_strength = 0.6 # Altera a força do input do jogador
         self.__knockback_strength = 15 # Altera a força do knockback
-        self.__jump_strength = 6 # Altera a força do pulo
+        self.__jump_strength = 7 # Altera a força do pulo
 
         # Atributos de input
         self.__thrust = 0
@@ -152,20 +152,20 @@ class Player(pygame.sprite.Sprite):
         for tile in collide_with.sprites():
             # Colisão horizontal
             if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.rect.width, self.rect.height): # Testa a colisão do deslocamento horizontal
-                if self.__delta_position.x > 0: # Caso o jogador colida com um superfície pela direita
+                if dx > 0: # Caso o jogador colida com um superfície pela direita
                     dx = tile.rect.left - self.rect.right
-                elif self.__delta_position.x < 0: # Caso o jogador colida com um superfície pela esquerda
+                elif dx < 0: # Caso o jogador colida com um superfície pela esquerda
                     dx = tile.rect.right - self.rect.left
                 else:
                     dx = 0
 
             # Colisão vertical
             if tile.rect.colliderect(self.__rect.x, self.__rect.y + dy, self.__rect.width, self.__rect.height): # Testa a colisão do deslocamento vertical
-                if self.__delta_position.y < 0 and (tile.rect.bottom <= self.__rect.top): # Jogador "subindo"
+                if dy < 0 and (tile.rect.bottom <= self.__rect.top): # Jogador "subindo"
                     dy = (tile.rect.bottom - self.__rect.top)
                     
                     self.__delta_position.y = 0 # Reinicia a gravidade
-                if self.__delta_position.y > 0 and (tile.rect.top >= self.__rect.bottom): # Jogador "caindo"
+                if dy > 0 and (tile.rect.top >= self.__rect.bottom): # Jogador "caindo"
                     dy = (tile.rect.top - self.__rect.bottom)
                     
                     self.__delta_position.y = 0 # Reinicia a gravidade
