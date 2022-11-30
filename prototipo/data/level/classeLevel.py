@@ -255,6 +255,10 @@ class Level:
     def restart_status(self):
         return self.__restart_status
 
+    @property
+    def timer(self):
+        return self.__timer
+
     # Setters
     def start_hold(self):
         self.__start_hold = time()

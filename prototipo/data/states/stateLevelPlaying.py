@@ -7,6 +7,7 @@ import config
 from utility.staticLevelMouse import LevelMouse
 from states.stateLevelPaused import LevelPaused
 from level.classeLevel import Level
+from utility.classeScoreController import ScoreController
 
 
 class LevelPlaying(State):
@@ -18,6 +19,7 @@ class LevelPlaying(State):
                           'mouse_left': False, 'mouse_right': False}
         
         self.__assets = Assets()
+        self.__scoreController = ScoreController()
         self.__buttons = pygame.sprite.Group()
         self.__level_atual = level_atual
 
@@ -89,6 +91,8 @@ class LevelPlaying(State):
 
         # Confere os status do nível
         if self.__level.win_status:
+            self.__scoreController.add_score(self.__level_atual+1, self.__assets.user_name, 
+                                                self.__level.timer.stopped_time)
             self.__next_level()
         if self.__level.restart_status:
             self.__level.restart_level()

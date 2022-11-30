@@ -4,6 +4,7 @@ from singletons.singletonAssets import Assets
 from states.abstractState import State
 
 from states.stateTitleScreen import TitleScreen
+from states.stateInputName import InputName
 
 
 class Game():
@@ -36,8 +37,8 @@ class Game():
         Assets().load_assets() # Inicializa o singleton de assets
     
     def __load_states(self):
-        self.__title_screen = TitleScreen(self)
-        self.__state_stack.append(self.__title_screen)
+        self.__input_name = InputName(self)
+        self.__state_stack.append(self.__input_name)
 
     def run(self):
         while self.__playing:
