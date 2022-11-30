@@ -47,3 +47,7 @@ class InputBox(Button):
         screen.blit(self.__text_surface, (text_x, text_y))
         # Blit the rect.
         pygame.draw.rect(screen, self._base_color, self._rect, 2)
+
+    @property
+    def text(self):
+        return self.__text_string

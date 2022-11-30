@@ -18,11 +18,10 @@ class InputName(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.NOME = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Digite seu nome:')
+        self.NOME = Button(self.__assets.fonts_path['text'], 40, (180,180,180), 'Digite seu nome:')
         self.INPUT_BOX = InputBox(self.__assets.fonts_path['text'], 50, (255,255,255), 500)
         
-        
-        self.VERIFICA = Button(self.__assets.fonts_path['text'], 55, (255, 255, 255), 'Digite um nome com no mínimo 3 letras')
+        self.VERIFICA = Button(self.__assets.fonts_path['text'], 40, (180,180,180), 'Digite um nome com no mínimo 3 letras')
 
     def restart_actions(self):
         self.__actions = super().restart_actions(self.__actions)
@@ -49,8 +48,8 @@ class InputName(State):
         display_surface.blit(background, (0, 0)) # Mostra o background
 
         center = display_surface.get_rect().center
-        self.NOME.render(display_surface, (center[0], center[1] - 150))
-        self.INPUT_BOX.render(display_surface, (center[0], center[1] - 50))
+        self.NOME.render(display_surface, (center[0], center[1]-100))
+        self.INPUT_BOX.render(display_surface, (center[0], center[1]))
         if self.__verificador:
             self.VERIFICA.render(display_surface, (center[0], center[1] + 100))
 
