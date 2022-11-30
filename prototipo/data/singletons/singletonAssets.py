@@ -30,15 +30,7 @@ class Assets(Singleton):
                 pygame.image.load(finder.find_file('door_003.png')),
                 pygame.image.load(finder.find_file('door_004.png'))
             ],
-            'gun': pygame.image.load(finder.find_file('gun2.png')).convert_alpha(),
-            'bow': [
-                pygame.image.load(finder.find_file('bow_001.png')),
-                pygame.image.load(finder.find_file('bow_002.png')),
-                pygame.image.load(finder.find_file('bow_003.png')),
-                pygame.image.load(finder.find_file('bow_004.png')),
-                pygame.image.load(finder.find_file('bow_005.png')),
-                pygame.image.load(finder.find_file('bow_006.png'))
-            ],
+            'gun': pygame.image.load(finder.find_file('gun.png')).convert_alpha(),
             'player': pygame.image.load(finder.find_file('idle.png')).convert_alpha(),
         }
 

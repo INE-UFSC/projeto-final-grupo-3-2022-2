@@ -84,19 +84,9 @@ class Level:
                     player_sprite = Player((player_origin_x, player_origin_y)) 
                     self.__player.add(player_sprite)
 
-    def display_bow(self, player_position):
-        player_x, player_y = player_position
-        bow_x = player_x
-        bow_y = player_y
-        
-        rotated_bow_image = self.__player.sprite.bow.get_rotated_image(player_position, LevelMouse.mouse_pos())
-        rotated_bow_rect = rotated_bow_image.get_rect(center = (bow_x , bow_y - 3))
-
-        self.__display_surface.blit(rotated_bow_image, rotated_bow_rect)
-
     def display_arrow_quantity(self, surface, player):
         font = pygame.font.SysFont('arial', 30, True, False)  # Edita a fonte
-        text = font.render(f'Quantidade de flechas: {len(player.bow.arrows)}', True, (0, 0, 0))  # Edita o texto
+        text = font.render(f'Quantidade de flechas: {len(player.gun.arrows)}', True, (0, 0, 0))  # Edita o texto
         surface.blit(text, (10, 10))  # Mostra na tela
 
     def display_timer(self, surface):
@@ -128,7 +118,7 @@ class Level:
 
         # Tenta atirar
         try: # Tenta pegar uma flecha do arco (irá suceder se o arco tiver flechas)
-            arrow = player.bow.pop_first_arrow()
+            arrow = player.gun.pop_first_arrow()
 
         except: # Caso o jogador não tenha uma flecha no arco, ele não poderá atirar
             # Fazer efeito sonoro ou algo do gênero
@@ -167,7 +157,7 @@ class Level:
             if arrow.rect.colliderect(player.rect):
                 arrow.stuck = False
                 stuck_arrows.remove(arrow)
-                player.bow.add_stuck_arrow(arrow)
+                player.gun.add_stuck_arrow(arrow)
 
     def __handle_spike_collisions(self, player):
         for spike in self.__level_spikes:
@@ -185,6 +175,16 @@ class Level:
             self.__win_status = True
             self.__timer.stop()
     
+    def __display_gun(self, player_position):
+        player_x, player_y = player_position
+        gun_x = player_x
+        gun_y = player_y
+        
+        rotated_gun_image = self.__player.sprite.gun.get_rotated_image(player_position, LevelMouse.mouse_pos())
+        rotated_gun_rect = rotated_gun_image.get_rect(center = (gun_x , gun_y - 3))
+
+        self.__display_surface.blit(rotated_gun_image, rotated_gun_rect)
+
     # Retorna uma surperfície com as dimensões do nível que contém o nível renderizado
     def update(self, actions):
         # Atualiza o player
@@ -223,7 +223,7 @@ class Level:
         self.__level_hit_targets.draw(self.__display_surface)
         # Jogador e flecha
         self.__player.draw(self.__display_surface)
-        self.display_bow(player.rect.center)
+        self.__display_gun(player.rect.center)
         # Arrows
         for arrow in self.__stuck_arrows:
             self.__display_surface.blit(arrow.image, arrow.rect)
