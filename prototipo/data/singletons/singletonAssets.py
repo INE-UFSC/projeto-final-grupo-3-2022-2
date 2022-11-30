@@ -7,8 +7,9 @@ from singletons.abstractSingleton import Singleton
 class Assets(Singleton):
     def __init__(self):
         super().__init__() # Inicia o Singleton
-
+       
         self.load_assets()
+
     
     def load_assets(self):
         self.__fonts_path = {
@@ -52,3 +53,12 @@ class Assets(Singleton):
     @property
     def level_images(self):
         return self.__level_images
+
+    @property
+    def user_name(self):
+        return self.__user_name
+
+    #Setters
+    @user_name.setter
+    def user_name(self, user_name):
+        self.__user_name = user_name
