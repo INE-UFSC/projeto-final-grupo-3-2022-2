@@ -18,8 +18,10 @@ class InputName(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.NOME = Button(self.__assets.fonts_path['text'], 55, (255, 255, 255), 'Digite seu nome:')
-        self.BOX = InputBox(self.__assets.fonts_path['text'], 40, (255, 255, 255), 300, 40)
+        self.NOME = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Digite seu nome:')
+        self.INPUT_BOX = InputBox(self.__assets.fonts_path['text'], 50, (255,255,255), 500)
+        
+        
         self.VERIFICA = Button(self.__assets.fonts_path['text'], 55, (255, 255, 255), 'Digite um nome com no mínimo 3 letras')
 
     def restart_actions(self):
@@ -28,19 +30,19 @@ class InputName(State):
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                if len(self.BOX.text)<3:
+                if len(self.INPUT_BOX.text) < 3:
                     self.__verificador = True
                 else:    
                     self.__actions['enter'] = True
         
-        self.BOX.handle_event(event)
+        self.INPUT_BOX.update_actions(event)
 
     def update(self, delta_time):
         if self.__actions['enter']:
-            self.__assets.user_name = self.BOX.text
+            self.__assets.user_name = str(self.INPUT_BOX.text).upper() # Salva o nome do usuário (em all caps)
             TitleScreen(self._game).enter_state()
 
-        self.BOX.update()
+        self.INPUT_BOX.update()
         
     def render(self, display_surface):
         background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))
@@ -48,7 +50,7 @@ class InputName(State):
 
         center = display_surface.get_rect().center
         self.NOME.render(display_surface, (center[0], center[1] - 150))
-        self.BOX.render(display_surface, (center[0], center[1] - 50))
+        self.INPUT_BOX.render(display_surface, (center[0], center[1] - 50))
         if self.__verificador:
             self.VERIFICA.render(display_surface, (center[0], center[1] + 100))
 
