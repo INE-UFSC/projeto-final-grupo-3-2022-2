@@ -7,7 +7,7 @@ from utility.finder import find_file
 from singletons.singletonAssets import Assets
 
 class Arrow(ABC):
-    def __init__(self, minimun_speed, maximun_extra_speed, gravity, image: pygame.image = None):
+    def __init__(self, minimun_speed, maximun_extra_speed, gravity = 0.1, image: pygame.image = None):
         super().__init__() # Inicia a classe ABC que define a classe como abstrata
 
         # Importa a imagem da flecha
@@ -20,9 +20,9 @@ class Arrow(ABC):
         #print(type(image))
 
         # Atributos de características da flecha
-        self.__minimun_speed = 5
-        self.__maximun_extra_speed = 2.5
-        self.__gravity = 0.1
+        self.__minimun_speed = minimun_speed
+        self.__maximun_extra_speed = maximun_extra_speed
+        self.__gravity = gravity
 
         # Atributos de status
         self.__stuck = False
