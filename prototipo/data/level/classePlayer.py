@@ -1,6 +1,6 @@
 import pygame
 from singletons.singletonAssets import Assets
-from level.classeBow import Bow
+from level.classeBow import Crossbow
 
 
 class Player(pygame.sprite.Sprite):
@@ -42,7 +42,7 @@ class Player(pygame.sprite.Sprite):
         self.__facing_right_status = True # Utilizado para definir a direção da textura do jogador
 
         # Arco
-        self.__bow = Bow(self.__rect.center)
+        self.__gun = Crossbow(self.__rect.center)
 
     """ MOVIMENTAÇÃO """
 
@@ -174,8 +174,8 @@ class Player(pygame.sprite.Sprite):
     def rect(self):
         return self.__rect
     @property
-    def bow(self):
-        return self.__bow
+    def gun(self):
+        return self.__gun
     @property
     def thrust(self):
         return self.__thrust

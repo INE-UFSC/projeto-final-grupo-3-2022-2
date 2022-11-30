@@ -11,7 +11,7 @@ from level.arrows.classeFastArrow import FastArrow
 from level.arrows.classePiercingArrow import PiercingArrow
 
 
-class Bow():
+class Crossbow():
     def __init__(self, initial_position):
         # Atributos padrões
         self.__image = Assets().level_images['gun'] # Carrega a imagem do arco (que tem fundo preto)
