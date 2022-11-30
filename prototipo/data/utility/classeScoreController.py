@@ -30,8 +30,12 @@ class ScoreController():
                 seg -= 60
                 min += 1
 
-            if min <= 10:
+            if min <= 10 and seg <= 10:
+                novo_tempos.append((score_level[0],f"0{min}:0{int(seg)}:{miliseg:.0f}"))
+            elif min <= 10:
                 novo_tempos.append((score_level[0],f"0{min}:{int(seg)}:{miliseg:.0f}"))
+            elif seg <= 10:
+                novo_tempos.append((score_level[0],f"{min}:0{int(seg)}:{miliseg:.0f}"))
             else:
                 novo_tempos.append((score_level[0],f"{min}:{int(seg)}:{miliseg:.0f}"))
 
