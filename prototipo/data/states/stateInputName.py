@@ -22,6 +22,9 @@ class InputName(State):
         self.BOX = InputBox(self.__assets.fonts_path['text'], 40, (255, 255, 255), 300, 40)
         self.VERIFICA = Button(self.__assets.fonts_path['text'], 55, (255, 255, 255), 'Digite um nome com no mínimo 3 letras')
 
+    def restart_actions(self):
+        self.__actions = super().restart_actions(self.__actions)
+
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
