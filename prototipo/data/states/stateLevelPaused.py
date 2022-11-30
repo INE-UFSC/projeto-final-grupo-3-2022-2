@@ -15,9 +15,9 @@ class LevelPaused(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.CONTINUE = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), 'Continuar')
-        self.LEVEL_RECORDS = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), 'Recordes do nível')
-        self.EXIT_LEVEL = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), 'Voltar para o menu')
+        self.CONTINUE = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Continuar')
+        self.LEVEL_RECORDS = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Recordes do nível')
+        self.EXIT_LEVEL = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Voltar para o menu')
 
     def restart_actions(self):
         self._actions = {'esc': False, 'mouse_left': False}
@@ -44,9 +44,10 @@ class LevelPaused(State):
             if self.LEVEL_RECORDS.check_for_hover(pygame.mouse.get_pos()):
                 pass
             if self.EXIT_LEVEL.check_for_hover(pygame.mouse.get_pos()):
-                pass
+                while len(self._game.state_stack) > 2:
+                    self._game.pop_state()
 
     def render(self, display_surface):
-        self.CONTINUE.render(display_surface, (20, 10), 'topleft')
-        self.LEVEL_RECORDS.render(display_surface, (20, 50), 'topleft')
-        self.EXIT_LEVEL.render(display_surface, (20, 90), 'topleft')
+        self.CONTINUE.render(display_surface, (60, 40), 'topleft')
+        self.LEVEL_RECORDS.render(display_surface, (60, 40+70), 'topleft')
+        self.EXIT_LEVEL.render(display_surface, (60, 40+140), 'topleft')

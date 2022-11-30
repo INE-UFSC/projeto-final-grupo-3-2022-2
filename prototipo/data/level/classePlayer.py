@@ -12,7 +12,6 @@ class Player(pygame.sprite.Sprite):
 
         # Atributos padrões
         self.__image = self.__images["idle"][0]
-        self.__image = pygame.transform.scale(self.__image, (self.__image.get_width() * 3, self.__image.get_height() * 3)) # Redimensiona a imagem do arco
         self.__rect = self.__image.get_rect(midbottom=position)
 
         # Mudanças de posição
@@ -60,7 +59,7 @@ class Player(pygame.sprite.Sprite):
         #if self.__frame_index >= len(animation):
         #    self.__frame_index = 0
         
-        image = pygame.transform.scale(frames[0], (frames[0].get_width() * 3, frames[0].get_height() * 3))
+        image = frames[0]
         if self.__input_right_status == True:
             self.__image = image
         else:

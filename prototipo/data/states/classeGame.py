@@ -118,8 +118,8 @@ class Game():
     def display_surface(self):
         return self.__display_surface
     @property
-    def actions(self):
-        return self.__actions
+    def state_stack(self):
+        return self.__state_stack
     
     # Setters
     @display_surface.setter

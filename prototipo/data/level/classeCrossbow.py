@@ -15,7 +15,6 @@ class Crossbow():
     def __init__(self, initial_position):
         # Atributos padrões
         self.__image = Assets().level_images['gun'] # Carrega a imagem do arco (que tem fundo preto)
-        self.__image = pygame.transform.scale(self.__image, (self.__image.get_width() * 3, self.__image.get_height() * 3)) # Redimensiona a imagem do arco
         self.__rect = self.__image.get_rect(center=initial_position)
 
         # Flechas

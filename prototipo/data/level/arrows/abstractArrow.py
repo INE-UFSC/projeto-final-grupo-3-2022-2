@@ -3,12 +3,21 @@ from abc import ABC
 from cmath import pi
 from math import atan2, sin, cos, pi
 
+from utility.finder import find_file
+from singletons.singletonAssets import Assets
+
 class Arrow(ABC):
-    def __init__(self, image_path: str, minimun_speed, maximun_extra_speed, gravity):
+    def __init__(self, minimun_speed, maximun_extra_speed, gravity, image: pygame.image = None):
         super().__init__() # Inicia a classe ABC que define a classe como abstrata
 
         # Importa a imagem da flecha
-        self.__base_image = pygame.image.load(image_path).convert()
+        #self.__base_image = pygame.image.load(find_file('arrow.png')).convert()
+        self.__base_image = Assets().level_images['arrow']
+        self.__base_image.set_colorkey((255,255,255)) # Faz com que a flecha não tenha fundo quando for rotacionada
+        
+
+        #print(type(self.__base_image))
+        #print(type(image))
 
         # Atributos de características da flecha
         self.__minimun_speed = minimun_speed
@@ -32,7 +41,7 @@ class Arrow(ABC):
 
         # Retângulo da flecha
         rotated_image = pygame.transform.rotate(self.__base_image, angle_degrees).convert()
-        rotated_image.set_colorkey((255, 255, 255))
+        #rotated_image.set_colorkey((0,0,0))
         self.__image = rotated_image
         self.__rect = self.__image.get_rect(center=initial_position)
         
@@ -46,7 +55,7 @@ class Arrow(ABC):
         angle_degrees = -(angle_radian) * 180 / pi # Converte o ângulo para graus
 
         rotated_image = pygame.transform.rotate(self.__base_image, angle_degrees).convert()
-        rotated_image.set_colorkey((255, 255, 255))
+        #rotated_image.set_colorkey((0,0,0))
         self.__image = rotated_image
         self.__rect = self.__image.get_rect(center=self.__rect.center)
 

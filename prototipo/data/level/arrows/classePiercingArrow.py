@@ -1,8 +1,7 @@
+from singletons.singletonAssets import Assets
 from level.arrows.abstractArrow import Arrow
-from utility.finder import find_file
+
 
 class PiercingArrow(Arrow):
     def __init__(self):
-        IMAGE_PATH = find_file('arrow.png')
-
-        super().__init__(IMAGE_PATH, 10, 15, 0.2)
+        super().__init__(10, 15, 0.2)

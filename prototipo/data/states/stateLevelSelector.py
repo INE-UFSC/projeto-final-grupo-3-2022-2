@@ -35,10 +35,10 @@ class LevelSelector(State):
             self.NIVEIS.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(level)))
             if level in scores:
                 self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][1])))
-                self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][0][0:3])))
+                self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][0])))
             else:
-                self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
-                self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
+                self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
+                self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:

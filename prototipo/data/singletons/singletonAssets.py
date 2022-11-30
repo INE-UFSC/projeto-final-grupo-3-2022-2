@@ -1,4 +1,5 @@
 import pygame
+from os import path
 
 import utility.finder as finder
 from singletons.abstractSingleton import Singleton
@@ -14,25 +15,30 @@ class Assets(metaclass = Singleton):
             'background': pygame.image.load(finder.find_file('background.png')).convert_alpha(),
         }
         self.__level_images = {
-            'spike': pygame.image.load(finder.find_file('spike.png')).convert_alpha(),
+            'spike': self.__get_image('spike.png', 3),
             'target': [
-                pygame.image.load(finder.find_file('target_001.png')),
-                pygame.image.load(finder.find_file('target_002.png'))
+                self.__get_image('target_001.png', 3),
+                self.__get_image('target_002.png', 3),
             ],
             'door': [
-                pygame.image.load(finder.find_file('door_001.png')),
-                pygame.image.load(finder.find_file('door_002.png')),
-                pygame.image.load(finder.find_file('door_003.png')),
-                pygame.image.load(finder.find_file('door_004.png'))
+                self.__get_image('door_001.png', scale=3),
+                self.__get_image('door_002.png', scale=3),
+                self.__get_image('door_003.png', scale=3),
+                self.__get_image('door_004.png', scale=3),
             ],
-            'gun': pygame.image.load(finder.find_file('gun.png')).convert_alpha()
+            'gun': self.__get_image('gun.png', scale=3),
+            'arrow': self.__get_image('arrow.png', scale=3)
         }
         self.__player = {
-            'idle': [pygame.image.load(finder.find_file('idle.png')).convert_alpha()],
+            'idle': [self.__get_image('idle.png', scale=3)],
             'run': [],
-            'fall': [],
-            # 'jump': pygame.image.load(finder.find_file('jump.png')).convert_alpha(),
+            'fall': []
         }
+
+    def __get_image(self, image_name, scale = 1, search_in = path.join('prototipo', 'graphics')):
+        image = pygame.image.load(finder.find_file(image_name, search_in)).convert_alpha()
+        size = (image.get_width() * scale, image.get_height() * scale)
+        return pygame.transform.scale(image, size)
 
     # Getters
     @property
@@ -49,7 +55,10 @@ class Assets(metaclass = Singleton):
         return self.__player
     @property
     def user_name(self):
-        return self.__user_name
+        try:
+            return self.__user_name
+        except:
+            return '?'
 
     #Setters
     @user_name.setter
