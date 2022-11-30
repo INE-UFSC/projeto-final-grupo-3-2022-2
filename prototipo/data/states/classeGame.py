@@ -99,6 +99,14 @@ class Game():
 
     def pop_state(self):
         self.__state_stack.pop()
+        self.__reset_state_actions()
+    
+    def __reset_state_actions(self):
+        try:
+            self.__state_stack[-1].restart_actions()
+        except:
+            pass
+
 
     # Getters
     @property

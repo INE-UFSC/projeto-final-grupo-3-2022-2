@@ -23,7 +23,10 @@ class TitleScreen(State):
         self.SELECT_1 = Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Selecionar nível')
         self.SELECT_2 = Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Criar mapa')
         self.SELECT_3 = Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
-    
+
+    def restart_actions(self):
+        self.__actions = super().restart_actions(self.__actions)
+
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.__actions['mouse_left'] = True

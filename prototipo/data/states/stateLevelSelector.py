@@ -40,6 +40,9 @@ class LevelSelector(State):
                 self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
                 self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '--'))
 
+    def restart_actions(self):
+        self.__actions = super().restart_actions(self.__actions)
+
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             self.__actions['mouse_left'] = True
