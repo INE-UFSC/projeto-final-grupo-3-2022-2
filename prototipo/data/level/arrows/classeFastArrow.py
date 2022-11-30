@@ -4,5 +4,6 @@ from level.arrows.abstractArrow import Arrow
 
 class FastArrow(Arrow):
     def __init__(self):
-        MINIMUN_SPEED = 20
-        super().__init__(MINIMUN_SPEED, 5, 0.2)
+        super().__init__(minimun_speed = 7,
+                         maximun_extra_speed = 3,
+                         gravity = 1)

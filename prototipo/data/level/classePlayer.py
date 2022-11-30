@@ -22,18 +22,18 @@ class Player(pygame.sprite.Sprite):
 
         self.__knockback_speed = pygame.Vector2(0, 0)
         self.__walking_speed = 0
-        self.__max_walking_speed = 5
+        self.__max_walking_speed = 2.1
 
         # Acelerações
-        self.__gravity = 0.45
+        self.__gravity = 0.19
         self.__acceleration = pygame.Vector2(0, self.__gravity)
         self.__ground_friction = 0.75 # Desaceleração do chão em porcentagem
         self.__air_friction = 0.98 # Desaceleração do ar em porcentagem
         
         # Forças
-        self.__input_strength = 0.6 # Altera a força do input do jogador
-        self.__knockback_strength = 15 # Altera a força do knockback
-        self.__jump_strength = 6 # Altera a força do pulo
+        self.__input_strength = 0.3 # Altera a força do input do jogador
+        self.__knockback_strength = 5.7 # Altera a força do knockback
+        self.__jump_strength = 2.35 # Altera a força do pulo
 
         # Atributos de input
         self.__thrust = 0
@@ -72,13 +72,18 @@ class Player(pygame.sprite.Sprite):
         self.__on_ground_status = False
 
     def __movement_input(self, actions):
+        if (actions["right"] and actions["left"]) or (not actions["right"] and not actions["left"]):
+            self.__thrust = 0
+            print(self.__thrust)
         # Movimento horizontal
-        if actions['right']:
+        elif actions['right']:
             self.__thrust = 1
             self.__input_right_status = True
-        if actions['left']:
+            print('right', self.__thrust)
+        elif actions['left']:
             self.__thrust = -1
             self.__input_right_status = False
+            print('left', self.__thrust)
         
         # Se o jogador não estiver pressionando esquerda ou direita
         if not actions['right'] and not actions['left']:

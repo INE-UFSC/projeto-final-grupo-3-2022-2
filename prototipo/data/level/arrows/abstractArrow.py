@@ -20,9 +20,9 @@ class Arrow(ABC):
         #print(type(image))
 
         # Atributos de características da flecha
-        self.__minimun_speed = minimun_speed
-        self.__maximun_extra_speed = maximun_extra_speed
-        self.__gravity = gravity
+        self.__minimun_speed = 5
+        self.__maximun_extra_speed = 2.5
+        self.__gravity = 0.1
 
         # Atributos de status
         self.__stuck = False

@@ -100,12 +100,12 @@ class Level:
         surface.blit(text, (400, 10))  # Mostra na tela """
 
     def __update_player(self, player, actions):
-        if actions['right'] and actions['left']:
+        """ if actions['right'] and actions['left']:
             pass # Matém a útilma direção
         elif actions['right']:
             player.input_right_status = True
         elif actions['left']:
-            player.input_right_status = False
+            player.input_right_status = False """
 
         # Gera uma tupla com os valores de deslocamento calculados baseados no player
         delta_speed = player.calculate_speed(actions)

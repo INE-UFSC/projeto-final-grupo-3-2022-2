@@ -4,7 +4,9 @@ from level.arrows.abstractArrow import Arrow
 
 class BounceArrow(Arrow):
     def __init__(self):
-        super().__init__(10, 15, 0.2)
+        super().__init__(minimun_speed = 5,
+                         maximun_extra_speed = 3.5,
+                         gravity = 1.2)
 
         self.__bounce_count = 0
         self.__max_bounce_count = 2
