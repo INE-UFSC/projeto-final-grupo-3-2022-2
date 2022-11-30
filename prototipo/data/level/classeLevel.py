@@ -103,9 +103,9 @@ class Level:
         if actions['right'] and actions['left']:
             pass # Matém a útilma direção
         elif actions['right']:
-            player.facing_right_status = True
+            player.input_right_status = True
         elif actions['left']:
-            player.facing_right_status = False
+            player.input_right_status = False
 
         # Gera uma tupla com os valores de deslocamento calculados baseados no player
         delta_speed = player.calculate_speed(actions)

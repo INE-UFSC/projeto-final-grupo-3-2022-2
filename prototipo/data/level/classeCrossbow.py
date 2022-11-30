@@ -32,7 +32,6 @@ class Crossbow():
             image = pygame.transform.flip(self.__image, False, True) # Faz uma cópia da imagem espelhada verticalmente
             
         rotated_image = pygame.transform.rotate(image, angle_degrees) # Faz uma cópia da imagem rotacionada
-            
 
         return rotated_image
     

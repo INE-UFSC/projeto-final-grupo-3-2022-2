@@ -42,7 +42,7 @@ class Player(pygame.sprite.Sprite):
         # Atributos de estado
         self.__jumping_status = False
         self.__on_ground_status = True
-        self.__facing_right_status = True # Utilizado para definir a direção da textura do jogador
+        self.__input_right_status = True # Utilizado para definir a direção da textura do jogador
 
         # Arco
         self.__gun = Crossbow(self.__rect.center)
@@ -61,7 +61,7 @@ class Player(pygame.sprite.Sprite):
         #    self.__frame_index = 0
         
         image = pygame.transform.scale(frames[0], (frames[0].get_width() * 3, frames[0].get_height() * 3))
-        if self.__facing_right_status == True:
+        if self.__input_right_status == True:
             self.__image = image
         else:
             self.__image = pygame.transform.flip(image, True, False) # Flipa a imagem no eixo x
@@ -76,10 +76,10 @@ class Player(pygame.sprite.Sprite):
         # Movimento horizontal
         if actions['right']:
             self.__thrust = 1
-            self.__facing_right_status = True
+            self.__input_right_status = True
         if actions['left']:
             self.__thrust = -1
-            self.__facing_right_status = False
+            self.__input_right_status = False
         
         # Se o jogador não estiver pressionando esquerda ou direita
         if not actions['right'] and not actions['left']:
@@ -185,8 +185,8 @@ class Player(pygame.sprite.Sprite):
         self.__on_ground_status = status
     def set_jumping_status(self, status: bool):
         self.__jumping_status = status
-    def facing_right_status(self, status: bool):
-        self.__facing_right_status = status
+    def input_right_status(self, status: bool):
+        self.__input_right_status = status
 
     # Getters
     @property
