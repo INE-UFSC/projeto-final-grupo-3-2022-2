@@ -21,9 +21,9 @@ class LevelSelector(State):
 
     def __load_buttons(self):
         self.VOLTAR = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
-        self.NIVEL = Button(self.__assets.fonts_path['text'], 50, (222, 142, 152), 'Nível')
-        self.RECORDE = Button(self.__assets.fonts_path['text'], 50, (142, 174, 222), 'Recorde')
-        self.AUTOR = Button(self.__assets.fonts_path['text'], 50, (142, 222, 160), 'Autor')
+        self.NIVEL = Button(self.__assets.fonts_path['title'], 50, (222, 142, 152), 'Nível')
+        self.RECORDE = Button(self.__assets.fonts_path['title'], 50, (142, 174, 222), 'Recorde')
+        self.AUTOR = Button(self.__assets.fonts_path['title'], 50, (142, 222, 160), 'Autor')
         self.SELETOR = Button(self.__assets.fonts_path['text'], 45, (222, 142, 152), '>')
         self.NIVEIS = []
         self.RECORDES = []

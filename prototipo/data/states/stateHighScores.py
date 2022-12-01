@@ -21,10 +21,10 @@ class HighScores(State):
 
     def __load_buttons(self):
         self.VOLTAR = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
-        self.RANK = Button(self.__assets.fonts_path['text'], 50, (222, 142, 152), 'Rank')
-        self.RECORDE = Button(self.__assets.fonts_path['text'], 50, (142, 174, 222), 'Recorde')
-        self.AUTOR = Button(self.__assets.fonts_path['text'], 50, (142, 222, 160), 'Autor')
-        self.SELETOR = Button(self.__assets.fonts_path['text'], 45, (222, 142, 152), '>')
+        self.RANK = Button(self.__assets.fonts_path['title'], 50, (222, 142, 152), 'Rank')
+        self.AUTOR = Button(self.__assets.fonts_path['title'], 50, (142, 222, 160), 'Autor')
+        self.RECORDE = Button(self.__assets.fonts_path['title'], 50, (142, 174, 222), 'Recorde')
+        
         self.RANKS = []
         self.RECORDES = []
         self.AUTORES = []
@@ -34,8 +34,8 @@ class HighScores(State):
             if rank > 8:
                 break
             self.RANKS.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), f"{rank+1}."))
-            self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[rank][1])))
             self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[rank][0])))
+            self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[rank][1])))
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -60,9 +60,9 @@ class HighScores(State):
         self.VOLTAR.render(display_surface, (15, 10), position_origin = 'topleft')
         self.RANK.render(display_surface, (170, 150))
         self.AUTOR.render(display_surface, (420, 150))
-        self.RECORDE.render(display_surface, (right[0]-200, 150))
+        self.RECORDE.render(display_surface, (right[0]-220, 150))
         
         for i in range(0, len(self.RANKS)):
-            self.RANKS[i].render(display_surface, (170, 150 + (i + 1) * 55))
-            self.AUTORES[i].render(display_surface, (420, 150 + (i + 1) * 55))
-            self.RECORDES[i].render(display_surface, (right[0]-200, 150 + (i + 1) * 55))
+            self.RANKS[i].render(display_surface, (170, 220 + i*55))
+            self.AUTORES[i].render(display_surface, (420, 220 + i*55))
+            self.RECORDES[i].render(display_surface, (right[0]-220, 220 + i*55))
