@@ -21,22 +21,12 @@ class ScoreController():
         return scores
 
     def __converte_tempo(self, scores_level: list):
-        novo_tempos = []
-        for score_level in scores_level:
-            seg = score_level[1]
-            miliseg = (seg - int(seg)) * 100
-            min = 0
-            while seg >= 60:
-                seg -= 60
-                min += 1
+        # Converte os floats com os segundos para uma string no formato min:seg.miliseg
+        # Retorna uma lista de tuplas com os nomes dos jogadores e seus tempos convertidos
 
-            if min <= 10 and seg <= 10:
-                novo_tempos.append((score_level[0],f"0{min}:0{int(seg)}:{miliseg:.0f}"))
-            elif min <= 10:
-                novo_tempos.append((score_level[0],f"0{min}:{int(seg)}:{miliseg:.0f}"))
-            elif seg <= 10:
-                novo_tempos.append((score_level[0],f"{min}:0{int(seg)}:{miliseg:.0f}"))
-            else:
-                novo_tempos.append((score_level[0],f"{min}:{int(seg)}:{miliseg:.0f}"))
-
-        return novo_tempos
+        formated_scores = []
+        for name, time in scores_level:
+            minutes, seconds = divmod(time, 60)
+            formated_scores.append((name, "{:0>2}:{:05.2f}".format(int(minutes),seconds)))
+        
+        return formated_scores
