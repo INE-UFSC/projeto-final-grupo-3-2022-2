@@ -58,11 +58,11 @@ class HighScores(State):
         right = display_surface.get_rect().topright
 
         self.VOLTAR.render(display_surface, (15, 10), position_origin = 'topleft')
-        self.RANK.render(display_surface, (130, center[1] - 200))
-        self.RECORDE.render(display_surface, (center[0]+50, center[1] - 200))
-        self.AUTOR.render(display_surface, (right[0]-200, center[1] - 200))
+        self.RANK.render(display_surface, (170, 150))
+        self.AUTOR.render(display_surface, (420, 150))
+        self.RECORDE.render(display_surface, (right[0]-200, 150))
         
         for i in range(0, len(self.RANKS)):
-            self.RANKS[i].render(display_surface, (130, center[1] - 200 + (i + 1) * 55))
-            self.RECORDES[i].render(display_surface, (center[0]+50, center[1] - 200 + (i + 1) * 55))
-            self.AUTORES[i].render(display_surface, (right[0]-200, center[1] - 200 + (i + 1) * 55))
+            self.RANKS[i].render(display_surface, (170, 150 + (i + 1) * 55))
+            self.AUTORES[i].render(display_surface, (420, 150 + (i + 1) * 55))
+            self.RECORDES[i].render(display_surface, (right[0]-200, 150 + (i + 1) * 55))

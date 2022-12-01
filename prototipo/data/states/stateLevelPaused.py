@@ -15,6 +15,7 @@ class LevelPaused(State):
         self.__assets = Assets()
         self.__current_level = current_level
         self.__background_surface = background_surface
+        self.__background_surface.set_alpha(60) # Diminui a opacidade da imagem de fundo
 
         self.__load_buttons()
 

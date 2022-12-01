@@ -99,7 +99,7 @@ class LevelPlaying(State):
             self.__timer_paused_status = True
             self.__paused_on = self.__timer.get_time()
             # Muda o estado
-            pause_state = LevelPaused(self._game, self.__current_level, self.__level_surface)
+            pause_state = LevelPaused(self._game, self.__current_level, self.__level_surface.copy())
             pause_state.enter_state()
 
         # Atualiza o nível, enviando os inputs detectados
