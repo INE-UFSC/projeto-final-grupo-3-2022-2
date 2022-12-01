@@ -12,7 +12,7 @@ class Assets(metaclass = Singleton):
             'text': finder.find_file('PixelOperatorHB.ttf')
         }
         self.__images = {
-            'background': pygame.image.load(finder.find_file('background.png')).convert_alpha(),
+            'background': self.__get_image('background.png'),
         }
         self.__level_images = {
             'spike': self.__get_image('spike.png', 3),
@@ -26,13 +26,26 @@ class Assets(metaclass = Singleton):
                 self.__get_image('door_003.png', scale=3),
                 self.__get_image('door_004.png', scale=3),
             ],
-            'gun': self.__get_image('gun.png', scale=3),
-            'arrow': self.__get_image('arrow.png', scale=3)
+            'gun': self.__get_image('crossbow.png', scale=3),
+            'arrows': {
+                'standart': self.__get_image('arrow-standart.png', scale=3),
+                'bounce': self.__get_image('arrow-bounce.png', scale=3),
+                'fast': self.__get_image('arrow-fast.png', scale=3),
+                'piercing': self.__get_image('arrow-piercing.png', scale=3)
+            }
         }
         self.__player = {
             'idle': [self.__get_image('idle.png', scale=3)],
             'run': [],
             'fall': []
+        }
+        self.__interface = {
+            'arrows' : {
+                'standart': self.__get_image('arrow-icon-standart.png', scale=3),
+                'bounce': self.__get_image('arrow-icon-bounce.png', scale=3),
+                'fast': self.__get_image('arrow-icon-fast.png', scale=3),
+                'piercing': self.__get_image('arrow-icon-piercing.png', scale=3)
+            }
         }
 
     def __get_image(self, image_name, scale = 1, search_in = path.join('prototipo', 'graphics')):
@@ -53,6 +66,10 @@ class Assets(metaclass = Singleton):
     @property
     def player(self):
         return self.__player
+    @property
+    def interface(self):
+        return self.__interface
+    
     @property
     def user_name(self):
         try:

@@ -4,7 +4,9 @@ from level.arrows.abstractArrow import Arrow
 
 class BounceArrow(Arrow):
     def __init__(self):
-        super().__init__(10, 15, 0.2)
+        IMAGE = Assets().level_images['arrows']['bounce']
+
+        super().__init__(10, 15, 0.2, IMAGE)
 
         self.__bounce_count = 0
         self.__max_bounce_count = 2

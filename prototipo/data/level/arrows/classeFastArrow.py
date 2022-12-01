@@ -5,4 +5,6 @@ from level.arrows.abstractArrow import Arrow
 class FastArrow(Arrow):
     def __init__(self):
         MINIMUN_SPEED = 20
-        super().__init__(MINIMUN_SPEED, 5, 0.2)
+        IMAGE = Assets().level_images['arrows']['fast']
+
+        super().__init__(MINIMUN_SPEED, 5, 0.2, IMAGE)

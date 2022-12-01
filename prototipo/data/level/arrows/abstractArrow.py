@@ -3,15 +3,13 @@ from abc import ABC
 from cmath import pi
 from math import atan2, sin, cos, pi
 
-from utility.finder import find_file
-from singletons.singletonAssets import Assets
 
 class Arrow(ABC):
-    def __init__(self, minimun_speed, maximun_extra_speed, gravity, image: pygame.image = None):
+    def __init__(self, minimun_speed, maximun_extra_speed, gravity, image: pygame.image):
         super().__init__() # Inicia a classe ABC que define a classe como abstrata
 
         # Importa a imagem da flecha
-        self.__base_image = Assets().level_images['arrow']
+        self.__base_image = image
         self.__base_image.set_colorkey((255,255,255)) # Faz com que a flecha não tenha fundo quando for rotacionada
 
         # Atributos de características da flecha
