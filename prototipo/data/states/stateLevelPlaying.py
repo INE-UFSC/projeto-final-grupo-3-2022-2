@@ -5,13 +5,16 @@ from singletons.singletonAssets import Assets
 import config
 
 from utility.staticLevelMouse import LevelMouse
+from utility.classeScoreController import ScoreController
+from utility.classeTimer import Timer
+from states.classeButton import Button
+
 from states.stateLevelPaused import LevelPaused
 from level.classeLevel import Level
-from utility.classeScoreController import ScoreController
 
 
 class LevelPlaying(State):
-    def __init__(self, game, level_atual = 0):
+    def __init__(self, game, current_level = 1):
         ACTIONS = {'esc': False, 'restart': False,
                    'up': False, 'down': False, 'left': False, 'right': False,
                    'mouse_left': False, 'mouse_right': False}
@@ -21,18 +24,25 @@ class LevelPlaying(State):
         self.__assets = Assets()
         self.__score_controller = ScoreController()
         self.__buttons = pygame.sprite.Group()
-        self.__level_atual = level_atual
+        self.__current_level = current_level
+        self.__level_surface = pygame.Surface((0,0))
         
-        self.__load_level(level_atual)
-        
-    def __load_level(self, level_atual):
-        current_level = config.levels[level_atual]
-        self.__level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
+        self.__load_interface()
+        self.__load_level()
     
+    def __load_interface(self):
+        self.TIMER = Button(self.__assets.fonts_path['text'], 40, (255,255,255), '00:00')
+
+    def __load_level(self):
+        current_level = config.levels[self.__current_level-1]
+        self.__level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
+        self.__timer = Timer()
+        self.__timer_paused_status = False
+
     def restart_actions(self):
         self._actions = {'esc': False, 'restart': False,
-                          'up': False, 'down': False, 'left': False, 'right': False,
-                          'mouse_left': False, 'mouse_right': False}
+                         'up': False, 'down': False, 'left': False, 'right': False,
+                         'mouse_left': False, 'mouse_right': False}
 
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN: # Inputs do teclado (soltar tecla)
@@ -78,35 +88,49 @@ class LevelPlaying(State):
                 self._actions['mouse_right'] = False
 
     def update(self, delta_time):
+        # Despausa o timer se estiver pausado
+        if self.__timer_paused_status:
+            self.__timer_paused_status = False
+            self.__timer.set_time(self.__paused_on)
+
         # Se o jogador pressionar ESC, entra no estado de pausa
         if self._actions['esc']:
-            pause_state = LevelPaused(self._game)
+            # Pausa o cronômetro
+            self.__timer_paused_status = True
+            self.__paused_on = self.__timer.get_time()
+            # Muda o estado
+            pause_state = LevelPaused(self._game, self.__current_level, self.__level_surface)
             pause_state.enter_state()
 
-        LevelMouse.set_surface_offset(screen_dimensions = (self._game.screen_width, self._game.screen_height),
-                                      level_dimensions = (self.__level.width, self.__level.height))
-
+        # Atualiza o nível, enviando os inputs detectados
+        LevelMouse.set_surface_offset((self._game.screen_width, self._game.screen_height), (self.__level.width, self.__level.height))
         self.__level.update(self._actions)
 
         # Confere os status do nível
         if self.__level.win_status:
-            self.__score_controller.add_score(self.__level_atual+1, self.__assets.user_name, 
-                                                self.__level.timer.stopped_time)
+            self.__timer.stop()
+            self.__score_controller.add_score(self.__current_level, self.__assets.user_name, self.__timer.stopped_time)
             self.__next_level()
         if self.__level.restart_status:
+            self.__timer.reset()
             self.__level.restart_level()
 
     def __next_level(self):
-        if self.__level_atual == len(config.levels):
+        if self.__current_level > len(config.levels):
             pass
             # Implementar fim de jogo (quando acabam os níveis)
         else:
-            self.__level_atual += 1
-            self.__load_level(self.__level_atual)
+            self.__current_level += 1
+            self.__load_level()
 
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
 
-        level_surface = self.__level.render() # Recebe a display surface do level
+        screen_center = display_surface.get_rect().center
 
-        display_surface.blit(level_surface, LevelMouse.get_surface_offset()) # Desenha o level
+        self.__level_surface = self.__level.render() # Recebe a display surface do level
+        display_surface.blit(self.__level_surface, LevelMouse.get_surface_offset()) # Desenha o level
+        
+        formated_time = self.__timer.get_formated_time()  # Recebe o tempo decorrido formatado
+        self.TIMER.set_text(formated_time)
+        self.TIMER.render(display_surface, (screen_center[0], 30)) # Desenha o tempo decorrido

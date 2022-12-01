@@ -52,7 +52,7 @@ class LevelSelector(State):
             
             for i in range(0, len(self.NIVEIS)):
                 if self.NIVEIS[i].check_for_hover(pygame.mouse.get_pos()):
-                    LevelPlaying(self._game, i).enter_state()
+                    LevelPlaying(self._game, i+1).enter_state()
 
     def render(self, display_surface):
         background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))
@@ -71,5 +71,4 @@ class LevelSelector(State):
             self.RECORDES[i].render(display_surface, (center[0]+50, center[1] - 200 + (i + 1) * 55))
             self.AUTORES[i].render(display_surface, (right[0]-200, center[1] - 200 + (i + 1) * 55))
             if self.NIVEIS[i].check_for_hover(pygame.mouse.get_pos()):
-                    self.SELETOR.render(display_surface, (100, center[1] - 200 + (i + 1) * 55))
-
+                self.SELETOR.render(display_surface, (100, center[1] - 200 + (i + 1) * 55))
