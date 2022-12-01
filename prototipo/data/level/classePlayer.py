@@ -74,16 +74,13 @@ class Player(pygame.sprite.Sprite):
     def __movement_input(self, actions):
         if (actions["right"] and actions["left"]) or (not actions["right"] and not actions["left"]):
             self.__thrust = 0
-            print(self.__thrust)
         # Movimento horizontal
         elif actions['right']:
             self.__thrust = 1
             self.__input_right_status = True
-            print('right', self.__thrust)
         elif actions['left']:
             self.__thrust = -1
             self.__input_right_status = False
-            print('left', self.__thrust)
         
         # Se o jogador não estiver pressionando esquerda ou direita
         if not actions['right'] and not actions['left']:
@@ -96,12 +93,15 @@ class Player(pygame.sprite.Sprite):
             self.__jump()
 
     def __apply_accceleration(self):
-        temp_speed_result = self.__delta_position.x + self.__acceleration.x
+        # Se a velocidade for acima se self.__max_walking_speed (ocorre pelo knockback), o uso de input não fará o jogador ganhar mais aceleração
+        # Se a velocidade for abaixo de self.__max_walking_speed, o uso de input fará o jogador ganhar aceleração e essa será limitada por self.__max_walking_speed
+        if self.__thrust == 1:
+            if self.__delta_position.x < self.__max_walking_speed:
+                self.__delta_position.x = max(self.__delta_position.x, min(self.__delta_position.x + self.__acceleration.x, self.__max_walking_speed))
+        elif self.__thrust == -1:
+            if self.__delta_position.x > -self.__max_walking_speed:
+                self.__delta_position.x = min(self.__delta_position.x, max(self.__delta_position.x + self.__acceleration.x, -self.__max_walking_speed))
 
-        # Se a velocidade for maior que a máxima de caminhada e o jogador estiver pressionando a tecla de movimento na mesma direção, não entra na condição
-        if not (temp_speed_result > self.__max_walking_speed and self.__thrust == 1) and not (temp_speed_result < -self.__max_walking_speed and self.thrust == -1):
-            self.__delta_position.x += self.__acceleration.x
-        
         # Aplica a aceleração da gravidade
         self.__delta_position.y += self.__acceleration.y
 
@@ -155,20 +155,20 @@ class Player(pygame.sprite.Sprite):
         for tile in collide_with.sprites():
             # Colisão horizontal
             if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.rect.width, self.rect.height): # Testa a colisão do deslocamento horizontal
-                if self.__delta_position.x < 0: # Caso o jogador colida com um superfície pela esquerda
-                    dx = tile.rect.right - self.rect.left
-                elif self.__delta_position.x > 0: # Caso o jogador colida com um superfície pela direita
+                if dx > 0: # Caso o jogador colida com um superfície pela direita
                     dx = tile.rect.left - self.rect.right
+                elif dx < 0: # Caso o jogador colida com um superfície pela esquerda
+                    dx = tile.rect.right - self.rect.left
                 else:
                     dx = 0
 
             # Colisão vertical
             if tile.rect.colliderect(self.__rect.x, self.__rect.y + dy, self.__rect.width, self.__rect.height): # Testa a colisão do deslocamento vertical
-                if self.__delta_position.y < 0 and (tile.rect.bottom <= self.__rect.top): # Jogador "subindo"
+                if dy < 0 and (tile.rect.bottom <= self.__rect.top): # Jogador "subindo"
                     dy = (tile.rect.bottom - self.__rect.top)
                     
                     self.__delta_position.y = 0 # Reinicia a gravidade
-                if self.__delta_position.y > 0 and (tile.rect.top >= self.__rect.bottom): # Jogador "caindo"
+                if dy > 0 and (tile.rect.top >= self.__rect.bottom): # Jogador "caindo"
                     dy = (tile.rect.top - self.__rect.bottom)
                     
                     self.__delta_position.y = 0 # Reinicia a gravidade

@@ -14,10 +14,6 @@ class Arrow(ABC):
         #self.__base_image = pygame.image.load(find_file('arrow.png')).convert()
         self.__base_image = Assets().level_images['arrow']
         self.__base_image.set_colorkey((255,255,255)) # Faz com que a flecha não tenha fundo quando for rotacionada
-        
-
-        #print(type(self.__base_image))
-        #print(type(image))
 
         # Atributos de características da flecha
         self.__minimun_speed = minimun_speed
