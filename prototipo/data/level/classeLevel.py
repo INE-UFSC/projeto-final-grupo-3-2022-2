@@ -84,7 +84,7 @@ class Level:
                     player_sprite = Player((player_origin_x, player_origin_y)) 
                     self.__player.add(player_sprite)
 
-    def display_arrow_quantity(self, surface, player):
+    """ def display_arrow_quantity(self, surface, player):
         font = pygame.font.SysFont('arial', 30, True, False)  # Edita a fonte
         text = font.render(f'Quantidade de flechas: {len(player.gun.arrows)}', True, (0, 0, 0))  # Edita o texto
         surface.blit(text, (10, 10))  # Mostra na tela
@@ -97,7 +97,7 @@ class Level:
         formated_time = "{:0>2}:{:05.2f}".format(int(minutes),seconds)
 
         text = font.render(f'Tempo: {formated_time}', True, (0, 0, 0))  # Edita o texto
-        surface.blit(text, (400, 10))  # Mostra na tela
+        surface.blit(text, (400, 10))  # Mostra na tela """
 
     def __update_player(self, player, actions):
         # Gera uma tupla com os valores de deslocamento calculados baseados no player
@@ -229,9 +229,6 @@ class Level:
             self.__display_surface.blit(arrow.image, arrow.rect)
         for arrow in self.__moving_arrows:
             self.__display_surface.blit(arrow.image, arrow.rect)
-        # Interface
-        self.display_arrow_quantity(self.__display_surface, player) # Mostra o número de flechas no arco
-        self.display_timer(self.__display_surface) # Mostra o tempo na tela
             
         return self.__display_surface
 
