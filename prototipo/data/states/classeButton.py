@@ -12,7 +12,9 @@ class Button():
         self._rect = self._text.get_rect()
     
     def render(self, screen: pygame.display, position: tuple, position_origin: str = 'center'):
-        if position_origin == 'topleft':
+        if position_origin == 'center':
+            self._rect.center = position
+        elif position_origin == 'topleft':
             self._rect.topleft = position
         elif position_origin == 'topright':
             self._rect.topright = position
@@ -30,5 +32,5 @@ class Button():
             return True
         return False
 
-    #def change_color(self):
-    #    ...
+    def set_text(self, text):
+        self._text = self._font.render(text, True, self._base_color)
