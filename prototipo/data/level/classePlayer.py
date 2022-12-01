@@ -93,12 +93,15 @@ class Player(pygame.sprite.Sprite):
             self.__jump()
 
     def __apply_accceleration(self):
-        temp_speed_result = self.__delta_position.x + self.__acceleration.x
+        # Se a velocidade for acima se self.__max_walking_speed (ocorre pelo knockback), o uso de input não fará o jogador ganhar mais aceleração
+        # Se a velocidade for abaixo de self.__max_walking_speed, o uso de input fará o jogador ganhar aceleração e essa será limitada por self.__max_walking_speed
+        if self.__thrust == 1:
+            if self.__delta_position.x < self.__max_walking_speed:
+                self.__delta_position.x = max(self.__delta_position.x, min(self.__delta_position.x + self.__acceleration.x, self.__max_walking_speed))
+        elif self.__thrust == -1:
+            if self.__delta_position.x > -self.__max_walking_speed:
+                self.__delta_position.x = min(self.__delta_position.x, max(self.__delta_position.x + self.__acceleration.x, -self.__max_walking_speed))
 
-        # Se a velocidade for maior que a máxima de caminhada e o jogador estiver pressionando a tecla de movimento na mesma direção, não entra na condição
-        if not (temp_speed_result > self.__max_walking_speed and self.__thrust == 1) and not (temp_speed_result < -self.__max_walking_speed and self.thrust == -1):
-            self.__delta_position.x += self.__acceleration.x
-        
         # Aplica a aceleração da gravidade
         self.__delta_position.y += self.__acceleration.y
 
@@ -153,9 +156,9 @@ class Player(pygame.sprite.Sprite):
             # Colisão horizontal
             if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.rect.width, self.rect.height): # Testa a colisão do deslocamento horizontal
                 if dx > 0: # Caso o jogador colida com um superfície pela direita
-                    dx = tile.rect.left - self.rect.right
+                    dx = (tile.rect.left - self.rect.right)
                 elif dx < 0: # Caso o jogador colida com um superfície pela esquerda
-                    dx = tile.rect.right - self.rect.left
+                    dx = (tile.rect.right - self.rect.left)
                 else:
                     dx = 0
 
