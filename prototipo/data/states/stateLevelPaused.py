@@ -3,14 +3,18 @@ from states.abstractState import State
 from states.classeButton import Button
 from singletons.singletonAssets import Assets
 
+from states.stateHighScores import HighScores
+
 
 class LevelPaused(State):
-    def __init__(self, game):
+    def __init__(self, game, current_level, background_surface: pygame.Surface):
         ACTIONS = {'esc': False, 'mouse_left': False}
 
         super().__init__(game, ACTIONS)
 
         self.__assets = Assets()
+        self.__current_level = current_level
+        self.__background_surface = background_surface
 
         self.__load_buttons()
 
@@ -42,12 +46,18 @@ class LevelPaused(State):
             if self.CONTINUE.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
             if self.LEVEL_RECORDS.check_for_hover(pygame.mouse.get_pos()):
-                pass
+                high_scores_state = HighScores(self._game, self.__current_level, self.__background_surface)
+                high_scores_state.enter_state()
             if self.EXIT_LEVEL.check_for_hover(pygame.mouse.get_pos()):
                 while len(self._game.state_stack) > 2:
                     self._game.pop_state()
 
     def render(self, display_surface):
+        display_surface.fill((0, 0, 0)) # Limpa a tela
+
+        display_surface.blit(self.__background_surface, (self._game.screen_width / 2 - self.__background_surface.get_width() / 2,
+                                                         self._game.screen_height / 2 - self.__background_surface.get_height() / 2))
+
         self.CONTINUE.render(display_surface, (60, 40), 'topleft')
         self.LEVEL_RECORDS.render(display_surface, (60, 40+70), 'topleft')
         self.EXIT_LEVEL.render(display_surface, (60, 40+140), 'topleft')
