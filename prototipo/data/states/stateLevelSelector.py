@@ -13,8 +13,7 @@ class LevelSelector(State):
 
         super().__init__(game, ACTIONS)
 
-        self.__scoreController = ScoreController()
-
+        self.__score_controller = ScoreController()
         self.__assets = Assets()
         self.__background = self.__assets.images['background']
 
@@ -29,7 +28,7 @@ class LevelSelector(State):
         self.NIVEIS = []
         self.RECORDES = []
         self.AUTORES = []
-        scores = self.__scoreController.get_all_scores()
+        scores = self.__score_controller.get_all_scores()
         
         for level in range(1, 9): # Range vai depender da classe que controla os leveis
             self.NIVEIS.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(level)))

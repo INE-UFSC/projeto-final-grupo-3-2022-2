@@ -19,7 +19,7 @@ class LevelPlaying(State):
         super().__init__(game, ACTIONS)
 
         self.__assets = Assets()
-        self.__scoreController = ScoreController()
+        self.__score_controller = ScoreController()
         self.__buttons = pygame.sprite.Group()
         self.__level_atual = level_atual
         
@@ -90,7 +90,7 @@ class LevelPlaying(State):
 
         # Confere os status do nível
         if self.__level.win_status:
-            self.__scoreController.add_score(self.__level_atual+1, self.__assets.user_name, 
+            self.__score_controller.add_score(self.__level_atual+1, self.__assets.user_name, 
                                                 self.__level.timer.stopped_time)
             self.__next_level()
         if self.__level.restart_status:
