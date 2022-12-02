@@ -1,6 +1,6 @@
 import pygame
 from states.abstractState import State
-from states.classeButton import Button
+from utility.interface.classeTextButton import TextButton
 from singletons.singletonAssets import Assets
 
 from states.stateLevelSelector import LevelSelector
@@ -19,10 +19,10 @@ class TitleScreen(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.TITLE = Button(self.__assets.fonts_path['title'], 96, (232, 192, 50), 'Speed Archer')
-        self.SELECT_1 = Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Selecionar nível')
-        self.SELECT_2 = Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Criar mapa')
-        self.SELECT_3 = Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
+        self.TITLE = TextButton(self.__assets.fonts_path['title'], 96, (232, 192, 50), 'Speed Archer')
+        self.SELECT_1 = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Selecionar nível')
+        self.SELECT_2 = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Criar mapa')
+        self.SELECT_3 = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:

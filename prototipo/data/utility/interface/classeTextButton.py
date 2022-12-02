@@ -1,7 +1,8 @@
 import pygame
+from utility.interface.abstractInterfaceElement import InterfaceElement
 
 
-class Button():
+class TextButton(InterfaceElement):
     def __init__(self, font_path, font_size: int, base_color: tuple, text):
         super().__init__()
 

@@ -1,6 +1,6 @@
 import pygame
 from states.abstractState import State
-from states.classeButton import Button
+from utility.interface.classeTextButton import TextButton
 from singletons.singletonAssets import Assets
 
 from states.stateHighScores import HighScores
@@ -20,9 +20,9 @@ class LevelPaused(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.CONTINUE = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Continuar')
-        self.LEVEL_RECORDS = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Recordes do nível')
-        self.EXIT_LEVEL = Button(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Voltar para o menu')
+        self.CONTINUE = TextButton(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Continuar')
+        self.LEVEL_RECORDS = TextButton(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Recordes do nível')
+        self.EXIT_LEVEL = TextButton(self.__assets.fonts_path['text'], 40, (255, 255, 255), 'Voltar para o menu')
 
     def restart_actions(self):
         self._actions = {'esc': False, 'mouse_left': False}

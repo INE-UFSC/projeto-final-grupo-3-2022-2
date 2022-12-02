@@ -7,7 +7,7 @@ import config
 from utility.staticLevelMouse import LevelMouse
 from utility.classeScoreController import ScoreController
 from utility.classeTimer import Timer
-from states.classeButton import Button
+from utility.interface.classeTextButton import TextButton
 
 from states.stateLevelPaused import LevelPaused
 from level.classeLevel import Level
@@ -31,7 +31,7 @@ class LevelPlaying(State):
         self.__load_level()
     
     def __load_interface(self):
-        self.TIMER = Button(self.__assets.fonts_path['text'], 40, (255,255,255), '00:00')
+        self.TIMER = TextButton(self.__assets.fonts_path['text'], 40, (255,255,255), '00:00')
 
     def __load_level(self):
         current_level = config.levels[self.__current_level-1]

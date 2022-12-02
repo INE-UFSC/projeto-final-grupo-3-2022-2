@@ -40,11 +40,19 @@ class Assets(metaclass = Singleton):
             'fall': []
         }
         self.__interface = {
-            'arrows' : {
+            'arrows': {
                 'standart': self.__get_image('arrow-icon-standart.png', scale=3),
                 'bounce': self.__get_image('arrow-icon-bounce.png', scale=3),
                 'fast': self.__get_image('arrow-icon-fast.png', scale=3),
                 'piercing': self.__get_image('arrow-icon-piercing.png', scale=3)
+            },
+            'keys': {
+                'wasd': self.__get_image('wasd.png', scale=3),
+                'directions': self.__get_image('directions.png', scale=3),
+                'esc': self.__get_image('esc.png', scale=3),
+                'rmb': self.__get_image('rmb.png', scale=3),
+                'lmb': self.__get_image('lmb.png', scale=3),
+                'r': self.__get_image('r.png', scale=3)
             }
         }
 

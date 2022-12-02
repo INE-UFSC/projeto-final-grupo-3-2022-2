@@ -1,7 +1,7 @@
 import pygame
 from states.abstractState import State
-from states.classeButton import Button
-from states.classeInputBox import InputBox
+from utility.interface.classeTextButton import TextButton
+from utility.interface.classeInputBox import InputBox
 from singletons.singletonAssets import Assets
 
 from states.stateTitleScreen import TitleScreen
@@ -21,19 +21,19 @@ class InputName(State):
         self.__verificador = False
 
     def __load_buttons(self):
-        self.NOME = Button(self.__assets.fonts_path['text'], 40, (255,255,255), 'Digite seu nome:')
+        self.NOME = TextButton(self.__assets.fonts_path['text'], 40, (255,255,255), 'Digite seu nome:')
         self.INPUT_BOX = InputBox(self.__assets.fonts_path['text'], 50, (255,255,255), 300)
-        self.TEXTO_ERRO = Button(self.__assets.fonts_path['text'], 30, (140,140,140), '')
+        self.TEXTO_ERRO = TextButton(self.__assets.fonts_path['text'], 30, (140,140,140), '')
 
     def update_actions(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if len(self.INPUT_BOX.text) < 3:
                     self.__verificador = False
-                    self.TEXTO_ERRO = Button(self.__assets.fonts_path['text'], 30, (140,140,140), 'Seu nome precisa ter no mínimo 3 letras')
+                    self.TEXTO_ERRO = TextButton(self.__assets.fonts_path['text'], 30, (140,140,140), 'Seu nome precisa ter no mínimo 3 letras')
                 elif len(self.INPUT_BOX.text) > 8:
                     self.__verificador = False
-                    self.TEXTO_ERRO = Button(self.__assets.fonts_path['text'], 30, (140,140,140), 'Seu nome pode ter no máximo 8 letras')
+                    self.TEXTO_ERRO = TextButton(self.__assets.fonts_path['text'], 30, (140,140,140), 'Seu nome pode ter no máximo 8 letras')
                 else:
                     self.__verificador = True 
                     self._actions['enter'] = True

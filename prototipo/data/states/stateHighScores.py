@@ -1,6 +1,6 @@
 import pygame
 from states.abstractState import State
-from states.classeButton import Button
+from utility.interface.classeTextButton import TextButton
 from singletons.singletonAssets import Assets
 
 from utility.classeScoreController import ScoreController
@@ -20,10 +20,10 @@ class HighScores(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.VOLTAR = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
-        self.RANK = Button(self.__assets.fonts_path['title'], 50, (222, 142, 152), 'Rank')
-        self.AUTOR = Button(self.__assets.fonts_path['title'], 50, (142, 222, 160), 'Autor')
-        self.RECORDE = Button(self.__assets.fonts_path['title'], 50, (142, 174, 222), 'Recorde')
+        self.VOLTAR = TextButton(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
+        self.RANK = TextButton(self.__assets.fonts_path['title'], 50, (222, 142, 152), 'Rank')
+        self.AUTOR = TextButton(self.__assets.fonts_path['title'], 50, (142, 222, 160), 'Autor')
+        self.RECORDE = TextButton(self.__assets.fonts_path['title'], 50, (142, 174, 222), 'Recorde')
         
         self.RANKS = []
         self.RECORDES = []
@@ -33,9 +33,9 @@ class HighScores(State):
         for rank in range(0, len(scores)): # Range vai depender da classe que controla os leveis
             if rank > 8:
                 break
-            self.RANKS.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), f"{rank+1}."))
-            self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[rank][0])))
-            self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[rank][1])))
+            self.RANKS.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), f"{rank+1}."))
+            self.AUTORES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[rank][0])))
+            self.RECORDES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[rank][1])))
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:

@@ -1,9 +1,9 @@
 import pygame
 
-from states.classeButton import Button
+from utility.interface.classeTextButton import TextButton
 
 
-class InputBox(Button):
+class InputBox(TextButton):
     def __init__(self, font_path, font_size: int, base_color: tuple, initial_width = 400, text=''):
         super().__init__(font_path, font_size, base_color, text)
 

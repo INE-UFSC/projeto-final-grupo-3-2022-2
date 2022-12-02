@@ -1,6 +1,6 @@
 import pygame
 from states.abstractState import State
-from states.classeButton import Button
+from utility.interface.classeTextButton import TextButton
 from singletons.singletonAssets import Assets
 
 from states.stateLevelPlaying import LevelPlaying
@@ -20,24 +20,24 @@ class LevelSelector(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.VOLTAR = Button(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
-        self.NIVEL = Button(self.__assets.fonts_path['title'], 50, (222, 142, 152), 'Nível')
-        self.RECORDE = Button(self.__assets.fonts_path['title'], 50, (142, 174, 222), 'Recorde')
-        self.AUTOR = Button(self.__assets.fonts_path['title'], 50, (142, 222, 160), 'Autor')
-        self.SELETOR = Button(self.__assets.fonts_path['text'], 45, (222, 142, 152), '>')
+        self.VOLTAR = TextButton(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
+        self.NIVEL = TextButton(self.__assets.fonts_path['title'], 50, (222, 142, 152), 'Nível')
+        self.RECORDE = TextButton(self.__assets.fonts_path['title'], 50, (142, 174, 222), 'Recorde')
+        self.AUTOR = TextButton(self.__assets.fonts_path['title'], 50, (142, 222, 160), 'Autor')
+        self.SELETOR = TextButton(self.__assets.fonts_path['text'], 45, (222, 142, 152), '>')
         self.NIVEIS = []
         self.RECORDES = []
         self.AUTORES = []
         scores = self.__score_controller.get_all_scores()
         
         for level in range(1, 9): # Range vai depender da classe que controla os leveis
-            self.NIVEIS.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(level)))
+            self.NIVEIS.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(level)))
             if level in scores:
-                self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][1])))
-                self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][0])))
+                self.RECORDES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][1])))
+                self.AUTORES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][0])))
             else:
-                self.RECORDES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
-                self.AUTORES.append(Button(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
+                self.RECORDES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
+                self.AUTORES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
