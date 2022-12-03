@@ -27,7 +27,6 @@ def find_file(filename: str, initial_path: str = os.getcwd()):
     return None # Caso o arquivo não seja encontrado
 
 
-
 def path_list_from_folder(subdir: str, initial_path: str = os.getcwd(), file_extension: str = '.*') -> list:
     """ 
     Args:
