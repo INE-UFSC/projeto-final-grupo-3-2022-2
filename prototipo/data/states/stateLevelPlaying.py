@@ -116,9 +116,8 @@ class LevelPlaying(State):
             self.__level.restart_level()
 
     def __next_level(self):
-        if self.__current_level > len(config.levels):
-            pass
-            # Implementar fim de jogo (quando acabam os níveis)
+        if self.__current_level >= len(config.levels):
+            self.exit_state()
         else:
             self.__current_level += 1
             self.__load_level()
