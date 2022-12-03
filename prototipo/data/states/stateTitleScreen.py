@@ -2,6 +2,7 @@ import pygame
 from states.abstractState import State
 from utility.interface.classeTextButton import TextButton
 from singletons.singletonAssets import Assets
+from utility.finder import find_file
 
 from states.stateLevelSelector import LevelSelector
 from states.stateHelpScreen import HelpScreen
@@ -20,9 +21,9 @@ class TitleScreen(State):
 
     def __load_buttons(self):
         self.TITLE = TextButton(self.__assets.fonts_path['title'], 96, (232, 192, 50), 'Speed Archer')
-        self.SELECT_1 = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Selecionar nível')
-        self.SELECT_2 = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Criar mapa')
-        self.SELECT_3 = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
+        self.LEVEL_SELECTOR = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Selecionar nível')
+        self.CREATE_MAP = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Criar mapa')
+        self.HELP = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -32,11 +33,11 @@ class TitleScreen(State):
 
     def update(self, delta_time):
         if self._actions['mouse_left']:
-            if self.SELECT_1.check_for_hover(pygame.mouse.get_pos()):
-                LevelSelector(self._game).enter_state()
-            if self.SELECT_2.check_for_hover(pygame.mouse.get_pos()):
+            if self.LEVEL_SELECTOR.check_for_hover(pygame.mouse.get_pos()):
+                LevelSelector(self._game, self.__assets.jsons['default-levels']).enter_state()
+            if self.CREATE_MAP.check_for_hover(pygame.mouse.get_pos()):
                 pass
-            if self.SELECT_3.check_for_hover(pygame.mouse.get_pos()):
+            if self.HELP.check_for_hover(pygame.mouse.get_pos()):
                 HelpScreen(self._game).enter_state()
 
     def render(self, display_surface):
@@ -48,6 +49,6 @@ class TitleScreen(State):
         center = display_surface.get_rect().center
 
         self.TITLE.render(display_surface, (center[0], center[1] - 120))
-        self.SELECT_1.render(display_surface, (center[0], center[1]))
-        self.SELECT_2.render(display_surface, (center[0], center[1] + 60))
-        self.SELECT_3.render(display_surface, (center[0], center[1] + 120))
+        self.LEVEL_SELECTOR.render(display_surface, (center[0], center[1]))
+        self.CREATE_MAP.render(display_surface, (center[0], center[1] + 60))
+        self.HELP.render(display_surface, (center[0], center[1] + 120))

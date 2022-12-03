@@ -1,6 +1,6 @@
 import pygame
 from os import path
-from json import load
+from json import load, loads
 
 import utility.finder as finder
 from singletons.abstractSingleton import Singleton
@@ -11,6 +11,9 @@ class Assets(metaclass = Singleton):
         self.__fonts_path = {
             'title': finder.find_file('Fibberish.ttf'),
             'text': finder.find_file('PixelOperatorHB.ttf')
+        }
+        self.__jsons = {
+            'default-levels': loads(open(finder.find_file('default-levels.json'), 'r').read())
         }
         self.__images = {
             'background': self.__get_image('background.png'),
@@ -82,6 +85,9 @@ class Assets(metaclass = Singleton):
     @property
     def fonts_path(self):
         return self.__fonts_path
+    @property
+    def jsons(self):
+        return self.__jsons
     @property
     def images(self):
         return self.__images

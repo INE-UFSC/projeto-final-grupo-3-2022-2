@@ -8,7 +8,7 @@ from utility.classeScoreController import ScoreController
 
 
 class LevelSelector(State):
-    def __init__(self, game):
+    def __init__(self, game, levels_list):
         ACTIONS = {'mouse_left': False}
 
         super().__init__(game, ACTIONS)
