@@ -2,9 +2,11 @@
 # Sua implementação evita a necessidade de alterar o código caso o local do arquivo seja alterado
 
 import os
-finder_path = __file__.replace("data/utility/finder.py", "")
+finder_directory = os.path.dirname(__file__)
+DATA_ROOT = os.path.dirname(finder_directory)
+PROJECT_ROOT = os.path.dirname(DATA_ROOT)
 
-def find_file(filename: str, initial_path: str = finder_path):
+def find_file(filename: str, initial_path: str = PROJECT_ROOT):
     """ 
     Args:
         filename (str): Nome do arquivo a ser procurado
@@ -21,7 +23,7 @@ def find_file(filename: str, initial_path: str = finder_path):
     raise Exception(f"No file named {filename} found") # Caso o arquivo não seja encontrado
 
 
-def path_list_from_folder(subdir: str, initial_path: str = finder_path, file_extension: str = '.*') -> list:
+def path_list_from_folder(subdir: str, initial_path: str = PROJECT_ROOT, file_extension: str = '.*') -> list:
     """ 
     Args:
         subdir (str): Nome do subdiretório do qual os arquivos serão listados
