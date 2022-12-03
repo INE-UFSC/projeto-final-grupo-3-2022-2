@@ -35,6 +35,10 @@ class Game():
 
     def __load_assets(self):
         Assets().load_assets() # Inicializa o singleton de assets
+        try:
+            pygame.display.set_icon(Assets().interface['game-icon'])
+        except:
+            print("O ícone do jogo não pode ser carregado")
     
     def __load_states(self):
         self.__input_name = InputName(self)

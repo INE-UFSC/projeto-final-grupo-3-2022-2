@@ -45,6 +45,7 @@ class Assets(metaclass = Singleton):
             'fall': []
         }
         self.__interface = {
+            'game-icon': self.__get_image('game-icon.png', scale=3),
             'arrows': {
                 'standart': self.__get_image('arrow-icon-standart.png', scale=3),
                 'bounce': self.__get_image('arrow-icon-bounce.png', scale=3),
