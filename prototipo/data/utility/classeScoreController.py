@@ -1,4 +1,5 @@
 from daos.ScoreDAO import ScoreDAO
+from typing import List
 
 class ScoreController():
     def __init__(self):
@@ -7,7 +8,7 @@ class ScoreController():
     def add_score(self, level_name: str, player_name: str, time: float):
         self.__scoreDAO.add(level_name, player_name, time)
 
-    def get_all_level_scores_sorted(self, level_name) -> list[tuple]:
+    def get_all_level_scores_sorted(self, level_name) -> List[tuple]:
         scores_level = self.__scoreDAO.get_level_scores(level_name)
         scores_level = sorted(scores_level.items(), key=lambda x:x[1])
 
