@@ -2,7 +2,7 @@ from daos.abstractDAO import AbstractDAO
 
 class ScoreDAO(AbstractDAO):
     def __init__(self, datasource='scores.json'):
-        super().__init__(datasource=datasource)
+        super().__init__(cache={}, datasource=datasource)
 
     def add(self, level: int, nickname: str, time: float):
         level = str(level)

@@ -4,11 +4,13 @@ from abstractDAO import AbstractDAO
 from daos.exceptions.NivelJaExisteException import NivelJaExisteException
 from daos.exceptions.NivelNaoExisteException import NivelNaoExisteException
 from utility.staticLevelUtility import LevelUtility
+
+
 class LevelDAO(AbstractDAO):
 
     def __init__(self, datasource='levels.json'):
         self.DEFAULT_LEVELS = ["Level 1", "Level 2", "Level 3"]
-        super().__init__(datasource)
+        super().__init__(cache=[], datasource=datasource)
         try:
             level_1 = {
                 'level_number': 1,
