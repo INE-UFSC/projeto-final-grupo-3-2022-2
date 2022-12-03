@@ -1,5 +1,4 @@
 import pygame
-from os import path
 from json import load, loads
 
 import utility.finder as finder
@@ -62,14 +61,14 @@ class Assets(metaclass = Singleton):
             }
         }
 
-    def __get_image(self, image_name, scale = 1, search_in = path.join('prototipo', 'graphics')):
-        image = pygame.image.load(finder.find_file(image_name, search_in)).convert_alpha()
+    def __get_image(self, image_name, scale = 1):
+        image = pygame.image.load(finder.find_file(image_name)).convert_alpha()
         size = (image.get_width() * scale, image.get_height() * scale)
         return pygame.transform.scale(image, size)
 
-    def __load_sprite_sheet(self, sheet_image_name, sheet_json, scale = 1, search_in = path.join('prototipo', 'graphics')) -> dict:
-        sheet_image = self.__get_image(sheet_image_name, scale, search_in = search_in)
-        sheet_json_path = finder.find_file(sheet_json, search_in)
+    def __load_sprite_sheet(self, sheet_image_name, sheet_json, scale = 1) -> dict:
+        sheet_image = self.__get_image(sheet_image_name, scale)
+        sheet_json_path = finder.find_file(sheet_json)
         with open(sheet_json_path, 'r') as json_file:
             sheet_data = load(json_file)
         
