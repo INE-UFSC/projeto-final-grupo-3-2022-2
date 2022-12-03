@@ -14,27 +14,29 @@ from level.classeLevel import Level
 
 
 class LevelPlaying(State):
-    def __init__(self, game, current_level = 1):
+    def __init__(self, game, levels_list, start_index = 0):
         ACTIONS = {'esc': False, 'restart': False,
                    'up': False, 'down': False, 'left': False, 'right': False,
                    'mouse_left': False, 'mouse_right': False}
 
         super().__init__(game, ACTIONS)
 
+        self.__levels_list = levels_list
+        self.__current_level_index = start_index
+
         self.__assets = Assets()
         self.__score_controller = ScoreController()
         self.__buttons = pygame.sprite.Group()
-        self.__current_level = current_level
         self.__level_surface = pygame.Surface((0,0))
         
         self.__load_interface()
-        self.__load_level()
+        self.__load_level(self.__current_level_index)
     
     def __load_interface(self):
         self.TIMER = TextButton(self.__assets.fonts_path['text'], 40, (255,255,255), '00:00')
 
-    def __load_level(self):
-        current_level = config.levels[self.__current_level-1]
+    def __load_level(self, index = 0):
+        current_level = self.__levels_list[index]
         self.__level = Level(current_level) # Passa a matriz que representa o nível e a superfície onde o nível será desenhado
         self.__timer = Timer()
         self.__timer_paused_status = False
@@ -99,7 +101,8 @@ class LevelPlaying(State):
             self.__timer_paused_status = True
             self.__paused_on = self.__timer.get_time()
             # Muda o estado
-            pause_state = LevelPaused(self._game, self.__current_level, self.__level_surface.copy())
+            level_name = self.__levels_list[self.__current_level_index]['level_name']
+            pause_state = LevelPaused(self._game, level_name, self.__level_surface.copy())
             pause_state.enter_state()
 
         # Atualiza o nível, enviando os inputs detectados
@@ -109,18 +112,19 @@ class LevelPlaying(State):
         # Confere os status do nível
         if self.__level.win_status:
             self.__timer.stop()
-            self.__score_controller.add_score(self.__current_level, self.__assets.user_name, self.__timer.stopped_time)
+            level_name = self.__levels_list[self.__current_level_index]['level_name']
+            self.__score_controller.add_score(level_name, self.__assets.user_name, self.__timer.stopped_time)
             self.__next_level()
         if self.__level.restart_status:
             self.__timer.reset()
             self.__level.restart_level()
 
     def __next_level(self):
-        if self.__current_level >= len(config.levels):
+        if self.__current_level_index + 1 >= len(self.__levels_list):
             self.exit_state()
         else:
-            self.__current_level += 1
-            self.__load_level()
+            self.__current_level_index += 1
+            self.__load_level(self.__current_level_index)
 
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
