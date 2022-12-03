@@ -1,5 +1,6 @@
 import pygame
 from os import path
+from json import load
 
 import utility.finder as finder
 from singletons.abstractSingleton import Singleton
@@ -15,6 +16,7 @@ class Assets(metaclass = Singleton):
             'background': self.__get_image('background.png'),
         }
         self.__level_images = {
+            'blocks': self.__load_sprite_sheet('block-sprite-sheet.png', 'block-sprite-sheet.json', scale = 3),
             'spike': self.__get_image('spike.png', 3),
             'target': [
                 self.__get_image('target_001.png', 3),
@@ -60,6 +62,21 @@ class Assets(metaclass = Singleton):
         image = pygame.image.load(finder.find_file(image_name, search_in)).convert_alpha()
         size = (image.get_width() * scale, image.get_height() * scale)
         return pygame.transform.scale(image, size)
+
+    def __load_sprite_sheet(self, sheet_image_name, sheet_json, scale = 1, search_in = path.join('prototipo', 'graphics')) -> dict:
+        sheet_image = self.__get_image(sheet_image_name, scale, search_in = search_in)
+        sheet_json_path = finder.find_file(sheet_json, search_in)
+        with open(sheet_json_path, 'r') as json_file:
+            sheet_data = load(json_file)
+        
+        quadrant_size = (sheet_data['quadrant_size'][0] * scale, sheet_data['quadrant_size'][1] * scale)
+        sheet_images = {} # Dicionário que armazenará as imagens do sprite sheet e terá como chave os nomes
+        for image_name, coord in sheet_data['coordinates'].items():
+            image = pygame.Surface(quadrant_size)
+            image.blit(sheet_image, (0, 0), (coord['x'] * quadrant_size[0], coord['y'] * quadrant_size[1], quadrant_size[0], quadrant_size[1]))
+            sheet_images[image_name] = image
+        
+        return sheet_images
 
     # Getters
     @property
