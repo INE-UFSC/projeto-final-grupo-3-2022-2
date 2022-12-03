@@ -24,7 +24,7 @@ def find_file(filename: str, initial_path: str = os.getcwd()):
         if filename in files:
             return os.path.join(root, filename) # Retorna o caminho completo do arquivo encontrado
 
-    return None # Caso o arquivo não seja encontrado
+    raise Exception(f"No file named {filename} found") # Caso o arquivo não seja encontrado
 
 
 def path_list_from_folder(subdir: str, initial_path: str = os.getcwd(), file_extension: str = '.*') -> list:
@@ -46,6 +46,8 @@ def path_list_from_folder(subdir: str, initial_path: str = os.getcwd(), file_ext
     for root, dirs, files in os.walk(path):
         if subdir in dirs:
             subdir_path = os.path.join(root, subdir)
+    if not subdir_path:
+        raise Exception(f"No folder named {subdir} found")
     
     files_in_subdir = [] # Armazenará os paths completos de todos os arquivos
 
