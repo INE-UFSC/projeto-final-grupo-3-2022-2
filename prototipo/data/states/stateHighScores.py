@@ -7,14 +7,14 @@ from utility.classeScoreController import ScoreController
 
 
 class HighScores(State):
-    def __init__(self, game, current_level, background_surface: pygame.Surface):
+    def __init__(self, game, level_name, background_surface: pygame.Surface):
         ACTIONS = {'mouse_left': False}
 
         super().__init__(game, ACTIONS)
 
         self.__score_controller = ScoreController()
         self.__assets = Assets()
-        self.__current_level = current_level
+        self.__level_name = level_name
         self.__background_surface = background_surface
 
         self.__load_buttons()
@@ -28,7 +28,7 @@ class HighScores(State):
         self.RANKS = []
         self.RECORDES = []
         self.AUTORES = []
-        scores = self.__score_controller.get_level_scores(self.__current_level)
+        scores = self.__score_controller.get_all_level_scores_sorted(self.__level_name)
         
         for rank in range(0, len(scores)): # Range vai depender da classe que controla os leveis
             if rank > 8:

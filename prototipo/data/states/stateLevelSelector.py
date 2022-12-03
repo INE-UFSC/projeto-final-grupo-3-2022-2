@@ -8,7 +8,7 @@ from utility.classeScoreController import ScoreController
 
 
 class LevelSelector(State):
-    def __init__(self, game):
+    def __init__(self, game, levels_list):
         ACTIONS = {'mouse_left': False}
 
         super().__init__(game, ACTIONS)
@@ -16,6 +16,8 @@ class LevelSelector(State):
         self.__score_controller = ScoreController()
         self.__assets = Assets()
         self.__background = self.__assets.images['background']
+
+        self.__levels_list = levels_list # Lista de níveis da categoria selecionada (é decidida pela tela de início, baseada no que o jogador escolheu)
 
         self.__load_buttons()
 
@@ -28,16 +30,22 @@ class LevelSelector(State):
         self.NIVEIS = []
         self.RECORDES = []
         self.AUTORES = []
-        scores = self.__score_controller.get_all_scores()
-        
-        for level in range(1, 9): # Range vai depender da classe que controla os leveis
-            self.NIVEIS.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(level)))
-            if level in scores:
-                self.RECORDES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][1])))
-                self.AUTORES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(scores[level][0][0])))
+
+        scores = self.__score_controller.get_all_best_scores()
+
+        for index, level in enumerate(self.__levels_list):
+            # Cria o número do nível
+            self.NIVEIS.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), str(index + 1)))
+
+            # Cria o texto com o recorde do nível e seu respectivo autor
+            level_name = level['level_name']
+            if level_name in scores:
+                name, time = scores[level_name][0], scores[level_name][1]
             else:
-                self.RECORDES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
-                self.AUTORES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), '-'))
+                name, time = "-", "-"
+            
+            self.RECORDES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), time))
+            self.AUTORES.append(TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), name))
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -52,7 +60,7 @@ class LevelSelector(State):
             
             for i in range(0, len(self.NIVEIS)):
                 if self.NIVEIS[i].check_for_hover(pygame.mouse.get_pos()):
-                    LevelPlaying(self._game, i+1).enter_state()
+                    LevelPlaying(self._game, self.__levels_list, i).enter_state()
 
     def render(self, display_surface):
         background = pygame.transform.smoothscale(self.__background, (self._game.screen_width, self._game.screen_height))

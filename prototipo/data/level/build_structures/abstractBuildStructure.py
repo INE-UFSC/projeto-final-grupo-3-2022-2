@@ -2,15 +2,12 @@ import pygame
 from abc import ABC
 
 class BuildStructure(ABC, pygame.sprite.Sprite):
-    def __init__(self, initial_position, width, height, image, fill=None):
+    def __init__(self, initial_position, width, height, image):
         super(BuildStructure, self).__init__() # Inicia a classe ABC e a classe de Sprite
         
         self.__initial_position = initial_position
-        if fill == None:
-            self.__image = image
-        else:
-            self.__image = pygame.Surface((width, height))
-            self.__image.fill(fill)
+        self.__image = image
+
         self.__rect = self.__image.get_rect(topleft = initial_position)
 
     # Getters

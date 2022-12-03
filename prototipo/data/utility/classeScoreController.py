@@ -4,23 +4,30 @@ class ScoreController():
     def __init__(self):
         self.__scoreDAO = ScoreDAO()
 
-    def add_score(self, level: int, nickname: str, time: float):
-        self.__scoreDAO.add(level, nickname, time)
+    def add_score(self, level_name: str, player_name: str, time: float):
+        self.__scoreDAO.add(level_name, player_name, time)
 
-    def get_level_scores(self, level: int):
-        scores = self.__scoreDAO.get_level(level)
-        scores = self.__converte_tempo(sorted(scores.items(), key=lambda x:x[1]))
-        return scores
+    def get_all_level_scores_sorted(self, level_name) -> list[tuple]:
+        scores_level = self.__scoreDAO.get_level_scores(level_name)
+        scores_level = sorted(scores_level.items(), key=lambda x:x[1])
 
-    def get_all_scores(self):
-        scores = {}
-        for chave, valor in self.__scoreDAO.get_all().items():
-            scores_level = self.__converte_tempo(sorted(valor.items(), key=lambda x:x[1]))
-            scores[int(chave)] = scores_level
+        return self.__convert_time_format(scores_level) # Lista ordenada de tuplas do tipo (nome do jogador, tempo formatado), ordenada pelos tempos
+    
+    def get_best_level_score(self, level_name) -> tuple:
+        scores_level = self.__scoreDAO.get_level_scores(level_name)
+        best_score = min(scores_level.items(), key=lambda x:x[1])
+        best_score = self.__convert_time_format([best_score])[0]
         
-        return scores
+        return best_score # Tupla do tipo (nome do jogador, tempo formatado)
 
-    def __converte_tempo(self, scores_level: list):
+    def get_all_best_scores(self) -> dict:
+        best_scores = {}
+        for level_name, scores_dict in self.__scoreDAO.get_all_scores().items():
+            best_scores[level_name] = self.get_best_level_score(level_name)
+        
+        return best_scores # Dicionario que tem como chave o nome dos níveis e como valor uma tupla do tipo (nome do jogador, tempo formatado)
+
+    def __convert_time_format(self, scores_level: list):
         # Converte os floats com os segundos para uma string no formato min:seg.miliseg
         # Retorna uma lista de tuplas com os nomes dos jogadores e seus tempos convertidos
 

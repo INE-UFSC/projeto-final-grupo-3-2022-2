@@ -2,37 +2,28 @@ from daos.abstractDAO import AbstractDAO
 
 class ScoreDAO(AbstractDAO):
     def __init__(self, datasource='scores.json'):
-        super().__init__(datasource=datasource)
+        super().__init__(cache={}, datasource=datasource)
 
-    def add(self, level: int, nickname: str, time: float):
-        level = str(level)
-        if level in self._objectCache:  # Verifica se o level ja foi adicionado
-            # Verifica se o nickname ja foi adicionado
-            if nickname in self._objectCache[level]:
-                # Se o tempo for menor que o registrado armazena o novo tempo
-                if time < self._objectCache[level][nickname]:
-                    self._objectCache[level][nickname] = time
-            else:
-                # Se não tiver o nome e tiver 50 nomes
-                if len(self._objectCache[level]) == 50:
-                    # Verifica se o tempo é menor do que o maior tempo do level
-                    if time < max(self._objectCache[level].values()):
-                        nickname_toremove = sorted(
-                            self._objectCache[level], key=self._objectCache[level].get)[-1]
-                        # Remove o nickname com o menor tempo
-                        self._objectCache[level].pop(nickname_toremove)
-                        self._objectCache[level][nickname] = time
+    def add(self, level_name: str, player_name: str, time: float):
+        if level_name in self._objectCache.keys(): 
+            if player_name in self._objectCache[level_name]:
+                if time < self._objectCache[level_name][player_name]:
+                    self._objectCache[level_name][player_name] = time
+            else: # Se o nome do jogador não estiver no dicionário
+                if len(self._objectCache[level_name]) >= 25: # Se o dicionário tiver com o máximo de nomes (25)
+                    if time < max(self._objectCache[level_name].values()): # Se o tempo for menor do que o maior pior tempo do dicionário
+                        player_name_to_remove = sorted(self._objectCache[level_name], key=self._objectCache[level_name].get)[-1] # Pega o nome do jogador com o maior tempo
+                        self._objectCache[level_name].pop(player_name_to_remove) # Remove o nome do jogador com o maior tempo
+                        self._objectCache[level_name][player_name] = time # Adiciona o novo nome do jogador com o novo tempo
                 else:
-                    self._objectCache[level][nickname] = time
+                    self._objectCache[level_name][player_name] = time
         else:
-            # Se não, adiciona uma lista com a tupla com o dados
-            self._objectCache[level] = {nickname: time}
+            self._objectCache[level_name] = {player_name: time}
 
         self._dump()
 
-    def get_level(self, level: int):
-        level = str(level)
-        return self._objectCache[level]
+    def get_level_scores(self, level_name):
+        return self._objectCache[str(level_name)]
 
-    def get_all(self):
+    def get_all_scores(self):
         return self._objectCache

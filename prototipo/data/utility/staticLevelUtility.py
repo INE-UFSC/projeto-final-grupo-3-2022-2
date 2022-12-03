@@ -1,15 +1,51 @@
 import sys
 sys.path.append("..")
 from typing import List
-from pyexcel_ods import get_data
+# from pyexcel_ods import get_data
+
 from utility.exceptions.TileMapErrorException import TileMapErrorException
 # https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
 
 
 class LevelUtility:
+    # Converts a level dictionary to a dictionary with the propper textures
+    # Parameters level_dict should be a dictionary with the following exampled values:
+    # 'level_name': 'name'
+    # 'arrows': ['standart', 'bounce', 'fast', 'piercing'] < ordered list of arrows >
+    # 'tile_map': < list of strings representing the map layout >
     @staticmethod
-    def convert(tile_map: List[str]) -> List[str]:
-        """Convert a list of tiles into a list of textures."""
+    def convert(level_dict: dict) -> dict:
+        # Tratamento dos possíveis erros
+        if 'level_name' not in level_dict:
+            raise Exception("Key 'level_name' not found in level_dict.")
+        elif 'arrows' not in level_dict:
+            raise TileMapErrorException("Key 'arrows' not found in level_dict.")
+        elif 'tile_map' not in level_dict:
+            raise TileMapErrorException("Key 'tile_map' not found in level_dict.")
+        
+        if len(level_dict['arrows']) == 0:
+            raise TileMapErrorException("Value of 'arrows' is empty. It should be a list with at leat one arrow type.")
+        for arrow in level_dict['arrows']:
+            if arrow not in ['standart', 'bounce', 'fast', 'piercing']:
+                raise TileMapErrorException(f"Value 'arrows' contains an invalid arrow type: {arrow}.")
+        
+        if len(level_dict['tile_map']) <= 5 or len(level_dict['tile_map'][0]) <= 5:
+            raise TileMapErrorException("Value 'tile_map' is empty. It should be a list with at leat 5 rows and 5 columns.")
+        
+        # Converte o tile map
+        try:
+            converted_tile_map = LevelUtility.convert_tile_map(level_dict['tile_map'])
+        except Exception as e:
+            raise e
+        
+        level_dict['textures'] = converted_tile_map
+        return level_dict
+
+    # Converts a list of tiles into a list of proper textures names.
+    # Parameter tile_map should be a list of strings representing the map layout.
+    @staticmethod
+    def convert_tile_map(tile_map: List[str]) -> List[str]:
+        
         st = tile_map.copy()
         st.insert(0, ["X" for _ in range((len(st[0])))])
         st.append(["X" for _ in range((len(st[0])))])
@@ -65,7 +101,8 @@ class LevelUtility:
                         "B_" + str(LevelUtility.__get_tile(context))
                     )
                 else:
-                    return_list[y - 1].append("FAILED")
+                    return_list[y - 1].append(" ")
+        
         return return_list
 
     @staticmethod
@@ -158,9 +195,10 @@ class LevelUtility:
         if map['level_name'] == '':
             raise TileMapErrorException("Level name can't be empty")
 
-    @staticmethod
-    def import_map(path) -> None:
-        """Recebe um path absoluto de um .ods relativo a um mapa, e retorna um dict formatado para inserir no LevelDAO"""
+    """ @staticmethod
+    def import_map_from_ods(path) -> None:
+        # TODO Atualizar para novo formato
+        # Recebe um path absoluto de um .ods relativo a um mapa, e retorna um dict formatado para inserir no LevelDAO
         try:
 
             map_file = get_data(path)['Sheet1']
@@ -175,24 +213,13 @@ class LevelUtility:
                         st += cell.upper()
                 tile_map.append(st)
 
-            level_name = map_file[0][29]
-            lifes = map_file[0][26]
-            standart_arrows = map_file[1][-1]
-            fast_arrows = map_file[2][-1]
-            piercing_arrows = map_file[3][-1]
-            bounce_arrows = map_file[4][-1]
-
+            arrows = [x.replace(" ", "") for x in map_file[14][0].split(",")] 
+            level_name = map_file[0][-1]
             level = {
                 'level_name': level_name,
-                'lifes': int(lifes),
-                'arrows': {
-                    'standart_arrows': int(standart_arrows),
-                    'fast_arrows': int(fast_arrows),
-                    'piercing_arrows': int(piercing_arrows),
-                    'bounce_arrows': int(bounce_arrows)
-                },
+                'arrows': arrows,
                 'tile_map': tile_map,
-                'textures': LevelUtility.convert(tile_map)
+                'textures': LevelUtility.convert_tile_map(tile_map)
             }
 
             LevelUtility.__verify_map(level)
@@ -202,4 +229,4 @@ class LevelUtility:
         except TileMapErrorException as e:
             print(e)
         except Exception as e:
-            print(e)
+            print(e) """

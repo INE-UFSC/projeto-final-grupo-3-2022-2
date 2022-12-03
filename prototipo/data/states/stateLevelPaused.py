@@ -7,13 +7,13 @@ from states.stateHighScores import HighScores
 
 
 class LevelPaused(State):
-    def __init__(self, game, current_level, background_surface: pygame.Surface):
+    def __init__(self, game, level_name, background_surface: pygame.Surface):
         ACTIONS = {'esc': False, 'mouse_left': False}
 
         super().__init__(game, ACTIONS)
 
         self.__assets = Assets()
-        self.__current_level = current_level
+        self.__level_name = level_name
         self.__background_surface = background_surface
         self.__background_surface.set_alpha(60) # Diminui a opacidade da imagem de fundo
 
@@ -47,7 +47,7 @@ class LevelPaused(State):
             if self.CONTINUE.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
             if self.LEVEL_RECORDS.check_for_hover(pygame.mouse.get_pos()):
-                high_scores_state = HighScores(self._game, self.__current_level, self.__background_surface)
+                high_scores_state = HighScores(self._game, self.__level_name, self.__background_surface)
                 high_scores_state.enter_state()
             if self.EXIT_LEVEL.check_for_hover(pygame.mouse.get_pos()):
                 while len(self._game.state_stack) > 2:
