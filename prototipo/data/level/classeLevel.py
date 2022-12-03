@@ -15,12 +15,14 @@ from level.build_structures.classeExitDoor import ExitDoor
 
 class Level:
     def __init__(self, level_data: dict):
-        self.__level_data = level_data
-        self.__level_map_matrix = level_data['tile_map']
+        self.__level_data = level_data # Dicionário com todas as informações do nível em questão
+        
+        self.__level_tile_map = level_data['tile_map']
+        self.__level_texture_map = level_data['textures']
 
         # Superfície onde o nível será desenhado
-        level_width = len(self.__level_map_matrix[0]) * config.level_tile_size
-        level_height = len(self.__level_map_matrix) * config.level_tile_size
+        level_width = len(self.__level_tile_map[0]) * config.level_tile_size
+        level_height = len(self.__level_tile_map) * config.level_tile_size
         self.__display_surface = pygame.surface.Surface((level_width, level_height))
 
         # Jogador
@@ -36,7 +38,7 @@ class Level:
         # Porta de saída do nível
         self.__level_exit_door = pygame.sprite.GroupSingle()
 
-        self.generate_level(self.__level_map_matrix)
+        self.generate_level(self.__level_tile_map, self.__level_texture_map)
 
         # Flechas
         self.__moving_arrows = []
@@ -55,16 +57,17 @@ class Level:
         self.__init__(self.__level_data)
 
     # Gera o mapa baseado no nível (baseado no argumento level_map recebido na construtora)
-    def generate_level(self, level_map_matrix):
+    def generate_level(self, tile_map, texture_map):
         tile_size = config.level_tile_size
 
-        for row_index, row in enumerate(level_map_matrix):
+        for row_index, row in enumerate(tile_map):
             for column_index, tile in enumerate(row):
                 x = column_index * tile_size # Gera a posição x do tile
                 y = row_index * tile_size # Gera a posição y do tile
                 
                 if tile == 'X':
-                    self.__level_tiles.add(Tile((x, y), tile_size)) # Adiciona o tile criado no atributo que agrupa os tiles
+                    texture_name = texture_map[row_index][column_index]
+                    self.__level_tiles.add(Tile((x, y), tile_size, texture_name)) # Adiciona o tile criado no atributo que agrupa os tiles
                 
                 if tile == 'A':
                     self.__level_spikes.add(Spike((x, y), 48)) # Adiciona o spike criado no atributo que agrupa os spikes
