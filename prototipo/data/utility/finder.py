@@ -2,9 +2,7 @@
 # Sua implementação evita a necessidade de alterar o código caso o local do arquivo seja alterado
 
 import os
-finder_directory = os.path.dirname(__file__)
-DATA_ROOT = os.path.dirname(finder_directory)
-PROJECT_ROOT = os.path.dirname(DATA_ROOT)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 def find_file(filename: str, initial_path: str = PROJECT_ROOT):
     """ 

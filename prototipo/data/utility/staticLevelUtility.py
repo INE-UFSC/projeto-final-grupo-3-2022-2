@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 from typing import List
-# from pyexcel_ods import get_data
+from pyexcel_ods import get_data
 
 from utility.exceptions.TileMapErrorException import TileMapErrorException
 # https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
@@ -182,20 +182,20 @@ class LevelUtility:
         else:
             return " "
 
-    @staticmethod
-    def __verify_map(map):
-        if map['lifes'] <= 0:
-            raise TileMapErrorException(
-                "Lifes must be integer and higher than zero.")
-        total_arrows = 0
-        for value in map['arrows'].values():
-            total_arrows += value
-        if total_arrows == 0:
-            raise TileMapErrorException("Must have at least one arrow.")
-        if map['level_name'] == '':
-            raise TileMapErrorException("Level name can't be empty")
+    # @staticmethod
+    # def __verify_map(map):
+    #     if map['lifes'] <= 0:
+    #         raise TileMapErrorException(
+    #             "Lifes must be integer and higher than zero.")
+    #     total_arrows = 0
+    #     for value in map['arrows'].values():
+    #         total_arrows += value
+    #     if total_arrows == 0:
+    #         raise TileMapErrorException("Must have at least one arrow.")
+    #     if map['level_name'] == '':
+    #         raise TileMapErrorException("Level name can't be empty")
 
-    """ @staticmethod
+    @staticmethod
     def import_map_from_ods(path) -> None:
         # TODO Atualizar para novo formato
         # Recebe um path absoluto de um .ods relativo a um mapa, e retorna um dict formatado para inserir no LevelDAO
@@ -222,11 +222,15 @@ class LevelUtility:
                 'textures': LevelUtility.convert_tile_map(tile_map)
             }
 
-            LevelUtility.__verify_map(level)
+            # LevelUtility.__verify_map(level)
             return level
         except ValueError as e:
             print(e)
         except TileMapErrorException as e:
             print(e)
         except Exception as e:
-            print(e) """
+            print(e)
+
+if __name__ == '__main__':
+    level = LevelUtility.import_map_from_ods('level_5.ods')
+    print(level)
