@@ -44,7 +44,9 @@ CREATED_LEVELS_PATH = find_file('created-levels.json')
 
 
 class LevelDAO(AbstractDAO):
-    def __init__(self, datasource=find_file('default-maps.json')):
+    def __init__(self, datasource=find_file('created-levels.json')):
+        #O argumento passado no construtor é o local de niveis criados
+        #os defaults já estão dentro da classe
         super().__init__(datasource)
         self.__DEFAULT_OBJECTCACHE = load(open(DEFAULT_LEVELS_PATH, 'r'))
 
