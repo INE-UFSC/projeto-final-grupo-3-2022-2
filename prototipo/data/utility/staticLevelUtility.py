@@ -251,8 +251,6 @@ class LevelUtility:
     def file_picker_convert() -> dict:
         """Uses a .ods file picker to convert the .ods to a level dictionary."""
         file_path = askopenfilename(filetypes=[("Map FIles", ".ods")])
-        print(file_path)
-        print(type(file_path))
         try:
             return LevelUtility.import_map_from_ods(file_path)
         except Exception as e:
