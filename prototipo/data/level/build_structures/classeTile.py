@@ -6,7 +6,11 @@ from singletons.singletonAssets import Assets
 class Tile(BuildStructure):
     def __init__(self, position, size, block_name):
         try:
-            SURFACE = Assets().level_images['blocks'][block_name.upper()]
+            if block_name.upper() == 'B_BLACK':
+                SURFACE = pygame.Surface((size, size))
+                SURFACE.fill((0,0,0))
+            else:
+                SURFACE = Assets().level_images['blocks'][block_name.upper()]
         except KeyError:
             raise ValueError(f"Invalid block name '{block_name}' recieved")
 
