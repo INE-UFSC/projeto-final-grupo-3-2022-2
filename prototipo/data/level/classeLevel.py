@@ -19,6 +19,7 @@ class Level:
         
         self.__level_tile_map = level_data['tile_map']
         self.__level_texture_map = level_data['textures']
+        self.__level_arrows = level_data['arrows'] # Lista de strings com o nome das flechas que o jogador terá no nível
 
         # Superfície onde o nível será desenhado
         level_width = len(self.__level_tile_map[0]) * config.level_tile_size
@@ -84,7 +85,7 @@ class Level:
                     player_origin_y = y + (tile_size)
 
                     # Gera o jogador usando a classe Player e enviando a posição inicial
-                    player_sprite = Player((player_origin_x, player_origin_y)) 
+                    player_sprite = Player((player_origin_x, player_origin_y), self.__level_arrows)
                     self.__player.add(player_sprite)
 
     """ def display_arrow_quantity(self, surface, player):

@@ -4,7 +4,7 @@ from level.classeCrossbow import Crossbow
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position):
+    def __init__(self, position, arrows):
         super().__init__()
 
         # Carrega as imagens do jogador
@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
         self.__input_right_status = True # Utilizado para definir a direção da textura do jogador
 
         # Arco
-        self.__gun = Crossbow(self.__rect.center)
+        self.__gun = Crossbow(self.__rect.center, arrows)
 
 
         # Animação

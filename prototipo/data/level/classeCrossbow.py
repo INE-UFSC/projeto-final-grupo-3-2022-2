@@ -12,13 +12,25 @@ from level.arrows.classePiercingArrow import PiercingArrow
 
 
 class Crossbow():
-    def __init__(self, initial_position):
+    def __init__(self, initial_position, initial_arrows):
         # Atributos padrões
         self.__image = Assets().level_images['gun'] # Carrega a imagem do arco (que tem fundo preto)
         self.__rect = self.__image.get_rect(center=initial_position)
 
         # Flechas
-        self.__arrows = [BounceArrow(), StandartArrow(), FastArrow(), PiercingArrow()]
+        self.__arrows = []
+        for arrow in initial_arrows:
+            if str(arrow).lower() == 'standart':
+                self.__arrows.append(StandartArrow())
+            elif str(arrow).lower() == 'bounce':
+                self.__arrows.append(BounceArrow())
+            elif str(arrow).lower() == 'fast':
+                self.__arrows.append(FastArrow())
+            elif str(arrow).lower() == 'piercing':
+                self.__arrows.append(PiercingArrow())
+            else:
+                print(f"Flecha não reconhecida iniciada: {arrow}. Adicionando flecha padrão.")
+                self.__arrows.append(StandartArrow())
 
     def get_rotated_image(self, player_position, cursor_position):
         # Calcula o ângulo entre o centro do jogador (ponto pivô de rotação da arma) e o cursor
