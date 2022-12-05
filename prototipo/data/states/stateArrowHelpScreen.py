@@ -54,12 +54,12 @@ class ArrowHelp(State):
 
         self.VOLTAR.render(display_surface, (15, 10), position_origin = 'topleft')
 
-        self.TEXT_BOUNCE_ARROW.render(display_surface, (left[0]+70, left[1]-200), position_origin = 'topleft')
-        self.TEXT_FAST_ARROW.render(display_surface, (left[0]+70, left[1]-100), position_origin = 'topleft')
-        self.TEXT_PIERCING_ARROW.render(display_surface, (left[0]+70, left[1]), position_origin = 'topleft')
-        self.TEXT_STANDART_ARROW.render(display_surface, (left[0]+70, left[1]+100), position_origin = 'topleft')
-        self.IMAGE_BOUNCE_ARROW.render(display_surface, (left[0]+40, left[1]-200), position_origin = 'topleft')
-        self.IMAGE_FAST_ARROW.render(display_surface, (left[0]+40, left[1]-100), position_origin = 'topleft')
-        self.IMAGE_PIERCING_ARROW.render(display_surface, (left[0]+40, left[1]), position_origin = 'topleft')
-        self.IMAGE_STANDART_ARROW.render(display_surface, (left[0]+40, left[1]+100), position_origin = 'topleft')
+        self.TEXT_BOUNCE_ARROW.render(display_surface, (left[0]+70, left[1]-150), position_origin = 'topleft')
+        self.TEXT_FAST_ARROW.render(display_surface, (left[0]+70, left[1]-50), position_origin = 'topleft')
+        self.TEXT_PIERCING_ARROW.render(display_surface, (left[0]+70, left[1]+50), position_origin = 'topleft')
+        self.TEXT_STANDART_ARROW.render(display_surface, (left[0]+70, left[1]+150), position_origin = 'topleft')
+        self.IMAGE_BOUNCE_ARROW.render(display_surface, (left[0]+40, left[1]-150), position_origin = 'topleft')
+        self.IMAGE_FAST_ARROW.render(display_surface, (left[0]+40, left[1]-50), position_origin = 'topleft')
+        self.IMAGE_PIERCING_ARROW.render(display_surface, (left[0]+40, left[1]+50), position_origin = 'topleft')
+        self.IMAGE_STANDART_ARROW.render(display_surface, (left[0]+40, left[1]+150), position_origin = 'topleft')
         
