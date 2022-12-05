@@ -213,11 +213,19 @@ class LevelUtility:
                         st += cell.upper()
                 tile_map.append(st)
 
-            arrows = [x.replace(" ", "") for x in map_file[14][0].split(",")] 
+            arrs = {
+                "S": "standart",
+                "F": "fast",
+                "P": "piercing",
+                "B": "bounce"
+            }
+
+            arrows = [x.replace(" ", "").upper() for x in map_file[14][0].split(",")]
+            new_arrows = [arrs[x] for x in arrows]
             level_name = map_file[0][-1]
             level = {
                 'level_name': level_name,
-                'arrows': arrows,
+                'arrows': new_arrows,
                 'tile_map': tile_map,
                 'textures': LevelUtility.convert_tile_map(tile_map)
             }
