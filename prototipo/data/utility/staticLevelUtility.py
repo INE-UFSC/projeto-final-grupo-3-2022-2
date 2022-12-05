@@ -1,9 +1,11 @@
-import sys
-sys.path.append("..")
-from typing import List
+from exceptions.TileMapErrorException import TileMapErrorException
 from pyexcel_ods import get_data
+from typing import List
+import sys
+from tkinter.filedialog import askopenfilename
 
-from utility.exceptions.TileMapErrorException import TileMapErrorException
+sys.path.append("..")
+
 # https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
 
 
@@ -19,25 +21,31 @@ class LevelUtility:
         if 'level_name' not in level_dict:
             raise Exception("Key 'level_name' not found in level_dict.")
         elif 'arrows' not in level_dict:
-            raise TileMapErrorException("Key 'arrows' not found in level_dict.")
+            raise TileMapErrorException(
+                "Key 'arrows' not found in level_dict.")
         elif 'tile_map' not in level_dict:
-            raise TileMapErrorException("Key 'tile_map' not found in level_dict.")
-        
+            raise TileMapErrorException(
+                "Key 'tile_map' not found in level_dict.")
+
         if len(level_dict['arrows']) == 0:
-            raise TileMapErrorException("Value of 'arrows' is empty. It should be a list with at leat one arrow type.")
+            raise TileMapErrorException(
+                "Value of 'arrows' is empty. It should be a list with at leat one arrow type.")
         for arrow in level_dict['arrows']:
             if arrow not in ['standart', 'bounce', 'fast', 'piercing']:
-                raise TileMapErrorException(f"Value 'arrows' contains an invalid arrow type: {arrow}.")
-        
+                raise TileMapErrorException(
+                    f"Value 'arrows' contains an invalid arrow type: {arrow}.")
+
         if len(level_dict['tile_map']) <= 5 or len(level_dict['tile_map'][0]) <= 5:
-            raise TileMapErrorException("Value 'tile_map' is empty. It should be a list with at leat 5 rows and 5 columns.")
-        
+            raise TileMapErrorException(
+                "Value 'tile_map' is empty. It should be a list with at leat 5 rows and 5 columns.")
+
         # Converte o tile map
         try:
-            converted_tile_map = LevelUtility.convert_tile_map(level_dict['tile_map'])
+            converted_tile_map = LevelUtility.convert_tile_map(
+                level_dict['tile_map'])
         except Exception as e:
             raise e
-        
+
         level_dict['textures'] = converted_tile_map
         return level_dict
 
@@ -45,7 +53,7 @@ class LevelUtility:
     # Parameter tile_map should be a list of strings representing the map layout.
     @staticmethod
     def convert_tile_map(tile_map: List[str]) -> List[str]:
-        
+
         st = tile_map.copy()
         st.insert(0, ["X" for _ in range((len(st[0])))])
         st.append(["X" for _ in range((len(st[0])))])
@@ -102,7 +110,7 @@ class LevelUtility:
                     )
                 else:
                     return_list[y - 1].append(" ")
-        
+
         return return_list
 
     @staticmethod
@@ -220,12 +228,12 @@ class LevelUtility:
                 "B": "bounce"
             }
 
-            arrows = [x.replace(" ", "").upper() for x in map_file[14][0].split(",")]
-            new_arrows = [arrs[x] for x in arrows]
+            arrows = list(map(lambda a: arrs[a], [x.replace(
+                " ", "").upper() for x in map_file[14][0].split(",")]))
             level_name = map_file[0][-1]
             level = {
                 'level_name': level_name,
-                'arrows': new_arrows,
+                'arrows': arrows,
                 'tile_map': tile_map,
                 'textures': LevelUtility.convert_tile_map(tile_map)
             }
@@ -239,6 +247,18 @@ class LevelUtility:
         except Exception as e:
             print(e)
 
+    @staticmethod
+    def file_picker_convert() -> dict:
+        """Uses a .ods file picker to convert the .ods to a level dictionary."""
+        file_path = askopenfilename(filetypes=[("Map FIles", ".ods")])
+        print(file_path)
+        print(type(file_path))
+        try:
+            return LevelUtility.import_map_from_ods(file_path)
+        except Exception as e:
+            print(e)
+
 if __name__ == '__main__':
-    level = LevelUtility.import_map_from_ods('level_5.ods')
-    print(level)
+    # level = LevelUtility.import_map_from_ods('level_5.ods')
+    # print(level)
+    print(LevelUtility.file_picker_convert())
