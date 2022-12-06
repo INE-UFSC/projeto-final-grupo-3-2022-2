@@ -26,11 +26,11 @@ class Arrow(ABC):
         self.__stuck = False
 
         # Velocidade da flecha depende do tempo que o jogador segurou o mouse
-        self.__speed = self.__minimun_speed + (self.__maximun_extra_speed * hold_factor)
+        speed = self.__minimun_speed + (self.__maximun_extra_speed * hold_factor)
 
         # Atributos de posição
         angle_radian = atan2(target_position[1] - initial_position[1], target_position[0] - initial_position[0]) # Define o ângulo em radianos
-        self.__delta_position = pygame.Vector2((cos(angle_radian) * self.__speed), (sin(angle_radian) * self.__speed))
+        self.__delta_position = pygame.Vector2((cos(angle_radian) * speed), (sin(angle_radian) * speed))
         angle_degrees = -(angle_radian) * 180 / pi # Converte o ângulo para graus
 
         # Retângulo da flecha
