@@ -203,3 +203,6 @@ class Player(pygame.sprite.Sprite):
     @property
     def thrust(self):
         return self.__thrust
+    @property
+    def arrows(self):
+        return self.__gun.arrows

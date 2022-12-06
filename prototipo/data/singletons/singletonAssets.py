@@ -46,10 +46,10 @@ class Assets(metaclass = Singleton):
         self.__interface = {
             'game-icon': self.__get_image('game-icon.png', scale=3),
             'arrows': {
-                'standart': self.__get_image('arrow-icon-standart.png', scale=3),
-                'bounce': self.__get_image('arrow-icon-bounce.png', scale=3),
-                'fast': self.__get_image('arrow-icon-fast.png', scale=3),
-                'piercing': self.__get_image('arrow-icon-piercing.png', scale=3)
+                'standart': self.__get_image('arrow-icon-standart.png', scale=4),
+                'bounce': self.__get_image('arrow-icon-bounce.png', scale=4),
+                'fast': self.__get_image('arrow-icon-fast.png', scale=4),
+                'piercing': self.__get_image('arrow-icon-piercing.png', scale=4)
             },
             'keys': {
                 'wasd': self.__get_image('wasd.png', scale=3),

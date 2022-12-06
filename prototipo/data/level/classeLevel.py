@@ -257,6 +257,9 @@ class Level:
     @property
     def timer(self):
         return self.__timer
+    @property
+    def player_arrows(self):
+        return self.__player.sprite.arrows
 
     # Setters
     def start_hold(self):

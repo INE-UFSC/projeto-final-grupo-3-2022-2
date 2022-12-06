@@ -134,6 +134,14 @@ class LevelPlaying(State):
         self.__level_surface = self.__level.render() # Recebe a display surface do level
         display_surface.blit(self.__level_surface, LevelMouse.get_surface_offset()) # Desenha o level
         
+        # Interface
         formated_time = self.__timer.get_formated_time()  # Recebe o tempo decorrido formatado
         self.TIMER.set_text(formated_time)
         self.TIMER.render(display_surface, (screen_center[0], 30)) # Desenha o tempo decorrido
+
+        player_arrows = self.__level.player_arrows
+        try:
+            for index, arrow in enumerate(self.__level.player_arrows):
+                display_surface.blit(arrow.icon_image, (15 + index*25, 15))
+        except:
+            print("Não foi possível carregar a interface das flechas.")
