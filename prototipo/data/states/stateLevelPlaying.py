@@ -26,7 +26,6 @@ class LevelPlaying(State):
 
         self.__assets = Assets()
         self.__score_controller = ScoreController()
-        self.__buttons = pygame.sprite.Group()
         self.__level_surface = pygame.Surface((0,0))
         
         self.__load_interface()
