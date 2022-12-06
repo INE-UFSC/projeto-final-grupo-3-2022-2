@@ -61,7 +61,7 @@ class Assets(metaclass = Singleton):
             }
         }
 
-    def __get_image(self, image_name, scale = 1):
+    def __get_image(self, image_name, scale = 1) -> pygame.image:
         image = pygame.image.load(finder.find_file(image_name)).convert_alpha()
         size = (image.get_width() * scale, image.get_height() * scale)
         return pygame.transform.scale(image, size)
