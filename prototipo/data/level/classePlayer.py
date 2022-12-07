@@ -46,20 +46,30 @@ class Player(pygame.sprite.Sprite):
         # Arco
         self.__gun = Crossbow(self.__rect.center, arrows)
 
-
         # Animação
         self.__animation_status = "idle"
-        self.__animation_speed = 0.1
+        self.__animation_speed = 0.2
         self.__frame_index = 0
+
+    def __get_animation_status(self, delta_speed, on_ground_status) -> str:
+        if on_ground_status == False:
+            if delta_speed[1] <= 0:
+                return "jump"
+            else:
+                return "fall"
+        if int(delta_speed[0]) != 0:
+            return "run"
+        else:
+            return "idle"
 
     def __update_animation(self):
         frames = self.__images[self.__animation_status]
 
-        #self.__frame_index += self.__animation_speed # Fazer a conversão para inteiro nesse ponto ???????????
-        #if self.__frame_index >= len(animation):
-        #    self.__frame_index = 0
+        self.__frame_index += self.__animation_speed # Fazer a conversão para inteiro nesse ponto ???????????
+        if self.__frame_index >= len(frames):
+            self.__frame_index = 0
         
-        image = frames[0]
+        image = frames[int(self.__frame_index)]
         if self.__input_right_status == True:
             self.__image = image
         else:
@@ -180,6 +190,7 @@ class Player(pygame.sprite.Sprite):
         return (dx, dy) # Retorna as posições colididas com o sprite group passado como argumento
 
     def update(self, delta_speed): # Calcula o movimento baseado nos inputs
+        self.__animation_status = self.__get_animation_status(delta_speed, self.__on_ground_status)
         self.__update_animation()
         self.__move_player(delta_speed) # Atualiza a posição do player
     

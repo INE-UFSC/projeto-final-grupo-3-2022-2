@@ -39,9 +39,14 @@ class Assets(metaclass = Singleton):
             }
         }
         self.__player = {
-            'idle': [self.__get_image('idle.png', scale=3)],
-            'run': [],
-            'fall': []
+            'idle': [self.__get_image('idle_001.png', scale=3)],
+            'run': [self.__get_image('run_001.png', scale=3),
+                    self.__get_image('run_002.png', scale=3),
+                    self.__get_image('run_003.png', scale=3),
+                    self.__get_image('run_004.png', scale=3),
+                    self.__get_image('run_005.png', scale=3)],
+            'jump': [self.__get_image('jump_001.png', scale=3)],
+            'fall': [self.__get_image('fall_001.png', scale=3)]
         }
         self.__interface = {
             'game-icon': self.__get_image('game-icon.png', scale=3),
