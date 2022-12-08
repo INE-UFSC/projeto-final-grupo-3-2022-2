@@ -5,6 +5,7 @@ from singletons.singletonAssets import Assets
 from utility.finder import find_file
 
 from states.stateLevelSelector import LevelSelector
+from states.stateMapImport import MapImport
 from states.stateHelpScreen import HelpScreen
 
 
@@ -22,7 +23,7 @@ class TitleScreen(State):
     def __load_buttons(self):
         self.TITLE = TextButton(self.__assets.fonts_path['title'], 96, (232, 192, 50), 'Bowbound')
         self.LEVEL_SELECTOR = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Selecionar nível')
-        self.CREATE_MAP = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Criar mapa')
+        self.IMPORT_MAP = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Importar um mapa')
         self.HELP = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
 
     def update_actions(self, event):
@@ -35,8 +36,8 @@ class TitleScreen(State):
         if self._actions['mouse_left']:
             if self.LEVEL_SELECTOR.check_for_hover(pygame.mouse.get_pos()):
                 LevelSelector(self._game, self.__assets.jsons['default-levels']).enter_state()
-            if self.CREATE_MAP.check_for_hover(pygame.mouse.get_pos()):
-                pass
+            if self.IMPORT_MAP.check_for_hover(pygame.mouse.get_pos()):
+                MapImport(self._game).enter_state()
             if self.HELP.check_for_hover(pygame.mouse.get_pos()):
                 HelpScreen(self._game).enter_state()
 
@@ -50,5 +51,5 @@ class TitleScreen(State):
 
         self.TITLE.render(display_surface, (center[0], center[1] - 120))
         self.LEVEL_SELECTOR.render(display_surface, (center[0], center[1]))
-        self.CREATE_MAP.render(display_surface, (center[0], center[1] + 60))
+        self.IMPORT_MAP.render(display_surface, (center[0], center[1] + 60))
         self.HELP.render(display_surface, (center[0], center[1] + 120))
