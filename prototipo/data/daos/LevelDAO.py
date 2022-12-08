@@ -39,12 +39,12 @@ from utility.finder import find_file
 #         raise NivelNaoExisteException(f"Level with name {level_name} doesn't exist.")
 
 
-DEFAULT_LEVELS_PATH = find_file('default-maps.json')
+DEFAULT_LEVELS_PATH = find_file('default-levels.json')
 CREATED_LEVELS_PATH = find_file('created-levels.json')
 
 
 class LevelDAO(AbstractDAO):
-    def __init__(self, datasource=find_file('created-levels.json')):
+    def __init__(self, datasource=CREATED_LEVELS_PATH):
         #O argumento passado no construtor é o local de niveis criados
         #os defaults já estão dentro da classe
         super().__init__(datasource)
@@ -75,10 +75,11 @@ class LevelDAO(AbstractDAO):
 
     def add_level(self, level_dict: dict):
         # Confere o nome do nível no dicionário
+        created_levels = self.get_created_levels_names()
         if 'level_name' not in level_dict:
             raise Exception(
                 "A chave 'level_name' contendo o nome do nível não foi encontrada no dicionário.")
-        elif level_dict['level_name'] in self._objectCache.keys():
+        elif level_dict['level_name'] in created_levels:
             raise NivelJaExisteException(
                 f"Um nível com o nome {level_dict['level_name']} já existe.")
 

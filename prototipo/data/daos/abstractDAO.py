@@ -1,11 +1,11 @@
 from abc import ABC
 import json
 class AbstractDAO(ABC):
-    def __init__(self, cache: list or dict, datasource = ''):
+    def __init__(self, datasource = ''):
         # O parâmetro cacha define se o DAO vai armazenar as informações em lista ou em dicionário
         # Deve ser passado ou um lista vazia [] ou um dicionário vazio {}
         self.datasource = datasource
-        self._objectCache = cache
+        self._objectCache = []
 
         try:
             self._load()

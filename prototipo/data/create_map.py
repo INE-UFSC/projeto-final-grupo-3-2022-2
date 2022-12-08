@@ -1,7 +1,7 @@
 from daos.LevelDAO import LevelDAO
 from utility.finder import find_file
 
-level_DAO = LevelDAO(find_file('default-levels.json'))
+level_DAO = LevelDAO()
 
 teste = {
     'level_name': 'Collision testing',
