@@ -5,11 +5,10 @@ import sys
 from tkinter.filedialog import askopenfilename
 
 sys.path.append("..")
-
 # https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
 
 
-class LevelUtility:
+class TileMapUtility:
     # Converts a level dictionary to a dictionary with the propper textures
     # Parameters level_dict should be a dictionary with the following exampled values:
     # 'level_name': 'name'
@@ -41,7 +40,7 @@ class LevelUtility:
 
         # Converte o tile map
         try:
-            converted_tile_map = LevelUtility.convert_tile_map(
+            converted_tile_map = TileMapUtility.convert_tile_map(
                 level_dict['tile_map'])
         except Exception as e:
             raise e
@@ -106,7 +105,7 @@ class LevelUtility:
                     if st[y + 1][x + 1] == "X":
                         context["down_right"] = True
                     return_list[y - 1].append(
-                        "B_" + str(LevelUtility.__get_tile(context))
+                        "B_" + str(TileMapUtility.__get_tile(context))
                     )
                 else:
                     return_list[y - 1].append(" ")
@@ -235,10 +234,10 @@ class LevelUtility:
                 'level_name': level_name,
                 'arrows': arrows,
                 'tile_map': tile_map,
-                'textures': LevelUtility.convert_tile_map(tile_map)
+                'textures': TileMapUtility.convert_tile_map(tile_map)
             }
 
-            # LevelUtility.__verify_map(level)
+            # TileMapUtility.__verify_map(level)
             return level
         except ValueError as e:
             print(e)
@@ -252,11 +251,11 @@ class LevelUtility:
         """Uses a .ods file picker to convert the .ods to a level dictionary."""
         file_path = askopenfilename(filetypes=[("Map FIles", ".ods")])
         try:
-            return LevelUtility.import_map_from_ods(file_path)
+            return TileMapUtility.import_map_from_ods(file_path)
         except Exception as e:
             print(e)
 
 if __name__ == '__main__':
-    # level = LevelUtility.import_map_from_ods('level_5.ods')
+    # level = TileMapUtility.import_map_from_ods('level_5.ods')
     # print(level)
-    print(LevelUtility.file_picker_convert())
+    print(TileMapUtility.file_picker_convert())

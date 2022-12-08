@@ -1,7 +1,7 @@
 from daos.abstractDAO import AbstractDAO
 from daos.exceptions.NivelJaExisteException import NivelJaExisteException
 from daos.exceptions.NivelNaoExisteException import NivelNaoExisteException
-from utility.staticLevelUtility import LevelUtility
+from utility.staticTileMapUtility import TileMapUtility
 import os
 from utility.finder import find_file
 
@@ -27,7 +27,7 @@ class LevelDAO(AbstractDAO):
 
         # Tenta fazer a conversão do nível (a validação das informações específicas de criação de nível são conferidas)
         try:
-            converted_dict = LevelUtility.convert(level_dict)
+            converted_dict = TileMapUtility.convert(level_dict)
         except Exception as error:
             raise error
 
