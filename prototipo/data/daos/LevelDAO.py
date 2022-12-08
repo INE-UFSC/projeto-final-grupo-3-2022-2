@@ -3,7 +3,7 @@ from daos.exceptions.NivelJaExisteException import NivelJaExisteException
 from daos.exceptions.NivelNaoExisteException import NivelNaoExisteException
 from utility.staticLevelUtility import LevelUtility
 from json import load
-
+import os
 from utility.finder import find_file
 
 
@@ -40,14 +40,19 @@ from utility.finder import find_file
 
 
 DEFAULT_LEVELS_PATH = find_file('default-levels.json')
-CREATED_LEVELS_PATH = find_file('created-levels.json')
 
 
 class LevelDAO(AbstractDAO):
-    def __init__(self, datasource=CREATED_LEVELS_PATH):
+    def __init__(self, datasource='created-levels.json'):
         #O argumento passado no construtor é o local de niveis criados
         #os defaults já estão dentro da classe
-        super().__init__(datasource)
+        try:
+            ds = find_file(datasource)
+            super().__init__(ds, cache = [])
+        except:
+            self._objectCache = []
+            self.datasource = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'maps/created-levels.json')
+            super()._dump()
         self.__DEFAULT_OBJECTCACHE = load(open(DEFAULT_LEVELS_PATH, 'r'))
 
     # Default Levels
