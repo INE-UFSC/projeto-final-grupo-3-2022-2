@@ -39,7 +39,7 @@ from utility.finder import find_file
 #         raise NivelNaoExisteException(f"Level with name {level_name} doesn't exist.")
 
 
-DEFAULT_LEVELS_PATH = find_file('default-maps.json')
+DEFAULT_LEVELS_PATH = find_file('default-levels.json')
 CREATED_LEVELS_PATH = find_file('created-levels.json')
 
 
