@@ -41,66 +41,53 @@ from utility.finder import find_file
 
 DEFAULT_LEVELS_PATH = find_file('default-levels.json')
 
-
 class LevelDAO(AbstractDAO):
-    def __init__(self, datasource='created-levels.json'):
-        #O argumento passado no construtor é o local de niveis criados
-        #os defaults já estão dentro da classe
+    def __init__(self, filename):
         try:
-            ds = find_file(datasource)
-            super().__init__(ds, cache = [])
+            datasource = find_file(filename) # Verifica se o arquivo com o nome passado existe
         except:
-            self._objectCache = []
-            self.datasource = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'maps/created-levels.json')
-            super()._dump()
-        self.__DEFAULT_OBJECTCACHE = load(open(DEFAULT_LEVELS_PATH, 'r'))
-
-    # Default Levels
-    def get_default_levels_names(self):
-        return [x['level_name'] for x in self.__DEFAULT_OBJECTCACHE]
-
-    def get_default_level(self, level_name):
-        for i, level in enumerate(self.__DEFAULT_OBJECTCACHE, start=0):
-            if level['level_name'] == level_name:
-                return self.__DEFAULT_OBJECTCACHE[i]
-        raise NivelNaoExisteException(
-            f"Level with name {level_name} doesn't exist.")
-    # End Default Levels
-
-    # Custom Level
-    def get_created_levels_names(self):
-        return [x["level_name"] for x in self._objectCache]
-
-    def get_created_level(self, level_name):
-        for i, level in enumerate(self._objectCache, start=0):
-            if level["level_name"] == level_name:
-                return self._objectCache[i]
-        raise NivelNaoExisteException(
-            f"Level with name {level_name} doesn't exist.")
+            # Volta duas pastas (daos, data) e acessa a pasta maps para criar o arquivo
+            datasource = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'maps', filename)
+        
+        super().__init__(cache=[], datasource=datasource)
 
     def add_level(self, level_dict: dict):
-        # Confere o nome do nível no dicionário
-        created_levels = self.get_created_levels_names()
+        # Confere se level_dict tem uma chave 'level_name'
         if 'level_name' not in level_dict:
-            raise Exception(
-                "A chave 'level_name' contendo o nome do nível não foi encontrada no dicionário.")
-        elif level_dict['level_name'] in created_levels:
-            raise NivelJaExisteException(
-                f"Um nível com o nome {level_dict['level_name']} já existe.")
+            raise Exception("The key 'level_name' containing the level name was not found in the 'level_dict' parameter.")
+
+        # Confere se já existe algum nível com o nome 'level_name' 
+        existing_level_names = [level['level_name'] for level in self._objectCache]
+        if level_dict['level_name'] in existing_level_names:
+            raise NivelJaExisteException(f"A level with the name '{level_dict['level_name']}' already exists in the selected datasource.")
 
         # Tenta fazer a conversão do nível (a validação das informações específicas de criação de nível são conferidas)
         try:
             converted_dict = LevelUtility.convert(level_dict)
-        except Exception as e:
-            raise e
+        except Exception as error:
+            raise error
 
         self._objectCache.append(converted_dict)
         self._dump()
 
-    def remove_level(self, level_name: str):
+    def remove_level_by_name(self, level_name: str) -> dict:
+        # Busca o nível com o nome passado e, se encontrado, o remove do cache e do arquivo
+        # Se for encontrado, retorna o nível removido
         for i, level in enumerate(self._objectCache, start=0):
             if level['level_name'] == level_name:
-                self._objectCache.pop(i)
-                return
-        raise NivelNaoExisteException(
-            f"Level with name {level_name} doesn't exist.")
+                removed_level = self._objectCache.pop(i)
+                self._dump()
+                return removed_level
+        
+        raise NivelNaoExisteException(f"Level with name {level_name} doesn't exist.")
+
+    # Getters
+    def get_level_names(self):
+        return [x['level_name'] for x in self._objectCache]
+
+    def get_level(self, level_name):
+        for i, level in enumerate(self._objectCache, start=0):
+            if level['level_name'] == level_name:
+                return self._objectCache[i]
+        
+        raise NivelNaoExisteException(f"Level with name {level_name} doesn't exist.")
