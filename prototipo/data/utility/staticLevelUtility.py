@@ -1,4 +1,4 @@
-from exceptions.TileMapErrorException import TileMapErrorException
+from utility.exceptions.TileMapErrorException import TileMapErrorException
 from pyexcel_ods import get_data
 from typing import List
 import sys
