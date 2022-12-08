@@ -18,7 +18,7 @@ class Game():
         self.__initial_screen_height = int(self.__monitor_size[1] * 0.80)
         self.__screen = pygame.display.set_mode((self.__initial_screen_width, self.__initial_screen_height), pygame.RESIZABLE)
 
-        pygame.display.set_caption("Speed Archer")
+        pygame.display.set_caption("Bowbound")
 
         # Configurações da superfície de display
         self.__display_surface = pygame.Surface((self.__initial_screen_width, self.__initial_screen_height))

@@ -20,7 +20,7 @@ class TitleScreen(State):
         self.__load_buttons()
 
     def __load_buttons(self):
-        self.TITLE = TextButton(self.__assets.fonts_path['title'], 96, (232, 192, 50), 'Speed Archer')
+        self.TITLE = TextButton(self.__assets.fonts_path['title'], 96, (232, 192, 50), 'Bowbound')
         self.LEVEL_SELECTOR = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Selecionar nível')
         self.CREATE_MAP = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Criar mapa')
         self.HELP = TextButton(self.__assets.fonts_path['text'], 50, (255, 255, 255), 'Ajuda')
