@@ -23,7 +23,10 @@ class ScoreDAO(AbstractDAO):
         self._dump()
 
     def get_level_scores(self, level_name):
-        return self._objectCache[str(level_name)]
+        try:
+            return self._objectCache[str(level_name)]
+        except KeyError:
+            return {}
 
     def get_all_scores(self):
         return self._objectCache
