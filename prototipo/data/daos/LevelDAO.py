@@ -5,6 +5,7 @@ from utility.staticTileMapUtility import TileMapUtility
 import os
 from utility.finder import find_file
 
+
 class LevelDAO(AbstractDAO):
     def __init__(self, filename):
         try:
