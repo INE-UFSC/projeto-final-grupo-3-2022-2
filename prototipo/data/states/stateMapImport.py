@@ -40,7 +40,7 @@ class MapImport(State):
                 try:
                     status = self.__level_import_controller.import_from_file_picker()
                     if status:
-                        self.TEXTO_ERRO.set_text('Mapa importado com sucesso!')
+                        self.TEXTO_ERRO.set_text('Mapa importado com sucesso! Reinicie o jogo para carregar.')
                     else:
                         self.TEXTO_ERRO.set_text('')
                 except Exception as e:
