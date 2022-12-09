@@ -4,7 +4,7 @@ from level.arrows.abstractArrow import Arrow
 
 class FastArrow(Arrow):
     def __init__(self):
-        MINIMUN_SPEED = 20
+        MINIMUN_SPEED = 25
         IMAGE = Assets().level_images['arrows']['fast']
         ICON_IMAGE = Assets().interface['arrows']['fast']
         BORDERED_ICON_IMAGE = Assets().interface['bordered-arrows']['fast']
