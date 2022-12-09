@@ -33,7 +33,7 @@ class Assets(metaclass = Singleton):
             ],
             'gun': self.__get_image('crossbow.png', scale=3),
             'arrows': {
-                'standart': self.__get_image('arrow-standart.png', scale=3),
+                'standart': self.__get_image('arrow-standard.png', scale=3),
                 'bounce': self.__get_image('arrow-bounce.png', scale=3),
                 'fast': self.__get_image('arrow-fast.png', scale=3),
                 'piercing': self.__get_image('arrow-piercing.png', scale=3)
@@ -52,13 +52,13 @@ class Assets(metaclass = Singleton):
         self.__interface = {
             'game-icon': self.__get_image('game-icon.png', scale=3),
             'arrows': {
-                'standart': self.__get_image('arrow-icon-standart.png', scale=4),
+                'standart': self.__get_image('arrow-icon-standard.png', scale=4),
                 'bounce': self.__get_image('arrow-icon-bounce.png', scale=4),
                 'fast': self.__get_image('arrow-icon-fast.png', scale=4),
                 'piercing': self.__get_image('arrow-icon-piercing.png', scale=4)
             },
             'bordered-arrows': {
-                'standart': self.__get_image('arrow-icon-standart-bordered.png', scale=4),
+                'standart': self.__get_image('arrow-icon-standard-bordered.png', scale=4),
                 'bounce': self.__get_image('arrow-icon-bounce-bordered.png', scale=4),
                 'fast': self.__get_image('arrow-icon-fast-bordered.png', scale=4),
                 'piercing': self.__get_image('arrow-icon-piercing-bordered.png', scale=4)
