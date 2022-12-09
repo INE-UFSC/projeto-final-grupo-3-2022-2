@@ -12,7 +12,8 @@ class Assets(metaclass = Singleton):
             'text': finder.find_file('PixelOperatorHB.ttf')
         }
         self.__jsons = {
-            'default-levels': loads(open(finder.find_file('default-levels.json'), 'r').read())
+            'default-levels': self.__load_json('default-levels.json'),
+            'created-levels': self.__load_json('created-levels.json'),
         }
         self.__images = {
             'background': self.__get_image('background.png'),
@@ -85,6 +86,13 @@ class Assets(metaclass = Singleton):
             sheet_images[image_name] = image
         
         return sheet_images
+
+    def __load_json(self, json_name) -> dict:
+        try:
+            return loads(open(finder.find_file('default-levels.json'), 'r').read())
+        except Exception as e:
+            print('Erro ao carregar o arquivo JSON:', e)
+            return {}
 
     # Getters
     @property
