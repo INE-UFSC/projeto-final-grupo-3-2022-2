@@ -2,20 +2,21 @@ from daos.LevelDAO import LevelDAO
 from utility.finder import find_file
 
 level_DAO = LevelDAO('default-levels.json')
+# level_DAO.remove_level_by_name('Fast arrows???')
 
 teste = {
-    'level_name': 'Using the knockback',
-    'arrows': ['standart'],
+    'level_name': 'A lot of arrows!?!?',
+    'arrows': ['standard', 'standard', 'piercing'],
     'tile_map': ['XXXXXXXXXXXXXXXXXXXXXXXXX',
                  'X                       X',
-                 'X                       X',
-                 'X                       X',
-                 'X P                   D X',
-                 'XXXXXXXXX       XXXXXXXXX',
-                 'XXXXXXXXX       XXXXXXXXX',
-                 'XXXXXXXXX   O   XXXXXXXXX',
-                 'XXXXXXXXX       XXXXXXXXX',
-                 'XXXXXXXXXAAAAAAAXXXXXXXXX',
+                 'XP                      X',
+                 'XXX XAX XXXXXXXXXXXXXXXXX',
+                 'XXX XXXOXXXXXXXXXXXXXXXXX',
+                 'XXX XXX XXXXXXXXXXXXXXXXX',
+                 'XXX XXXOXXXXXXXXXXXXXXXXX',
+                 'XXX XXX XXXXXXXXXXXXXXXXX',
+                 'XXX XXXAXXXXXXXXXXXXXXXXX',
+                 'XXXOXXXXXXXXXXXXXXXXXXXXX',
                  'XXXXXXXXXXXXXXXXXXXXXXXXX']
 }
 

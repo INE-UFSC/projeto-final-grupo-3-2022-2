@@ -11,7 +11,7 @@ class TileMapUtility:
     # Converts a level dictionary to a dictionary with the propper textures
     # Parameters level_dict should be a dictionary with the following exampled values:
     # 'level_name': 'name'
-    # 'arrows': ['standart', 'bounce', 'fast', 'piercing'] < ordered list of arrows >
+    # 'arrows': ['standard', 'bounce', 'fast', 'piercing'] < ordered list of arrows >
     # 'tile_map': < list of strings representing the map layout >
     @staticmethod
     def convert(level_dict: dict) -> dict:
@@ -29,7 +29,7 @@ class TileMapUtility:
             raise TileMapErrorException(
                 "Value of 'arrows' is empty. It should be a list with at leat one arrow type.")
         for arrow in level_dict['arrows']:
-            if arrow not in ['standart', 'bounce', 'fast', 'piercing']:
+            if arrow not in ['standard', 'bounce', 'fast', 'piercing']:
                 raise TileMapErrorException(
                     f"Value 'arrows' contains an invalid arrow type: {arrow}.")
 
@@ -207,7 +207,7 @@ class TileMapUtility:
                 tile_map.append(st)
 
             arrs = {
-                "S": "standart",
+                "S": "standard",
                 "F": "fast",
                 "P": "piercing",
                 "B": "bounce"

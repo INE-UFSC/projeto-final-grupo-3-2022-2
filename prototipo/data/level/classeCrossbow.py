@@ -5,7 +5,7 @@ from math import pi, atan2
 from singletons.singletonAssets import Assets
 
 from level.arrows.abstractArrow import Arrow
-from level.arrows.classeStandartArrow import StandartArrow
+from level.arrows.classeStandardArrow import StandardArrow
 from level.arrows.classeBounceArrow import BounceArrow
 from level.arrows.classeFastArrow import FastArrow
 from level.arrows.classePiercingArrow import PiercingArrow
@@ -20,8 +20,8 @@ class Crossbow():
         # Flechas
         self.__arrows = []
         for arrow in initial_arrows:
-            if str(arrow).lower() == 'standart':
-                self.__arrows.append(StandartArrow())
+            if str(arrow).lower() == 'standard':
+                self.__arrows.append(StandardArrow())
             elif str(arrow).lower() == 'bounce':
                 self.__arrows.append(BounceArrow())
             elif str(arrow).lower() == 'fast':
@@ -30,7 +30,7 @@ class Crossbow():
                 self.__arrows.append(PiercingArrow())
             else:
                 print(f"Flecha não reconhecida iniciada: {arrow}. Adicionando flecha padrão.")
-                self.__arrows.append(StandartArrow())
+                self.__arrows.append(StandardArrow())
 
     def get_rotated_image(self, player_position, cursor_position):
         # Calcula o ângulo entre o centro do jogador (ponto pivô de rotação da arma) e o cursor

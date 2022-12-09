@@ -21,12 +21,12 @@ class ArrowHelp(State):
         self.TEXT_BOUNCE_ARROW = TextButton(self.__assets.fonts_path['text'], 40, (101, 139, 245), 'Bounce Arrow: A flecha quica 2 vezes antes de se fixar na parede')
         self.TEXT_FAST_ARROW = TextButton(self.__assets.fonts_path['text'], 40, (245, 173, 101), 'Fast Arrow: A flecha possui uma velocidade superior que as demais')
         self.TEXT_PIERCING_ARROW = TextButton(self.__assets.fonts_path['text'], 40, (245, 101, 101), 'Piercing Arrow: A flecha continua sua tragetória mesmo se atingir um alvo')
-        self.TEXT_STANDART_ARROW = TextButton(self.__assets.fonts_path['text'], 40, (200, 200, 200), 'Standart Arrow: Apenas uma flecha normal')
+        self.TEXT_STANDARD_ARROW = TextButton(self.__assets.fonts_path['text'], 40, (200, 200, 200), 'Standard Arrow: Apenas uma flecha normal')
 
         self.IMAGE_BOUNCE_ARROW = Image(self.__assets.interface['arrows']['bounce'])
         self.IMAGE_FAST_ARROW = Image(self.__assets.interface['arrows']['fast'])
         self.IMAGE_PIERCING_ARROW = Image(self.__assets.interface['arrows']['piercing'])
-        self.IMAGE_STANDART_ARROW = Image(self.__assets.interface['arrows']['standart'])
+        self.IMAGE_STANDARD_ARROW = Image(self.__assets.interface['arrows']['standard'])
 
     def update_actions(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -57,9 +57,9 @@ class ArrowHelp(State):
         self.TEXT_BOUNCE_ARROW.render(display_surface, (left[0]+70, left[1]-150), position_origin = 'topleft')
         self.TEXT_FAST_ARROW.render(display_surface, (left[0]+70, left[1]-50), position_origin = 'topleft')
         self.TEXT_PIERCING_ARROW.render(display_surface, (left[0]+70, left[1]+50), position_origin = 'topleft')
-        self.TEXT_STANDART_ARROW.render(display_surface, (left[0]+70, left[1]+150), position_origin = 'topleft')
+        self.TEXT_STANDARD_ARROW.render(display_surface, (left[0]+70, left[1]+150), position_origin = 'topleft')
         self.IMAGE_BOUNCE_ARROW.render(display_surface, (left[0]+40, left[1]-150), position_origin = 'topleft')
         self.IMAGE_FAST_ARROW.render(display_surface, (left[0]+40, left[1]-50), position_origin = 'topleft')
         self.IMAGE_PIERCING_ARROW.render(display_surface, (left[0]+40, left[1]+50), position_origin = 'topleft')
-        self.IMAGE_STANDART_ARROW.render(display_surface, (left[0]+40, left[1]+150), position_origin = 'topleft')
+        self.IMAGE_STANDARD_ARROW.render(display_surface, (left[0]+40, left[1]+150), position_origin = 'topleft')
         
