@@ -7,7 +7,6 @@ from daos.LevelDAO import LevelDAO
 class LevelImportController:
     def __init__(self, destination_json_name: str):
         self.__level_dao = LevelDAO(destination_json_name)
-        self.__tile_map_utility = TileMapUtility()
         
     def import_from_file_picker(self):
         file_path = askopenfilename(filetypes=[("Map Files", ".ods")])
