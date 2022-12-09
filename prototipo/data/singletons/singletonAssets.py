@@ -89,7 +89,7 @@ class Assets(metaclass = Singleton):
 
     def __load_json(self, json_name) -> dict:
         try:
-            return loads(open(finder.find_file('default-levels.json'), 'r').read())
+            return loads(open(finder.find_file(json_name), 'r').read())
         except Exception as e:
             print('Erro ao carregar o arquivo JSON:', e)
             return {}
