@@ -6,8 +6,9 @@ class BounceArrow(Arrow):
     def __init__(self):
         IMAGE = Assets().level_images['arrows']['bounce']
         ICON_IMAGE = Assets().interface['arrows']['bounce']
+        BORDER_ICON_IMAGE = Assets().interface['bordered-arrows']['bounce']
 
-        super().__init__(10, 15, 0.2, IMAGE, ICON_IMAGE)
+        super().__init__(10, 15, 0.2, IMAGE, ICON_IMAGE, BORDER_ICON_IMAGE)
 
         self.__bounce_count = 0
         self.__max_bounce_count = 2

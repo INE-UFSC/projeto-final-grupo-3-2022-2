@@ -57,6 +57,12 @@ class Assets(metaclass = Singleton):
                 'fast': self.__get_image('arrow-icon-fast.png', scale=4),
                 'piercing': self.__get_image('arrow-icon-piercing.png', scale=4)
             },
+            'bordered-arrows': {
+                'standart': self.__get_image('arrow-icon-standart-bordered.png', scale=4),
+                'bounce': self.__get_image('arrow-icon-bounce-bordered.png', scale=4),
+                'fast': self.__get_image('arrow-icon-fast-bordered.png', scale=4),
+                'piercing': self.__get_image('arrow-icon-piercing-bordered.png', scale=4)
+            },
             'keys': {
                 'wasd': self.__get_image('wasd.png', scale=3),
                 'directions': self.__get_image('directions.png', scale=3),

@@ -141,6 +141,9 @@ class LevelPlaying(State):
         player_arrows = self.__level.player_arrows
         try:
             for index, arrow in enumerate(self.__level.player_arrows):
-                display_surface.blit(arrow.icon_image, (15 + index*25, 15))
+                if index == 0:
+                    display_surface.blit(arrow.bordered_icon_image, (12 + index*25, 12))
+                else:
+                    display_surface.blit(arrow.icon_image, (15 + index*25, 15))
         except:
             print("Não foi possível carregar a interface das flechas.")

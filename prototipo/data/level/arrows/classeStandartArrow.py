@@ -6,6 +6,7 @@ class StandartArrow(Arrow):
     def __init__(self):
         IMAGE = Assets().level_images['arrows']['standart']
         ICON_IMAGE = Assets().interface['arrows']['standart']
+        BORDERED_ICON_IMAGE = Assets().interface['bordered-arrows']['standart']
 
-        super().__init__(10, 15, 0.2, IMAGE, ICON_IMAGE)
+        super().__init__(10, 15, 0.2, IMAGE, ICON_IMAGE, BORDERED_ICON_IMAGE)
  

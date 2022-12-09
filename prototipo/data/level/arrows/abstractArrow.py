@@ -5,13 +5,17 @@ from math import atan2, sin, cos, pi
 
 
 class Arrow(ABC):
-    def __init__(self, minimun_speed, maximun_extra_speed, gravity, image: pygame.image, icon_image: pygame.image):
+    def __init__(self, minimun_speed, maximun_extra_speed, gravity, image: pygame.image, icon_image: pygame.image, bordered_icon_image: pygame.image= None):
         super().__init__() # Inicia a classe ABC que define a classe como abstrata
 
         # Importa a imagem da flecha
         self.__base_image = image
         self.__base_image.set_colorkey((255,255,255)) # Faz com que a flecha não tenha fundo quando for rotacionada
         self.__icon_image = icon_image
+        if bordered_icon_image == None:
+            self.__bordered_icon_image = icon_image
+        else:
+            self.__bordered_icon_image = bordered_icon_image
 
         # Atributos de características da flecha
         self.__minimun_speed = minimun_speed
@@ -116,7 +120,10 @@ class Arrow(ABC):
     @property
     def icon_image(self):
         return self.__icon_image
-
+    @property
+    def bordered_icon_image(self):
+        return self.__bordered_icon_image
+    
     # Setters
     @stuck.setter
     def stuck(self, value: bool):
