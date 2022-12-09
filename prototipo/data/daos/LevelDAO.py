@@ -24,7 +24,7 @@ class LevelDAO(AbstractDAO):
         # Confere se já existe algum nível com o nome 'level_name' 
         existing_level_names = [level['level_name'] for level in self._objectCache]
         if level_dict['level_name'] in existing_level_names:
-            raise NivelJaExisteException(f"A level with the name '{level_dict['level_name']}' already exists in the selected datasource.")
+            raise NivelJaExisteException("A level with the name '{}' already exists in the selected datasource.".format(level_dict['level_name']))
 
         # Tenta fazer a conversão do nível (a validação das informações específicas de criação de nível são conferidas)
         try:
