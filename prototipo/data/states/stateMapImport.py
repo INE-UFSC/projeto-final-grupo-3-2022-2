@@ -3,8 +3,9 @@ from states.abstractState import State
 from utility.interface.classeTextButton import TextButton
 from singletons.singletonAssets import Assets
 
-from states.stateLevelPlaying import LevelPlaying
-from utility.classeScoreController import ScoreController
+
+from utility.classeLevelImportController import LevelImportController
+
 
 class MapImport(State):
     def __init__(self, game):
@@ -14,6 +15,8 @@ class MapImport(State):
         
         self.__assets = Assets()
         self.__background = self.__assets.images['background']
+
+        self.__level_import_controller = LevelImportController('created-levels.json')
         
         self.__load_buttons()
     
@@ -33,7 +36,12 @@ class MapImport(State):
             if self.VOLTAR.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
             if self.IMPORTAR.check_for_hover(pygame.mouse.get_pos()):
-                pass
+                try:
+                    self.__level_import_controller.import_from_file_picker()
+                    self.TEXTO_ERRO.set_text('Mapa importado com sucesso!')
+                except Exception as e:
+                    self.TEXTO_ERRO.set_text('Erro ao importar mapa!')
+                    print(e)
 
     def render(self, display_surface):
         display_surface.fill((0, 0, 0)) # Limpa a tela
@@ -43,5 +51,5 @@ class MapImport(State):
         center = display_surface.get_rect().center
 
         self.VOLTAR.render(display_surface, (15, 10), position_origin = 'topleft')
-        self.IMPORTAR.render(display_surface, (center[0], center[1]))
-        self.TEXTO_ERRO.render(display_surface, (center[0], center[1] + 60))
+        self.IMPORTAR.render(display_surface, (center[0], center[1]), position_origin = 'center')
+        self.TEXTO_ERRO.render(display_surface, (center[0], center[1] + 80), position_origin = 'center')

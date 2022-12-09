@@ -2,7 +2,6 @@ from utility.exceptions.TileMapErrorException import TileMapErrorException
 from pyexcel_ods import get_data
 from typing import List
 import sys
-from tkinter.filedialog import askopenfilename
 
 sys.path.append("..")
 # https://pythonhosted.org/pyexcel-ods/#read-from-an-ods-file
@@ -189,19 +188,6 @@ class TileMapUtility:
         else:
             return " "
 
-    # @staticmethod
-    # def __verify_map(map):
-    #     if map['lifes'] <= 0:
-    #         raise TileMapErrorException(
-    #             "Lifes must be integer and higher than zero.")
-    #     total_arrows = 0
-    #     for value in map['arrows'].values():
-    #         total_arrows += value
-    #     if total_arrows == 0:
-    #         raise TileMapErrorException("Must have at least one arrow.")
-    #     if map['level_name'] == '':
-    #         raise TileMapErrorException("Level name can't be empty")
-
     @staticmethod
     def import_map_from_ods(path) -> None:
         # TODO Atualizar para novo formato
@@ -245,17 +231,3 @@ class TileMapUtility:
             print(e)
         except Exception as e:
             print(e)
-
-    @staticmethod
-    def file_picker_convert() -> dict:
-        """Uses a .ods file picker to convert the .ods to a level dictionary."""
-        file_path = askopenfilename(filetypes=[("Map FIles", ".ods")])
-        try:
-            return TileMapUtility.import_map_from_ods(file_path)
-        except Exception as e:
-            print(e)
-
-if __name__ == '__main__':
-    # level = TileMapUtility.import_map_from_ods('level_5.ods')
-    # print(level)
-    print(TileMapUtility.file_picker_convert())

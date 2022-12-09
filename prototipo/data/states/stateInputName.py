@@ -59,6 +59,3 @@ class InputName(State):
         self.INPUT_BOX.render(display_surface, (center[0], center[1]))
         if self.__verificador != True:
             self.TEXTO_ERRO.render(display_surface, (center[0], center[1] + 80))
-
-
-

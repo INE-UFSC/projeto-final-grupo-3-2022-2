@@ -35,3 +35,4 @@ class TextButton(InterfaceElement):
 
     def set_text(self, text):
         self._text = self._font.render(text, True, self._base_color)
+        self._rect = self._text.get_rect()
