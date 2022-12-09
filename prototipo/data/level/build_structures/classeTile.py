@@ -8,7 +8,7 @@ class Tile(BuildStructure):
         try:
             if block_name.upper() == 'B_BLACK':
                 SURFACE = pygame.Surface((size, size))
-                SURFACE.fill((0,0,0))
+                SURFACE.fill((5,5,8))
             else:
                 SURFACE = Assets().level_images['blocks'][block_name.upper()]
         except KeyError:

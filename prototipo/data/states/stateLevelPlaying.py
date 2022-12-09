@@ -126,7 +126,7 @@ class LevelPlaying(State):
             self.__load_level(self.__current_level_index)
 
     def render(self, display_surface):
-        display_surface.fill((0, 0, 0)) # Limpa a tela
+        display_surface.fill((5,5,8)) # Limpa a tela
 
         screen_center = display_surface.get_rect().center
 
