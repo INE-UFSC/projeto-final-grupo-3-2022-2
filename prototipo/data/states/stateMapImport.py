@@ -22,7 +22,7 @@ class MapImport(State):
     
     def __load_buttons(self):
         self.VOLTAR = TextButton(self.__assets.fonts_path['text'], 35, (255, 255, 255), '< Voltar')
-        self.IMPORTAR = TextButton(self.__assets.fonts_path['text'], 35, (255, 255, 255), 'Explorador de arquivos...')
+        self.IMPORTAR = TextButton(self.__assets.fonts_path['text'], 35, (255, 255, 255), 'Clique para abrir o explorador de arquivos...')
         self.TEXTO_ERRO = TextButton(self.__assets.fonts_path['text'], 30, (140,140,140), '')
     
     def update_actions(self, event):
@@ -36,9 +36,13 @@ class MapImport(State):
             if self.VOLTAR.check_for_hover(pygame.mouse.get_pos()):
                 self.exit_state()
             if self.IMPORTAR.check_for_hover(pygame.mouse.get_pos()):
+                super().restart_actions() # Reinicia as ações para que não fique abrindo varias vezes o file picker
                 try:
-                    self.__level_import_controller.import_from_file_picker()
-                    self.TEXTO_ERRO.set_text('Mapa importado com sucesso!')
+                    status = self.__level_import_controller.import_from_file_picker()
+                    if status:
+                        self.TEXTO_ERRO.set_text('Mapa importado com sucesso!')
+                    else:
+                        self.TEXTO_ERRO.set_text('')
                 except Exception as e:
                     self.TEXTO_ERRO.set_text('Erro ao importar mapa!')
                     print(e)

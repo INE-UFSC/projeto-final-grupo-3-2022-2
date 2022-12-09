@@ -11,8 +11,12 @@ class LevelImportController:
         
     def import_from_file_picker(self):
         file_path = askopenfilename(filetypes=[("Map Files", ".ods")])
-        try:
-            tile_map = TileMapUtility.import_map_from_ods(file_path)
-            self.__level_dao.add_level(tile_map)
-        except Exception as e:
-            raise e
+        if file_path == '': # Quando o file picker é fechado sem selecionar um arquivos
+            return False # Irá retornar False
+        else:
+            try:
+                tile_map = TileMapUtility.import_map_from_ods(file_path)
+                self.__level_dao.add_level(tile_map)
+                return True # Se conseguiu importar, irá retornar True
+            except Exception as e:
+                raise e # Se houve erro ao importar, irá levantar a exceção
